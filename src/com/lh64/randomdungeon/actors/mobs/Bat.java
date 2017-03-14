@@ -19,6 +19,7 @@ package com.lh64.randomdungeon.actors.mobs;
 
 import java.util.HashSet;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.effects.Speck;
 import com.lh64.randomdungeon.items.potions.PotionOfHealing;
@@ -32,11 +33,19 @@ public class Bat extends Mob {
 		name = "vampire bat";
 		spriteClass = BatSprite.class;
 		
-		HP = HT = 30;
-		defenseSkill = 15;
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
+			} else {
+				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
+			}
+		defenseSkill = (Dungeon.hero.lvl/3 +1) + 2;
 		baseSpeed = 2f;
 		
-		EXP = 7;
+		if(Dungeon.hero.lvl <= 1){
+			EXP = Dungeon.hero.lvl;
+			} else{
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
+			}
 		maxLvl = 15;
 		
 		flying = true;
@@ -47,17 +56,21 @@ public class Bat extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 6, 12 );
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
+			}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 16;
+		return ((Dungeon.hero.lvl/3 +1) * 2) + 7;
 	}
 	
 	@Override
 	public int dr() {
-		return 4;
+		return (Dungeon.hero.lvl /3 +1);
 	}
 	
 	@Override

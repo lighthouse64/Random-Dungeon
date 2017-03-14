@@ -18,6 +18,7 @@
 package com.lh64.randomdungeon.actors.mobs;
 
 import com.lh64.randomdungeon.Badges;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.buffs.Bleeding;
 import com.lh64.randomdungeon.actors.buffs.Buff;
@@ -30,7 +31,11 @@ public class Albino extends Rat {
 		name = "albino rat";
 		spriteClass = AlbinoSprite.class;
 		
-		HP = HT = 15;
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*6 +3,(Dungeon.hero.lvl /3 +1)*7 +5);
+			} else {
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
+			}
 	}
 	
 	@Override

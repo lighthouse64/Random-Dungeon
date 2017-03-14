@@ -17,6 +17,7 @@
  */
 package com.lh64.randomdungeon;
 
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.annotation.SuppressLint;
@@ -35,6 +36,7 @@ import com.lh64.randomdungeon.scenes.TitleScene;
 
 public class PixelDungeon extends Game {
 	
+	public static boolean namechange;
 	public PixelDungeon() {
 		super( TitleScene.class );
 		
@@ -125,6 +127,8 @@ public class PixelDungeon extends Game {
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
+		
+		
 		
 		updateImmersiveMode();
 		
@@ -276,6 +280,7 @@ public class PixelDungeon extends Game {
 	public static void scaleUp( boolean value ) {
 		Preferences.INSTANCE.put( Preferences.KEY_SCALE_UP, value );
 		switchScene( TitleScene.class );
+		
 	}
 	
 	public static boolean scaleUp() {
@@ -331,7 +336,7 @@ public class PixelDungeon extends Game {
 		Preferences.INSTANCE.put( Preferences.KEY_LAST_CLASS, value );
 	}
 	
-	public static int lastClass() {
+	public static int lastClass() { 
 		return Preferences.INSTANCE.getInt( Preferences.KEY_LAST_CLASS, 0 );
 	}
 	

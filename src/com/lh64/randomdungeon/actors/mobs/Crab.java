@@ -17,7 +17,10 @@
  */
 package com.lh64.randomdungeon.actors.mobs;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
+import com.lh64.randomdungeon.actors.buffs.Bleeding;
+import com.lh64.randomdungeon.actors.buffs.Buff;
 import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.items.food.MysteryMeat;
 import com.lh64.randomdungeon.sprites.CrabSprite;
@@ -26,15 +29,22 @@ import com.lh64.utils.Random;
 public class Crab extends Mob {
 
 	{
-		name = "sewer crab";
+		name = "Sewer crab";
 		spriteClass = CrabSprite.class;
-		
-		HP = HT = 15;
-		defenseSkill = 5;
+		if(Dungeon.hero.lvl <= 6){
+		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*6 +3,(Dungeon.hero.lvl /3 +1)*7 +5);
+		} else {
+		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
+		}
+		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
 		baseSpeed = 2f;
 		
-		EXP = 3;
-		maxLvl = 9;
+		if(Dungeon.hero.lvl <= 1){
+			EXP = Dungeon.hero.lvl;
+			} else{
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl+1);
+			}
+		maxLvl = Dungeon.hero.lvl + 4;
 		
 		loot = new MysteryMeat();
 		lootChance = 0.167f;
@@ -42,17 +52,30 @@ public class Crab extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 3, 6 );
+		if(Dungeon.hero.lvl <= 8){
+		return Random.Int( (Dungeon.hero.lvl/3 + 1) +1 ,(Dungeon.hero.lvl/3 + 1) +5);
+		} else {
+		return Random.Int( (Dungeon.hero.lvl/3 +1 ) +4 ,(Dungeon.hero.lvl/3 )*2 +8);
+		}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 12;
+		return (Dungeon.hero.lvl/3 +1)*2 + 9;
 	}
 	
 	@Override
+	public int attackProc( Char enemy, int damage ) {
+		if(Dungeon.hero.lvl > 6){
+		if (Random.Int( 0,15 ) == 0) {
+			Buff.affect( enemy, Bleeding.class );
+		}
+		}
+		return damage;
+	}
+	@Override
 	public int dr() {
-		return 4;
+		return (Dungeon.hero.lvl /3 +1) + 2;
 	}
 	
 	@Override

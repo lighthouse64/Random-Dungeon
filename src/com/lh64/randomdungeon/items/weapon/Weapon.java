@@ -42,7 +42,6 @@ abstract public class Weapon extends KindOfWeapon {
 		"Interaction of different types of magic has negated the enchantment on this weapon!";
 	
 	private static final String TXT_TO_STRING	= "%s :%d";
-	private static final String TXT_BROKEN		= "broken %s :%d";
 	
 	public int		STR	= 10;
 	public float	ACU	= 1;
@@ -169,7 +168,7 @@ abstract public class Weapon extends KindOfWeapon {
 	
 	@Override
 	public String toString() {
-		return levelKnown ? Utils.format( isBroken() ? TXT_BROKEN : TXT_TO_STRING, super.toString(), STR ) : super.toString();
+		return levelKnown ? Utils.format( TXT_TO_STRING, super.toString(), STR ) : super.toString();
 	}
 	
 	@Override
@@ -226,9 +225,8 @@ abstract public class Weapon extends KindOfWeapon {
 		
 		private static final Class<?>[] enchants = new Class<?>[]{ 
 			Fire.class, Poison.class, Death.class, Paralysis.class, Leech.class, 
-			Slow.class, Shock.class, Instability.class, Horror.class, Luck.class,
-			Tempering.class};
-		private static final float[] chances= new float[]{ 10, 10, 1, 2, 1, 2, 6, 3, 2, 2, 3 };
+			Slow.class, Shock.class, Instability.class, Horror.class, Luck.class};
+		private static final float[] chances= new float[]{ 10, 10, 1, 2, 1, 2, 6, 3, 2, 2 };
 			
 		public abstract boolean proc( Weapon weapon, Char attacker, Char defender, int damage );
 		

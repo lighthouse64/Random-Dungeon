@@ -25,7 +25,7 @@ import com.lh64.randomdungeon.sprites.ChestSprite;
 import com.lh64.randomdungeon.windows.WndBag;
 
 public class Chest extends NPC {
-
+public static int cpos;
 	{
 		name = "Storage";
 		spriteClass = ChestSprite.class;
@@ -36,6 +36,15 @@ public class Chest extends NPC {
 	@Override
 	public int defenseSkill( Char enemy ) {
 		return 1000;
+	}
+	
+	@Override
+	public boolean act(){
+		throwItem();
+		spend( TICK );
+		Chest.cpos = pos;
+		return true;
+		
 	}
 	
 	@Override
@@ -64,6 +73,7 @@ public class Chest extends NPC {
 	@Override
 	public void interact() {
 	Dungeon.storage = true;
+	Dungeon.ShopkeeperBag = false;
 	GameScene.show(new WndBag(Dungeon.hero.storage.backpack,null,WndBag.Mode.STORAGE,null));
 	}
 	

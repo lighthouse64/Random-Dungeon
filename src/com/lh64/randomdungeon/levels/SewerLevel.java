@@ -24,7 +24,10 @@ import com.lh64.noosa.particles.PixelParticle;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.DungeonTilemap;
+import com.lh64.randomdungeon.actors.mobs.Mob;
+import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
 import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
+import com.lh64.randomdungeon.actors.mobs.npcs.Wandmaker;
 import com.lh64.randomdungeon.items.DewVial;
 import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.utils.ColorMath;
@@ -92,13 +95,19 @@ public class SewerLevel extends RegularLevel {
 				}
 			}
 		}
-		
+		Mob chest = new Chest();
 		while (true) {
 			int pos = roomEntrance.random();
-			if (pos != entrance) {
+			int newpos = roomEntrance.random();
+			if (pos != entrance && newpos != pos && newpos != entrance) {
 				map[pos] = Terrain.SIGN;
+				chest.pos = newpos;
+				
+				mobs.add(chest);
+			
 				break;
-			}
+			} 
+			
 		}
 	}
 	
@@ -107,6 +116,7 @@ public class SewerLevel extends RegularLevel {
 		super.createMobs();
 
 		Ghost.Quest.spawn( this );
+		Wandmaker.Quest.spawn( this, roomEntrance );
 	}
 	
 	@Override

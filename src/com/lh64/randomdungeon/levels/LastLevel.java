@@ -21,6 +21,8 @@ import java.util.Arrays;
 
 import com.lh64.noosa.Scene;
 import com.lh64.randomdungeon.Assets;
+import com.lh64.randomdungeon.actors.mobs.Mob;
+import com.lh64.randomdungeon.actors.mobs.npcs.Portal;
 import com.lh64.randomdungeon.items.Amulet;
 import com.lh64.randomdungeon.levels.painters.Painter;
 import com.lh64.utils.Random;
@@ -43,7 +45,7 @@ public class LastLevel extends Level {
 	
 	@Override
 	public String waterTex() {
-		return Assets.WATER_HALLS;
+		return Assets.WATER_SEWERS;
 	}
 	
 	@Override
@@ -61,7 +63,7 @@ public class LastLevel extends Level {
 		map[exit] = Terrain.LOCKED_EXIT;
 		
 		pedestal = (SIZE / 2 + 1) * (WIDTH + 1);
-		map[pedestal] = Terrain.PEDESTAL;
+		
 		map[pedestal-1] = map[pedestal+1] = Terrain.STATUE_SP;
 		
 		feeling = Feeling.NONE;
@@ -80,11 +82,16 @@ public class LastLevel extends Level {
 
 	@Override
 	protected void createMobs() {
+		createPortal();
 	}
-
+	protected void createPortal() {
+		Mob portal = new Portal();
+		portal.pos = pedestal;
+		mobs.add(portal);
+	}
 	@Override
 	protected void createItems() {
-		drop( new Amulet(), pedestal );
+		drop( new Amulet(), pedestal-2 );
 	}
 	
 	@Override
@@ -97,8 +104,6 @@ public class LastLevel extends Level {
 		switch (tile) {
 		case Terrain.WATER:
 			return "Cold lava";
-		case Terrain.GRASS:
-			return "Embermoss";
 		case Terrain.HIGH_GRASS:
 			return "Emberfungi";
 		case Terrain.STATUE:
@@ -124,6 +129,6 @@ public class LastLevel extends Level {
 	
 	@Override
 	public void addVisuals( Scene scene ) {
-		HallsLevel.addVisuals( this, scene );
+		
 	}
 }

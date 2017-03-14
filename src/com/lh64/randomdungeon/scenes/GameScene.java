@@ -116,8 +116,13 @@ public class GameScene extends PixelScene {
 	
 	@Override
 	public void create() {
-		Music.INSTANCE.play( Assets.TUNE, true );
-		Music.INSTANCE.volume( 1f );
+		if(Dungeon.levelTheme == 1){
+			Music.INSTANCE.play(Assets.SEWERS, true);
+			Music.INSTANCE.volume( 1f );
+		} else {
+			Music.INSTANCE.play( Assets.TUNE, true );
+			Music.INSTANCE.volume( 1f );
+		}
 		
 		PixelDungeon.lastClass( Dungeon.hero.heroClass.ordinal() );
 		
@@ -248,23 +253,14 @@ public class GameScene extends PixelScene {
 			break;
 		case DESCEND:
 			switch (Dungeon.depth) {
+			case 0:
+				WndStory.showChapter( WndStory.ID_PRISON );
+				break;
 			case 1:
 				WndStory.showChapter( WndStory.ID_SEWERS );
 				break;
-			case 6:
-				WndStory.showChapter( WndStory.ID_PRISON );
-				break;
-			case 11:
-				WndStory.showChapter( WndStory.ID_CAVES );
-				break;
-			case 16:
-				WndStory.showChapter( WndStory.ID_METROPOLIS );
-				break;
-			case 22:
-				WndStory.showChapter( WndStory.ID_HALLS );
-				break;
 			}
-			if (Dungeon.hero.isAlive() && Dungeon.depth != 22) {
+			if (Dungeon.hero.isAlive() && Dungeon.depth != 1) {
 				Badges.validateNoKilling();
 			}
 			break;
@@ -292,8 +288,12 @@ public class GameScene extends PixelScene {
 			if (Dungeon.depth < Statistics.deepestFloor) {
 				GLog.h( TXT_WELCOME_BACK, Dungeon.depth );
 			} else {
+				if(Dungeon.depth == 0){
+					GLog.h("Welcome to the city");
+				} else{
 				GLog.h( TXT_WELCOME, Dungeon.depth );
 				Sample.INSTANCE.play( Assets.SND_DESCEND );
+				}
 			}
 			switch (Dungeon.level.feeling) {
 				case CHASM:

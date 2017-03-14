@@ -93,7 +93,7 @@ public class SmartTexture extends Texture {
 		bitmap = null;
 	}
 	
-	public RectF uvRect( int left, int top, int right, int bottom ) {
+	public RectF uvRect( int left, int top, float right, float bottom ) {
 		return new RectF(
 			(float)left		/ width,
 			(float)top		/ height,

@@ -71,6 +71,7 @@ public class WndRanking extends WndTabbed {
 				try {
 					Badges.loadGlobal();
 					Dungeon.loadGame( gameFile );
+					
 				} catch (Exception e ) {
 					error = TXT_ERROR;
 				}
@@ -163,7 +164,7 @@ public class WndRanking extends WndTabbed {
 		public StatsTab() {
 			super();
 			
-			String heroClass = Dungeon.hero.className();
+			String heroClass = Dungeon.name + ", the " + Dungeon.hero.className();
 			
 			IconTitle title = new IconTitle();
 			title.icon( HeroSprite.avatar( Dungeon.hero.heroClass, Dungeon.hero.tier() ) );

@@ -43,10 +43,10 @@ public class Armor extends EquipableItem {
 	private static final String TXT_IDENTIFY	= "you are now familiar enough with your %s to identify it. It is %s.";
 	
 	private static final String TXT_TO_STRING	= "%s :%d";
-	private static final String TXT_BROKEN		= "broken %s :%d";
+	
 	
 	private static final String TXT_INCOMPATIBLE = 
-		"Interaction of different types of magic has erased the glyph on this armor!";
+		"Interaction of different types of magic has removed the glyph on this armor!";
 	
 	public int tier;
 	public int STR;
@@ -90,7 +90,7 @@ public class Armor extends EquipableItem {
 	
 	@Override
 	public boolean doEquip( Hero hero ) {
-		
+		if(Dungeon.ShopkeeperBag == false && Dungeon.storage == false){
 		detach( hero.belongings.backpack );
 		
 		if (hero.belongings.armor == null || hero.belongings.armor.doUnequip( hero, true, false )) {
@@ -113,6 +113,10 @@ public class Armor extends EquipableItem {
 			collect( hero.belongings.backpack );
 			return false;
 			
+		}
+		}else{
+			GLog.b("Isn't it sad that you can't equip armor unless it's physically in your bag...");
+		return false;
 		}
 	}
 	
@@ -173,11 +177,7 @@ public class Armor extends EquipableItem {
 		return upgrade( glyph != null );
 	}
 	
-	@Override
-	public Item degrade() {
-		STR++;
-		return super.degrade();
-	}
+
 	
 	@Override
 	public int maxDurability( int lvl ) {
@@ -205,7 +205,7 @@ public class Armor extends EquipableItem {
 	
 	@Override
 	public String toString() {
-		return levelKnown ? Utils.format( isBroken() ? TXT_BROKEN : TXT_TO_STRING, super.toString(), STR ) : super.toString();
+		return levelKnown ? Utils.format( TXT_TO_STRING, super.toString(), STR ) : super.toString();
 	}
 	
 	@Override
@@ -333,7 +333,7 @@ public class Armor extends EquipableItem {
 		private static final Class<?>[] glyphs = new Class<?>[]{ 
 			Bounce.class, Affection.class, AntiEntropy.class, Multiplicity.class, 
 			Potential.class, Metabolism.class, Stench.class, Viscosity.class,
-			Displacement.class, Entanglement.class, AutoRepair.class };
+			Displacement.class, Entanglement.class};
 		
 		private static final float[] chances= new float[]{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
 			

@@ -17,9 +17,12 @@
  */
 package com.lh64.randomdungeon.windows;
 
+import java.io.IOException;
+
 import com.lh64.noosa.Camera;
 import com.lh64.noosa.audio.Sample;
 import com.lh64.randomdungeon.Assets;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.PixelDungeon;
 import com.lh64.randomdungeon.scenes.PixelScene;
 import com.lh64.randomdungeon.ui.CheckBox;
@@ -174,7 +177,24 @@ public class WndSettings extends Window {
 			btnOrientation.setRect( 0, btnSound.bottom() + GAP, WIDTH, BTN_HEIGHT );
 			add( btnOrientation );
 			
-			resize( WIDTH, (int)btnOrientation.bottom() );
+			RedButton btnNewName = new RedButton( "Change your name" ){
+				@Override
+				protected void onClick(){
+					Dungeon.changename = true;
+					try {
+						Dungeon.saveName();
+					} catch (IOException e) {
+						
+						e.printStackTrace();
+					}
+					
+					parent.add(new WndMessage("A prompt for your name to change will appear on the next startup."));
+					
+				}
+			};
+			btnNewName.setRect(0, btnOrientation.bottom() + GAP, WIDTH, BTN_HEIGHT);
+			add( btnNewName );
+			resize( WIDTH, (int)btnNewName.bottom() );
 			
 		}
 	}

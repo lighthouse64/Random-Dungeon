@@ -29,6 +29,7 @@ import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.Statistics;
 import com.lh64.randomdungeon.actors.buffs.Buff;
+import com.lh64.randomdungeon.actors.buffs.Hunger;
 import com.lh64.randomdungeon.actors.hero.Hero;
 import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.randomdungeon.scenes.PixelScene;
@@ -44,8 +45,9 @@ public class WndHero extends WndTabbed {
 	private static final String TXT_EXP		= "Experience";
 	private static final String TXT_STR		= "Strength";
 	private static final String TXT_HEALTH	= "Health";
+	private static final String TXT_HUNGER  = "Satiety";
 	private static final String TXT_GOLD	= "Gold Collected";
-	private static final String TXT_DEPTH	= "Maximum Depth";
+	private static final String TXT_DEPTH	= "Maximum Depth (obscured)";
 	
 	private static final int WIDTH		= 100;
 	private static final int TAB_WIDTH	= 40;
@@ -103,6 +105,7 @@ public class WndHero extends WndTabbed {
 		public StatsTab() {
 			
 			Hero hero = Dungeon.hero; 
+			
 
 			BitmapText title = PixelScene.createText( 
 				Utils.format( TXT_TITLE, hero.lvl, hero.className() ).toUpperCase( Locale.ENGLISH ), 9 );
@@ -136,12 +139,13 @@ public class WndHero extends WndTabbed {
 			
 			statSlot( TXT_STR, hero.STR() );
 			statSlot( TXT_HEALTH, hero.HP + "/" + hero.HT );
+			statSlot( TXT_HUNGER, 400 - Math.round(Hunger.level));
 			statSlot( TXT_EXP, hero.exp + "/" + hero.maxExp() );
 
 			pos += GAP;
 			
 			statSlot( TXT_GOLD, Statistics.goldCollected );
-			statSlot( TXT_DEPTH, Statistics.deepestFloor );
+			statSlot( TXT_DEPTH, "" );
 			
 			pos += GAP;
 		}

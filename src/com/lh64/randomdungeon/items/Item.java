@@ -29,18 +29,14 @@ import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.buffs.SnipersMark;
 import com.lh64.randomdungeon.actors.hero.Hero;
-import com.lh64.randomdungeon.effects.Degradation;
+import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
 import com.lh64.randomdungeon.effects.Speck;
-import com.lh64.randomdungeon.items.armor.Armor;
 import com.lh64.randomdungeon.items.bags.Bag;
-import com.lh64.randomdungeon.items.rings.Ring;
-import com.lh64.randomdungeon.items.wands.Wand;
-import com.lh64.randomdungeon.items.weapon.Weapon;
+import com.lh64.randomdungeon.items.rings.RingOfHaggler;
 import com.lh64.randomdungeon.items.weapon.missiles.MissileWeapon;
 import com.lh64.randomdungeon.mechanics.Ballistica;
 import com.lh64.randomdungeon.scenes.CellSelector;
 import com.lh64.randomdungeon.scenes.GameScene;
-import com.lh64.randomdungeon.sprites.CharSprite;
 import com.lh64.randomdungeon.sprites.ItemSprite;
 import com.lh64.randomdungeon.sprites.MissileSprite;
 import com.lh64.randomdungeon.ui.QuickSlot;
@@ -49,21 +45,19 @@ import com.lh64.randomdungeon.utils.Utils;
 import com.lh64.utils.Bundlable;
 import com.lh64.utils.Bundle;
 import com.lh64.utils.Callback;
-import com.lh64.utils.PointF;
+
 
 public class Item implements Bundlable {
 
 	private static final String TXT_PACK_FULL	= "Your pack is too full for the %s";
 	
-	private static final String TXT_BROKEN		= "Because of frequent use, your %s has broken.";
-	private static final String TXT_GONNA_BREAK	= "Because of frequent use, your %s is going to break soon.";
+
 	
 	private static final String TXT_TO_STRING		= "%s";
 	private static final String TXT_TO_STRING_X		= "%s x%d";
 	private static final String TXT_TO_STRING_LVL	= "%s%+d";
 	private static final String TXT_TO_STRING_LVL_X	= "%s%+d x%d";
 	
-	private static final float DURABILITY_WARNING_LEVEL	= 1/6f;
 	
 	protected static final float TIME_TO_THROW		= 1.0f;
 	protected static final float TIME_TO_PICK_UP	= 1.0f;
@@ -73,11 +67,15 @@ public class Item implements Bundlable {
 	public static final String AC_THROW		= "THROW";
 	public static final String AC_STORE     = "STORE";
 	public static final String AC_RETRIEVE  = "RETRIEVE";
+	public static  String AC_BUY       = "";
+	public static  String AC_BUY1      = "";
 	
 	public String defaultAction;
 	
 	protected String name = "smth";
 	protected int image = 0;
+	public static int itemprice;
+
 	
 
 	public boolean stackable = false;
@@ -101,16 +99,33 @@ public class Item implements Bundlable {
 	
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = new ArrayList<String>();
-		actions.add( AC_DROP );
-		actions.add( AC_THROW );
-		if(Dungeon.storage == false){
-		actions.add(AC_STORE);
+		if (Dungeon.storage == true ){
+			actions.add(AC_RETRIEVE);
 		}
-		else{
-		actions.add(AC_RETRIEVE);
+		if(Dungeon.storage == false && Dungeon.ShopkeeperBag==false){
+			if(Dungeon.visible[Chest.cpos]){
+			actions.add(AC_STORE);
+			}
+			actions.add( AC_DROP );
+			actions.add( AC_THROW );
+			}
+		else if(Dungeon.ShopkeeperBag == true && Dungeon.storage ==false){
+			if(quantity == 1){
+			AC_BUY = "Buy for " + price()*10 + " gold";
+			actions.add(AC_BUY);
+			} else{
+				AC_BUY = "Buy for all " + price()*10 + " gold";
+				actions.add(AC_BUY);
+				AC_BUY1 = "Buy 1 for " + price()*10/quantity() + " gold";
+				actions.add(AC_BUY1);
+			}
 		}
+		
+		
 		return actions;
-	}
+		}
+	
+		
 	
 	public boolean doPickUp( Hero hero ) {
 		if (collect( hero.belongings.backpack )) {
@@ -126,15 +141,53 @@ public class Item implements Bundlable {
 }
 	public void doStore (Hero hero){
 		collect(hero.storage.backpack);
+		detachAll(hero.belongings.backpack);
 	}
 	public void doRetrieve (Hero hero){
 		collect(hero.belongings.backpack);
+		detachAll(hero.storage.backpack);
+	}
+	
+	public void doBuy1(Hero hero){
+		itemprice = price()*10/quantity();
+		if (Dungeon.hero.buff( RingOfHaggler.Haggling.class ) != null && itemprice >= 2) {
+			itemprice /= 2;
+		}
+		if (Dungeon.gold < itemprice){
+			GLog.n("You're too poor to buy that.");
+			Dungeon.ShopkeeperBag = false;
+			}else{
+			collect(hero.belongings.backpack);
+			detach(hero.shopkeeperbag.backpack);
+			Dungeon.gold -= itemprice;
+			GLog.p("Please come by and shop again!");
+			Dungeon.ShopkeeperBag = false;
+			}
+	}
+	
+	public void doBuy(Hero hero){
+		
+		itemprice = price()*10;
+		if (Dungeon.hero.buff( RingOfHaggler.Haggling.class ) != null && itemprice >= 2) {
+			itemprice /= 2;
+		}
+		
+			if (Dungeon.gold < itemprice){
+			GLog.n("You're too poor to buy that.");
+			Dungeon.ShopkeeperBag = false;
+			}else{
+			collect(hero.belongings.backpack);
+			detachAll(hero.shopkeeperbag.backpack);
+			Dungeon.gold -= itemprice;
+			GLog.p("Please come by and shop again!");
+			Dungeon.ShopkeeperBag = false;
+			}
+		
 	}
 	public void doDrop( Hero hero ) {	
 		hero.spendAndNext( TIME_TO_DROP );			
 		Dungeon.level.drop( detachAll( hero.belongings.backpack ), hero.pos ).sprite.drop( hero.pos );	
 	}
-	
 	public void doThrow( Hero hero ) {
 		GameScene.selectCell( thrower );
 	}
@@ -158,6 +211,12 @@ public class Item implements Bundlable {
 		}
 		else if(action.equals(AC_RETRIEVE)){
 			doRetrieve(hero);
+		} 
+		else if (action.equals(AC_BUY)){
+			doBuy(hero);
+		}
+		else if (action.equals(AC_BUY1)){
+			doBuy1(hero);
 		}
 	}
 	
@@ -278,7 +337,7 @@ public class Item implements Bundlable {
 	}
 	
 	public int effectiveLevel() {
-		return isBroken() ? 0 : level;
+		return level;
 	}
 	
 	public Item upgrade() {
@@ -301,10 +360,7 @@ public class Item implements Bundlable {
 	}
 	
 	public Item degrade() {
-		
-		this.level--;	
-		fix();
-		
+
 		return this;
 	}
 	
@@ -317,32 +373,7 @@ public class Item implements Bundlable {
 	}
 	
 	public void use() {
-		if (level > 0 && !isBroken()) {
-			int threshold = (int)(maxDurability() * DURABILITY_WARNING_LEVEL);
-			if (durability-- >= threshold && threshold > durability && levelKnown) {
-				GLog.w( TXT_GONNA_BREAK, name() );
-			}
-			if (isBroken()) {
-				getBroken();
-				if (levelKnown) {
-					GLog.n( TXT_BROKEN, name() );
-					Dungeon.hero.interrupt();
-					
-					CharSprite sprite = Dungeon.hero.sprite;
-					PointF point = sprite.center().offset( 0, -16 );
-					if (this instanceof Weapon) {
-						sprite.parent.add( Degradation.weapon( point ) );
-					} else if (this instanceof Armor) {
-						sprite.parent.add( Degradation.armor( point ) );
-					} else if (this instanceof Ring) {
-						sprite.parent.add( Degradation.ring( point ) );
-					} else if (this instanceof Wand) {
-						sprite.parent.add( Degradation.wand( point ) );
-					}
-					Sample.INSTANCE.play( Assets.SND_DEGRADE );
-				}
-			}
-		}
+		
 	}
 	
 	public boolean isBroken() {
@@ -353,13 +384,11 @@ public class Item implements Bundlable {
 	}
 	
 	public void fix() {
-		durability = maxDurability();
+		
 	}
 	
 	public void polish() {
-		if (durability < maxDurability()) {
-			durability++;
-		}
+		
 	}
 	
 	public int durability() {
@@ -471,9 +500,7 @@ public class Item implements Bundlable {
 		if (levelKnown) {
 			if (level > 0) {
 				price *= (level + 1);
-				if (isBroken()) {
-					price /= 2;
-				}
+				
 			} else if (level < 0) {
 				price /= (1 - level);
 			}

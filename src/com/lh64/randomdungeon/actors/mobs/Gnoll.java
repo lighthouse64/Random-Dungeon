@@ -17,6 +17,7 @@
  */
 package com.lh64.randomdungeon.actors.mobs;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.items.Gold;
@@ -29,11 +30,18 @@ public class Gnoll extends Mob {
 		name = "gnoll scout";
 		spriteClass = GnollSprite.class;
 		
-		HP = HT = 12;
-		defenseSkill = 4;
-		
-		EXP = 2;
-		maxLvl = 8;
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
+			} else {
+				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
+			}
+		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
+		if(Dungeon.hero.lvl <= 1){
+		EXP = Dungeon.hero.lvl;
+		} else{
+			EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
+		}
+		maxLvl = Dungeon.hero.lvl + 3;
 		
 		loot = Gold.class;
 		lootChance = 0.5f;
@@ -41,17 +49,21 @@ public class Gnoll extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 5 );
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3 + 1) +2,(Dungeon.hero.lvl/3)*2 + 6);
+			}  
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 11;
+		return ((Dungeon.hero.lvl/3 +1) * 2) + 7;
 	}
 	
 	@Override
 	public int dr() {
-		return 2;
+		return (Dungeon.hero.lvl /3 +1) + 1;
 	}
 	
 	@Override
@@ -64,6 +76,6 @@ public class Gnoll extends Mob {
 	public String description() {
 		return
 			"Gnolls are hyena-like humanoids. They dwell in sewers and dungeons, venturing up to raid the surface from time to time. " +
-			"Gnoll scouts are regular members of their pack, they are not as strong as brutes and not as intelligent as shamans.";
+			"Gnoll scouts are regular members of their pack; they are not as strong as brutes and not as intelligent as shamans.";
 	}
 }

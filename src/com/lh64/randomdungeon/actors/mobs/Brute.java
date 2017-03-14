@@ -37,11 +37,20 @@ public class Brute extends Mob {
 		name = "gnoll brute";
 		spriteClass = BruteSprite.class;
 		
-		HP = HT = 40;
-		defenseSkill = 15;
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*6 +3,(Dungeon.hero.lvl /3 +1)*7 +5);
+			} else {
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
+			}
+		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
 		
-		EXP = 8;
-		maxLvl = 15;
+		if(Dungeon.hero.lvl <= 1){
+			EXP = Dungeon.hero.lvl;
+			} else{
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl+1);
+			}
+		maxLvl = Dungeon.hero.lvl + 4;
+		
 		
 		loot = Gold.class;
 		lootChance = 0.5f;
@@ -57,19 +66,26 @@ public class Brute extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return enraged ?
-			Random.NormalIntRange( 10, 40 ) :	
-			Random.NormalIntRange( 8, 18 );
+		if(Dungeon.hero.lvl <= 8){
+			return enraged ? Random.Int( (Dungeon.hero.lvl/3 + 1) +2 ,(Dungeon.hero.lvl/3 + 1)*2 +4) :	
+				Random.Int( (Dungeon.hero.lvl/3 + 1) +1 ,(Dungeon.hero.lvl/3 + 1) +4);
+			} else {
+				return enraged ? Random.Int( (Dungeon.hero.lvl/3 +1 ) +7 ,(Dungeon.hero.lvl/3 )*3 +8):
+						Random.Int( (Dungeon.hero.lvl/3 +1 ) +4 ,(Dungeon.hero.lvl/3 )*2 +8);
+			}
+		
+				
+				
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 20;
+		return (Dungeon.hero.lvl/3 +1)*2 + 7;
 	}
 	
 	@Override
 	public int dr() {
-		return 8;
+		return (Dungeon.hero.lvl /3 +1) + 2;
 	}
 	
 	@Override

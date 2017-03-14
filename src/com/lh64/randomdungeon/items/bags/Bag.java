@@ -104,12 +104,14 @@ public class Bag extends Item implements Iterable<Item> {
 		items.clear();
 	}
 	
-	private static final String ITEMS	= "inventory";
+	public static String ITEMS	= "inventory";
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
+		
 		bundle.put( ITEMS, items );
+		
 	}
 	
 	@Override

@@ -28,6 +28,7 @@ import com.lh64.randomdungeon.Badges.Badge;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.blobs.ToxicGas;
+import com.lh64.randomdungeon.actors.buffs.Paralysis;
 import com.lh64.randomdungeon.actors.buffs.Poison;
 import com.lh64.randomdungeon.actors.hero.HeroSubClass;
 import com.lh64.randomdungeon.effects.CellEmitter;
@@ -49,29 +50,29 @@ public class Tengu extends Mob {
 	private static final int JUMP_DELAY = 5;
 	
 	{
-		name = Dungeon.depth == Statistics.deepestFloor ? "Tengu" : "memory of Tengu";
+		name = Dungeon.depth == Statistics.deepestFloor ? "Tengu" : "Memory of Tengu";
 		spriteClass = TenguSprite.class;
 		
-		HP = HT = 120;
-		EXP = 20;
-		defenseSkill = 20;
+		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*13 +5,(Dungeon.hero.lvl /3 +1)*15 +5);
+		EXP = Dungeon.hero.lvl;
+		defenseSkill = (Dungeon.hero.lvl) * 2;
 	}
 	
 	private int timeToJump = JUMP_DELAY;
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 8, 15 );
+		return Random.Int( (Dungeon.hero.lvl/2 ) +3 ,(Dungeon.hero.lvl/2 )*2 +5);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 20;
+		return Dungeon.hero.lvl + 11;
 	}
 	
 	@Override
 	public int dr() {
-		return 5;
+		return (Dungeon.hero.lvl /3 +1) + 2;
 	}
 	
 	@Override
@@ -185,6 +186,7 @@ public class Tengu extends Mob {
 		RESISTANCES.add( ToxicGas.class );
 		RESISTANCES.add( Poison.class );
 		RESISTANCES.add( Death.class );
+		RESISTANCES.add( Paralysis.class);
 		RESISTANCES.add( ScrollOfPsionicBlast.class );
 	}
 	

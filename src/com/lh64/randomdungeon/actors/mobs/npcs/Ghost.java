@@ -44,7 +44,7 @@ import com.lh64.randomdungeon.items.quest.DriedRose;
 import com.lh64.randomdungeon.items.quest.RatSkull;
 import com.lh64.randomdungeon.items.weapon.Weapon;
 import com.lh64.randomdungeon.items.weapon.missiles.MissileWeapon;
-import com.lh64.randomdungeon.levels.SewerLevel;
+import com.lh64.randomdungeon.levels.Level;
 import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.randomdungeon.sprites.GhostSprite;
 import com.lh64.randomdungeon.utils.Utils;
@@ -240,8 +240,8 @@ public class Ghost extends NPC {
 			}
 		}
 		
-		public static void spawn( SewerLevel level ) {
-			if (!spawned && Dungeon.depth > 1 && Random.Int( 5 - Dungeon.depth ) == 0) {
+		public static void spawn( Level level ) {
+			if (!spawned && Dungeon.depth > 2 && Random.Int( 5 - Dungeon.depth ) == 0) {
 				
 				Ghost ghost = new Ghost();
 				do {

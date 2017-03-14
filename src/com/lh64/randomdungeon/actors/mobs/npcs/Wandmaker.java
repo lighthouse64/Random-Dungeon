@@ -40,7 +40,6 @@ import com.lh64.randomdungeon.items.wands.WandOfReach;
 import com.lh64.randomdungeon.items.wands.WandOfRegrowth;
 import com.lh64.randomdungeon.items.wands.WandOfSlowness;
 import com.lh64.randomdungeon.levels.Level;
-import com.lh64.randomdungeon.levels.PrisonLevel;
 import com.lh64.randomdungeon.levels.Room;
 import com.lh64.randomdungeon.levels.Terrain;
 import com.lh64.randomdungeon.plants.Rotberry;
@@ -179,7 +178,7 @@ public class Wandmaker extends NPC {
 			}
 		}
 		
-		public static void spawn( PrisonLevel level, Room room ) {
+		public static void spawn( Level level, Room room ) {
 			if (!spawned && Dungeon.depth > 6 && Random.Int( 10 - Dungeon.depth ) == 0) {
 				
 				Wandmaker npc = new Wandmaker();

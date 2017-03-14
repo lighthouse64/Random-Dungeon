@@ -33,14 +33,14 @@ public class Hunger extends Buff implements Hero.Doom {
 
 	private static final float STEP	= 10f;
 	
-	public static final float HUNGRY	= 260f;
-	public static final float STARVING	= 360f;
+	public static final float HUNGRY	= 300f;
+	public static final float STARVING	= 400f;
 	
-	private static final String TXT_HUNGRY		= "You are hungry.";
+	private static final String TXT_HUNGRY		= "You are hungry...";
 	private static final String TXT_STARVING	= "You are starving!";
 	private static final String TXT_DEATH		= "You starved to death...";
 	
-	private float level;
+	public static float level;
 
 	private static final String LEVEL	= "level";
 	
@@ -64,14 +64,16 @@ public class Hunger extends Buff implements Hero.Doom {
 			
 			if (isStarving()) {
 				if (Random.Float() < 0.3f && (target.HP > 1 || !target.paralysed)) {
-					
+					if(level < 0){
+						level = 0;
+					}
 					GLog.n( TXT_STARVING );
 					hero.damage( 1, this );
 					
 					hero.interrupt();
 				}
 			} else {	
-				
+				if(Dungeon.depth > 1){
 				int bonus = 0;
 				for (Buff buff : target.buffs( RingOfSatiety.Satiety.class )) {
 					bonus += ((RingOfSatiety.Satiety)buff).level;
@@ -96,6 +98,7 @@ public class Hunger extends Buff implements Hero.Doom {
 				
 				if (statusUpdated) {
 					BuffIndicator.refreshHero();
+				}
 				}
 				
 			}

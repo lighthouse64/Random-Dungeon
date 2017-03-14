@@ -47,7 +47,7 @@ public class Ring extends EquipableItem {
 	
 	private static final String TXT_UNEQUIP_TITLE = "Unequip one ring";
 	private static final String TXT_UNEQUIP_MESSAGE = 
-		"You can only wear two rings at a time. " +
+		"You can only wear three rings at a time. " +
 		"Unequip one of your equipped rings.";
 	
 	protected Buff buff;
@@ -115,29 +115,44 @@ public class Ring extends EquipableItem {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
+		if(Dungeon.ShopkeeperBag == false && Dungeon.storage == false){
 		actions.add( isEquipped( hero ) ? AC_UNEQUIP : AC_EQUIP );
+		}
 		return actions;
 	}
 	
 	@Override
 	public boolean doEquip( final Hero hero ) {
 		
-		if (hero.belongings.ring1 != null && hero.belongings.ring2 != null) {
+		if (hero.belongings.ring1 != null && hero.belongings.ring2 != null && hero.belongings.ring3 != null) {
 			
 			final Ring r1 = hero.belongings.ring1;
 			final Ring r2 = hero.belongings.ring2;
+			final Ring r3 = hero.belongings.ring3;
 			
 			PixelDungeon.scene().add( 
 				new WndOptions( TXT_UNEQUIP_TITLE, TXT_UNEQUIP_MESSAGE, 
 					Utils.capitalize( r1.toString() ), 
-					Utils.capitalize( r2.toString() ) ) {
+					Utils.capitalize( r2.toString() ),
+					Utils.capitalize( r3.toString())) {
 					
 					@Override
 					protected void onSelect( int index ) {
 						
 						detach( hero.belongings.backpack );
+						Ring equipped;
+						if( index == 0){
+							equipped = ( r1 );
+							
+						}
+						else if ( index == 1){
+							equipped = ( r2 );
+							
+						}
+						else {
+							equipped  = ( r3 );
+						}
 						
-						Ring equipped = (index == 0 ? r1 : r2);
 						if (equipped.doUnequip( hero, true, false )) {
 							doEquip( hero );
 						} else {
@@ -152,8 +167,10 @@ public class Ring extends EquipableItem {
 			
 			if (hero.belongings.ring1 == null) {
 				hero.belongings.ring1 = this;
-			} else {
+			} else if (hero.belongings.ring2 == null) {
 				hero.belongings.ring2 = this;
+			} else{
+				hero.belongings.ring3 = this;
 			}
 			
 			detach( hero.belongings.backpack );
@@ -184,8 +201,10 @@ public class Ring extends EquipableItem {
 			
 			if (hero.belongings.ring1 == this) {
 				hero.belongings.ring1 = null;
-			} else {
+			} else if (hero.belongings.ring2 == this) {
 				hero.belongings.ring2 = null;
+			} else{
+				hero.belongings.ring3 = null;
 			}
 			
 			hero.remove( buff );
@@ -202,7 +221,7 @@ public class Ring extends EquipableItem {
 	
 	@Override
 	public boolean isEquipped( Hero hero ) {
-		return hero.belongings.ring1 == this || hero.belongings.ring2 == this;
+		return hero.belongings.ring1 == this || hero.belongings.ring2 == this || hero.belongings.ring3 == this;
 	}
 	
 	@Override
@@ -232,14 +251,6 @@ public class Ring extends EquipableItem {
 		renewBuff();
 	}
 	
-	@Override
-	public int maxDurability( int lvl ) {
-		if (lvl <= 1) {
-			return Integer.MAX_VALUE;
-		} else {
-			return 100 * (lvl < 16 ? 16 - lvl : 1);
-		}
-	}
 	
 	public boolean isKnown() {
 		return handler.isKnown( this );

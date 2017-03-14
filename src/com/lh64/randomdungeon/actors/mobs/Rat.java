@@ -17,49 +17,64 @@
  */
 package com.lh64.randomdungeon.actors.mobs;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
+import com.lh64.randomdungeon.sprites.CharSprite;
 import com.lh64.randomdungeon.sprites.RatSprite;
 import com.lh64.utils.Random;
 
 public class Rat extends Mob {
 
 	{
-		name = "marsupial rat";
+		name = "Sewer rat";
 		spriteClass = RatSprite.class;
 		
-		HP = HT = 8;
-		defenseSkill = 3;
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
+			} else {
+				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
+			}
+		defenseSkill = (Dungeon.hero.lvl/3 +1) + 2;
 		
-		maxLvl = 5;
+		if(Dungeon.hero.lvl <= 1){
+			EXP = Dungeon.hero.lvl;
+			} else{
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
+			}
+		maxLvl = Dungeon.hero.lvl+ 5;
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1, 5 );
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
+			}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 8;
+		return (Dungeon.hero.lvl/3 +1) + 8;
 	}
 	
 	@Override
 	public int dr() {
-		return 1;
+		return (Dungeon.hero.lvl /3 +1);
 	}
 	
 	@Override
 	public void die( Object cause ) {
 		Ghost.Quest.processSewersKill( pos );
-		
+		sprite.showStatus( CharSprite.NEGATIVE, "X(" );
 		super.die( cause );
 	}
 	
 	@Override
 	public String description() {
 		return
-			"Marsupial rats are aggressive, but rather weak denizens " +
-			"of the sewers. They can be dangerous only in big numbers.";
+			"Sewer rats are aggressive, but rather weak denizens " +
+			"of the sewers. They can be dangerous only in big numbers.  These rats also don't have rabies.";
 	}
 }

@@ -29,7 +29,6 @@ import com.lh64.randomdungeon.Badges;
 import com.lh64.randomdungeon.Bones;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.GamesInProgress;
-import com.lh64.randomdungeon.ResultDescriptions;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.buffs.Barkskin;
@@ -67,6 +66,7 @@ import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.KindOfWeapon;
 import com.lh64.randomdungeon.items.Heap.Type;
 import com.lh64.randomdungeon.items.armor.Armor;
+import com.lh64.randomdungeon.items.bags.Bag;
 import com.lh64.randomdungeon.items.keys.GoldenKey;
 import com.lh64.randomdungeon.items.keys.IronKey;
 import com.lh64.randomdungeon.items.keys.Key;
@@ -112,14 +112,14 @@ import com.lh64.utils.Random;
 
 public class Hero extends Char {
 	
-	private static final String TXT_LEAVE = "One does not simply leave Pixel Dungeon.";
+	private static final String TXT_LEAVE = "You haven't unlocked the upper floors.";
 	
 	private static final String TXT_LEVEL_UP = "level up!";
 	private static final String TXT_NEW_LEVEL = 
 		"Welcome to level %d! Now you are healthier and more focused. " +
 		"It's easier for you to hit enemies and dodge their attacks.";
 	
-	public static final String TXT_YOU_NOW_HAVE	= "You now have %s";
+	public static final String TXT_YOU_NOW_HAVE	= "You obtained the %s";
 	
 	private static final String TXT_SOMETHING_ELSE	= "There is something else here";
 	private static final String TXT_LOCKED_CHEST	= "This chest is locked and you don't have matching key";
@@ -157,6 +157,7 @@ public class Hero extends Char {
 	public MissileWeapon rangedWeapon = null;
 	public Belongings belongings;
 	public Storage storage;
+	public ShopkeeperBag shopkeeperbag;
 	
 	public int STR;
 	public boolean weakened = false;
@@ -178,6 +179,7 @@ public class Hero extends Char {
 		
 		belongings = new Belongings( this );
 		storage = new Storage(this);
+		shopkeeperbag = new ShopkeeperBag(this);
 		
 		visibleEnemies = new ArrayList<Mob>();
 	}
@@ -191,10 +193,12 @@ public class Hero extends Char {
 	private static final String STRENGTH	= "STR";
 	private static final String LEVEL		= "lvl";
 	private static final String EXPERIENCE	= "exp";
-	
+
 	@Override
 	public void storeInBundle( Bundle bundle ) {
+		
 		super.storeInBundle( bundle );
+		
 		
 		heroClass.storeInBundle( bundle );
 		subClass.storeInBundle( bundle );
@@ -207,8 +211,15 @@ public class Hero extends Char {
 		bundle.put( LEVEL, lvl );
 		bundle.put( EXPERIENCE, exp );
 		
+		Bag.ITEMS = "inventory";
 		belongings.storeInBundle( bundle );
+		Bag.ITEMS = "shopkeeperbag";
+		shopkeeperbag.storeInBundle(bundle);
+		Bag.ITEMS = "storage";
+		storage.storeInBundle(bundle);
 	}
+	
+
 	
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
@@ -226,7 +237,12 @@ public class Hero extends Char {
 		lvl = bundle.getInt( LEVEL );
 		exp = bundle.getInt( EXPERIENCE );
 		
+		Bag.ITEMS = "inventory";
 		belongings.restoreFromBundle( bundle );
+		Bag.ITEMS = "shopkeeperbag";
+		shopkeeperbag.restoreFromBundle(bundle);
+		Bag.ITEMS = "storage";
+		storage.restoreFromBundle(bundle);
 	}
 	
 	public static void preview( GamesInProgress.Info info, Bundle bundle ) {
@@ -465,7 +481,7 @@ public class Hero extends Char {
 		ready = false;
 	}
 	
-	private void ready() {
+	public void ready() {
 		sprite.idle();
 		curAction = null;
 		ready = true;
@@ -741,9 +757,12 @@ public class Hero extends Char {
 					GameScene.show( new WndMessage( TXT_LEAVE ) );
 					ready();
 				} else {
-					Dungeon.win( ResultDescriptions.WIN );
-					Dungeon.deleteGame( Dungeon.hero.heroClass, true );
+					if (Dungeon.zerocheck == true){
 					Game.switchScene( SurfaceScene.class );
+					} else{
+						InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
+						Game.switchScene( InterlevelScene.class );
+					}
 				}
 				
 			}
@@ -751,6 +770,10 @@ public class Hero extends Char {
 				ready();
 				GameScene.show(new WndConfirmAscend());
 				
+			}
+			else if (Dungeon.depth == 0){
+				InterlevelScene.mode = InterlevelScene.Mode.DESCEND;
+				Game.switchScene( InterlevelScene.class );
 			}
 			
 			else {
@@ -1089,33 +1112,33 @@ public class Hero extends Char {
 		
 		if (sprite != null) {
 			if (buff instanceof Burning) {
-				GLog.w( "You catch fire!" );
+				GLog.w( "You catch fire! \n" );
 				interrupt();
 			} else if (buff instanceof Paralysis) {
-				GLog.w( "You are paralysed!" );
+				GLog.w( "You are paralysed! \n" );
 				interrupt();
 			} else if (buff instanceof Poison) {
-				GLog.w( "You are poisoned!" );
+				GLog.w( "You are poisoned! \n" );
 				interrupt();
 			} else if (buff instanceof Ooze) {
-				GLog.w( "Caustic ooze eats your flesh. Wash away it!" );
+				GLog.w( "Caustic ooze eats your flesh. Wash away it! \n" );
 			} else if (buff instanceof Roots) {
-				GLog.w( "You can't move!" );
+				GLog.w( "You can't move! \n" );
 			} else if (buff instanceof Weakness) {
-				GLog.w( "You feel weakened!" );
+				GLog.w( "You feel weakened! \n" );
 			} else if (buff instanceof Blindness) {
-				GLog.w( "You are blinded!" );
+				GLog.w( "You are blinded! \n" );
 			} else if (buff instanceof Fury) {
-				GLog.w( "You become furious!" );
+				GLog.w( "You become furious! \n" );
 				sprite.showStatus( CharSprite.POSITIVE, "furious" );
 			} else if (buff instanceof Charm) {
-				GLog.w( "You are charmed!" );
+				GLog.w( "You are charmed! \n" );
 			}  else if (buff instanceof Cripple) {
-				GLog.w( "You are crippled!" );
+				GLog.w( "You are crippled! \n" );
 			} else if (buff instanceof Bleeding) {
-				GLog.w( "You are bleeding!" );
+				GLog.w( "You are bleeding! \n" );
 			} else if (buff instanceof Vertigo) {
-				GLog.w( "Everything is spinning around you!" );
+				GLog.w( "Everything is spinning around you! \n" );
 				interrupt();
 			}
 			
@@ -1401,6 +1424,7 @@ public class Hero extends Char {
 	
 	public void resurrect( int resetLevel ) {
 		if(WndConfirmAscend.go == true){
+			HP=HT;
 			Dungeon.gold = Dungeon.gold/2;
 			belongings.resurrect(resetLevel);
 		}

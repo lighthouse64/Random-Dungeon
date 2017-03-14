@@ -17,9 +17,11 @@
  */
 package com.lh64.randomdungeon.actors.mobs;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.mobs.Yog.BurningFist;
 import com.lh64.randomdungeon.actors.mobs.Yog.RottingFist;
+import com.lh64.randomdungeon.actors.mobs.npcs.Human;
 import com.lh64.utils.Random;
 
 public class Bestiary {
@@ -70,110 +72,56 @@ public class Bestiary {
 			classes = new Class<?>[]{ Rat.class };
 			break;
 		case 2:
-			chances = new float[]{ 1, 1 };
-			classes = new Class<?>[]{ Rat.class, Gnoll.class };
-			break;
 		case 3:
-			chances = new float[]{ 1, 2, 1,   0.02f };
-			classes = new Class<?>[]{ Rat.class, Gnoll.class, Crab.class,   Swarm.class };
-			break;
 		case 4:
-			chances = new float[]{ 1, 2, 3,   0.02f, 0.01f, 0.01f };
-			classes = new Class<?>[]{ Rat.class, Gnoll.class, Crab.class,   Swarm.class, Skeleton.class, Thief.class };
-			break;
-			
 		case 5:
-			chances = new float[]{ 1 };
-			classes = new Class<?>[]{ Goo.class };
-			break;
-			
 		case 6:
-			chances = new float[]{ 4, 2, 1,   0.2f };
-			classes = new Class<?>[]{ Skeleton.class, Thief.class, Swarm.class,   Shaman.class };
-			break;
 		case 7:
-			chances = new float[]{ 3, 1, 1, 1 };
-			classes = new Class<?>[]{ Skeleton.class, Shaman.class, Thief.class, Swarm.class };
-			break;
 		case 8:
-			chances = new float[]{ 3, 2, 1, 1, 1,   0.02f };
-			classes = new Class<?>[]{ Skeleton.class, Shaman.class, Gnoll.class, Thief.class, Swarm.class,   Bat.class };
-			break;
 		case 9:
-			chances = new float[]{ 3, 3, 1, 1,   0.02f, 0.01f };
-			classes = new Class<?>[]{ Skeleton.class, Shaman.class, Thief.class, Swarm.class,   Bat.class, Brute.class };
-			break;
-			
 		case 10:
-			chances = new float[]{ 1 };
-			classes = new Class<?>[]{ Tengu.class };
-			break;
-			
 		case 11:
-			chances = new float[]{ 1,   0.2f };
-			classes = new Class<?>[]{ Bat.class,   Brute.class };
-			break;
 		case 12:
-			chances = new float[]{ 1, 1,   0.2f };
-			classes = new Class<?>[]{ Bat.class, Brute.class,   Spinner.class };
-			break;
 		case 13:
-			chances = new float[]{ 1, 3, 1, 1,   0.02f };
-			classes = new Class<?>[]{ Bat.class, Brute.class, Shaman.class, Spinner.class,    Elemental.class };
-			break;
 		case 14:
-			chances = new float[]{ 1, 3, 1, 4,    0.02f, 0.01f };
-			classes = new Class<?>[]{ Bat.class, Brute.class, Shaman.class, Spinner.class,    Elemental.class, Monk.class };
-			break;
-			
 		case 15:
-			chances = new float[]{ 1 };
-			classes = new Class<?>[]{ DM300.class };
-			break;
-			
 		case 16:
-			chances = new float[]{ 1, 1,   0.2f };
-			classes = new Class<?>[]{ Elemental.class, Warlock.class,    Monk.class };
-			break;
 		case 17:
-			chances = new float[]{ 1, 1, 1 };
-			classes = new Class<?>[]{ Elemental.class, Monk.class, Warlock.class };
-			break;
 		case 18:
-			chances = new float[]{ 1, 2, 1, 1 };
-			classes = new Class<?>[]{ Elemental.class, Monk.class, Golem.class, Warlock.class };
-			break;
 		case 19:
-			chances = new float[]{ 1, 2, 3, 1,    0.02f };
-			classes = new Class<?>[]{ Elemental.class, Monk.class, Golem.class, Warlock.class,    Succubus.class };
-			break;
-			
 		case 20:
-			chances = new float[]{ 1 };
-			classes = new Class<?>[]{ King.class };
-			break;
-			
+		case 21:
 		case 22:
-			chances = new float[]{ 1, 1 };
-			classes = new Class<?>[]{ Succubus.class, Eye.class };
-			break;
 		case 23:
-			chances = new float[]{ 1, 2, 1 };
-			classes = new Class<?>[]{ Succubus.class, Eye.class, Scorpio.class };
-			break;
 		case 24:
-			chances = new float[]{ 1, 2, 3 };
-			classes = new Class<?>[]{ Succubus.class, Eye.class, Scorpio.class };
-			break;
-			
 		case 25:
-			chances = new float[]{ 1 };
+		case 26:
+		case 27:
+		case 28:	
+			if (Dungeon.levelTheme == 1){
+				chances = new float[]{ 1, 1, 1, 0.8f };
+				classes = new Class<?>[]{ Rat.class, Gnoll.class, SewerHorse.class, Crab.class };
+			}
+			else if (Dungeon.levelTheme == 2){
+				chances = new float[]{ 1, 1, 0.8f, 1 };
+				classes = new Class<?>[]{ Shaman.class, Gnoll.class, Skeleton.class, Thief.class };
+			}
+			else if (Dungeon.levelTheme == 3){
+				chances = new float[]{ 1, 1, 1, 1, 0.5f };
+				classes = new Class<?>[]{ Bat.class, Gnoll.class, SewerHorse.class, Spinner.class, Brute.class };
+			}
+			else{
+				chances = new float[]{ 1 };
+				classes = new Class<?>[]{ Eye.class };
+			}
+			break;
+		case 29:
+			chances = new float[]{ 1};
 			classes = new Class<?>[]{ Yog.class };
 			break;
-			
 		default:
-			chances = new float[]{ 1 };
-			classes = new Class<?>[]{ Eye.class };
+			chances = new float[]{ 0.5f };
+			classes = new Class<?>[]{ Human.class };
 		}
 		
 		return classes[ Random.chances( chances )];

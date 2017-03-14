@@ -48,7 +48,6 @@ public class WndTradeItem extends Window {
 	private static final String TXT_CANCEL		= "Never mind";
 	
 	private static final String TXT_SOLD	= "You've sold your %s for %dg";
-	private static final String TXT_BOUGHT	= "You've bought %s for %dg";
 	
 	private WndBag owner;
 	
@@ -112,6 +111,7 @@ public class WndTradeItem extends Window {
 		resize( WIDTH, (int)btnCancel.bottom() );
 	}
 	
+	
 	public WndTradeItem( final Heap heap, boolean canBuy ) {
 		
 		super();
@@ -128,7 +128,7 @@ public class WndTradeItem extends Window {
 				@Override
 				protected void onClick() {
 					hide();
-					buy( heap );
+					
 				}
 			};
 			btnBuy.setRect( 0, pos + GAP, WIDTH, BTN_HEIGHT );
@@ -232,18 +232,5 @@ public class WndTradeItem extends Window {
 		return price;
 	}
 	
-	private void buy( Heap heap ) {
-		
-		Hero hero = Dungeon.hero;
-		Item item = heap.pickUp();
-		
-		int price = price( item );
-		Dungeon.gold -= price;
-		
-		GLog.i( TXT_BOUGHT, item.name(), price );
-		
-		if (!item.doPickUp( hero )) {
-			Dungeon.level.drop( item, heap.pos ).sprite.drop();
-		}
-	}
+
 }

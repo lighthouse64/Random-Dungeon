@@ -41,16 +41,28 @@ public class Skeleton extends Mob {
 		name = "skeleton";
 		spriteClass = SkeletonSprite.class;
 		
-		HP = HT = 25;
-		defenseSkill = 9;
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*6 +3,(Dungeon.hero.lvl /3 +1)*7 +5);
+			} else {
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
+			}
+		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
 		
-		EXP = 5;
-		maxLvl = 10;
+		if(Dungeon.hero.lvl <= 1){
+			EXP = Dungeon.hero.lvl;
+			} else{
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl+1);
+			}
+		maxLvl = Dungeon.hero.lvl + 3;
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 3, 8 );
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3 + 1) +2,(Dungeon.hero.lvl/3)*2 + 6);
+			}  
 	}
 	
 	@Override
@@ -62,7 +74,7 @@ public class Skeleton extends Mob {
 		for (int i=0; i < Level.NEIGHBOURS8.length; i++) {
 			Char ch = findChar( pos + Level.NEIGHBOURS8[i] );
 			if (ch != null && ch.isAlive()) {
-				int damage = Math.max( 0,  damageRoll() - Random.IntRange( 0, ch.dr() / 2 ) );
+				int damage = Math.max( 0,  damageRoll() - Random.IntRange( 0, ch.dr() / 3 ) );
 				ch.damage( damage, this );
 				if (ch == Dungeon.hero && !ch.isAlive()) {
 					heroKilled = true;
@@ -96,12 +108,12 @@ public class Skeleton extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 12;
+		return (Dungeon.hero.lvl/3 +1)*2 + 8;
 	}
 	
 	@Override
 	public int dr() {
-		return 5;
+		return (Dungeon.hero.lvl /3 +1) + 2;
 	}
 	
 	@Override
@@ -113,8 +125,8 @@ public class Skeleton extends Mob {
 	public String description() {
 		return
 			"Skeletons are composed of corpses bones from unlucky adventurers and inhabitants of the dungeon, " +
-			"animated by emanations of evil magic from the depths below. After they have been " +
-			"damaged enough, they disintegrate in an explosion of bones.";
+			"animated by emanations of evil magic from the depths below. After " +
+			"enough damage, they disintegrate in an explosion of bones.";
 	}
 	
 	private static final HashSet<Class<?>> IMMUNITIES = new HashSet<Class<?>>();

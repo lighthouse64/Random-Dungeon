@@ -42,11 +42,19 @@ public class Thief extends Mob {
 		name = "crazy thief";
 		spriteClass = ThiefSprite.class;
 		
-		HP = HT = 20;
-		defenseSkill = 12;
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
+			} else {
+				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
+			}
+		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
 		
-		EXP = 5;
-		maxLvl = 10;
+		if(Dungeon.hero.lvl <= 1){
+			EXP = Dungeon.hero.lvl;
+			} else{
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
+			}
+		maxLvl = Dungeon.hero.lvl + 5;
 		
 		loot = RingOfHaggler.class;
 		lootChance = 0.01f;
@@ -70,7 +78,11 @@ public class Thief extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1, 7 );
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
+			}
 	}
 	
 	@Override
@@ -90,12 +102,12 @@ public class Thief extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 12;
+		return ((Dungeon.hero.lvl/3 +1) * 2) + 7;
 	}
 	
 	@Override
 	public int dr() {
-		return 3;
+		return (Dungeon.hero.lvl /3 +1) + 1;
 	}
 	
 	@Override

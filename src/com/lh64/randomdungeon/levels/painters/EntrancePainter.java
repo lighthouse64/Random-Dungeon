@@ -18,6 +18,7 @@
 package com.lh64.randomdungeon.levels.painters;
 
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.levels.Level;
 import com.lh64.randomdungeon.levels.Room;
 import com.lh64.randomdungeon.levels.Terrain;
@@ -34,8 +35,12 @@ public class EntrancePainter extends Painter {
 		}
 		
 		level.entrance = room.random( 1 );
-	
+		if(Dungeon.depth == 0){
+			set( level, level.entrance, Terrain.EXIT );
+		} else{
 		set( level, level.entrance, Terrain.ENTRANCE );
+		}
+
 	}
 	
 }

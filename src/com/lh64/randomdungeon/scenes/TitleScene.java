@@ -17,6 +17,8 @@
  */
 package com.lh64.randomdungeon.scenes;
 
+import java.io.IOException;
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.opengl.GLES20;
@@ -29,6 +31,7 @@ import com.lh64.noosa.audio.Music;
 import com.lh64.noosa.audio.Sample;
 import com.lh64.noosa.ui.Button;
 import com.lh64.randomdungeon.Assets;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.PixelDungeon;
 import com.lh64.randomdungeon.effects.BannerSprites;
 import com.lh64.randomdungeon.effects.Fireball;
@@ -42,6 +45,7 @@ public class TitleScene extends PixelScene {
 	private static final String TXT_HIGHSCORES	= "Rankings";
 	private static final String TXT_BADGES		= "Badges";
 	private static final String TXT_ABOUT		= "About";
+
 	
 	@Override
 	public void create() {
@@ -69,8 +73,8 @@ public class TitleScene extends PixelScene {
 		title.x = (w - title.width()) / 2;
 		title.y = (h - height) / 2;
 		
-		placeTorch( title.x + 18, title.y + 20 );
-		placeTorch( title.x + title.width - 18, title.y + 20 );
+		placeTorch( title.x + 8, title.y + 15 );
+		placeTorch( title.x + title.width - 18, title.y + 15 );
 		
 		Image signs = new Image( BannerSprites.get( BannerSprites.Type.PIXEL_DUNGEON_SIGNS ) ) {
 			private float time = 0;
@@ -133,6 +137,7 @@ public class TitleScene extends PixelScene {
 			btnAbout.setPos( w / 2, (h + height) / 2 - DashboardItem.SIZE );
 			btnPlay.setPos( w / 2 - btnPlay.width(), btnAbout.top() - DashboardItem.SIZE );
 			btnHighscores.setPos( w / 2, btnPlay.top() );
+			
 		}
 		
 		BitmapText version = new BitmapText( "v " + Game.version, font1x );
@@ -141,6 +146,17 @@ public class TitleScene extends PixelScene {
 		version.x = w - version.width();
 		version.y = h - version.height();
 		add( version );
+		try {
+			Dungeon.loadName("Name");
+		} catch (IOException e) {
+			
+			e.printStackTrace();
+		}
+		BitmapText str = new BitmapText(Dungeon.name + "'s",PixelScene.font3x);
+		str.measure();
+		str.x = title.x ;
+		str.y = title.y -20 ;
+		add(str);
 		
 		PrefsButton btnPrefs = new PrefsButton();
 		btnPrefs.setPos( 0, 0 );
@@ -158,7 +174,6 @@ public class TitleScene extends PixelScene {
 		fb.setPos( x, y );
 		add( fb );
 	}
-	
 	private static class DashboardItem extends Button {
 		
 		public static final float SIZE	= 48;

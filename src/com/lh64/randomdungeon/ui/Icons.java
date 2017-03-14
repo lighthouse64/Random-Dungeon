@@ -78,7 +78,7 @@ public enum Icons {
 			icon.frame( icon.texture.uvRect( 0, 13, 16, 29 ) );
 			break;
 		case WATA:
-			icon.frame( icon.texture.uvRect( 30, 16, 45, 26 ) );
+			icon.frame( icon.texture.uvRect( 30, 16, 45, 28 ) );
 			break;
 		case WARRIOR:
 			icon.frame( icon.texture.uvRect( 0, 29, 16, 45 ) );

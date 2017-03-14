@@ -43,6 +43,7 @@ import com.lh64.randomdungeon.ui.Archs;
 import com.lh64.randomdungeon.ui.RedButton;
 import com.lh64.utils.Point;
 import com.lh64.utils.Random;
+import com.lh64.randomdungeon.scenes.InterlevelScene;
 
 public class SurfaceScene extends PixelScene {
 	
@@ -159,7 +160,8 @@ public class SurfaceScene extends PixelScene {
 		
 		RedButton gameOver = new RedButton( "Game Over" ) {
 			protected void onClick() {
-				Game.switchScene( TitleScene.class );
+				InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
+				Game.switchScene( InterlevelScene.class );
 			}
 		};
 		gameOver.setSize( SKY_WIDTH - FRAME_MARGIN_X * 2, BUTTON_HEIGHT );
@@ -181,6 +183,8 @@ public class SurfaceScene extends PixelScene {
 	
 	@Override
 	protected void onBackPressed() {
+		InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
+		Game.switchScene( InterlevelScene.class );
 	}
 	
 	private static class Sky extends Visual {

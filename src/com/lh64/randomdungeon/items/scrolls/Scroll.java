@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.lh64.randomdungeon.Badges;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.buffs.Blindness;
 import com.lh64.randomdungeon.actors.hero.Hero;
 import com.lh64.randomdungeon.items.Item;
@@ -110,17 +111,26 @@ public abstract class Scroll extends Item {
 			
 			if (hero.buff( Blindness.class ) != null) {
 				GLog.w( TXT_BLINDED );
-			} else {
+			}
+			else if(Dungeon.ShopkeeperBag == true){
+				GLog.n("You know, you have to buy that before you read it.");
+			}
+			else if(Dungeon.storage == true){
+				GLog.w("You attempt to read the scroll from the chest, but fail.");
+			}else {
+			
+			
 				curUser = hero;
 				curItem = detach( hero.belongings.backpack );
 				doRead();
 			}
 			
-		} else {
 		
-			super.execute( hero, action );
-			
-		}
+	} else {
+		
+		super.execute( hero, action );
+		
+	}
 	}
 	
 	abstract protected void doRead();

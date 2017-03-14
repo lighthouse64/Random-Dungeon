@@ -17,16 +17,13 @@
  */
 package com.lh64.randomdungeon.levels.features;
 
-import com.lh64.noosa.audio.Sample;
-import com.lh64.randomdungeon.Assets;
+
 import com.lh64.randomdungeon.Dungeon;
-import com.lh64.randomdungeon.effects.CellEmitter;
-import com.lh64.randomdungeon.effects.particles.ElmoParticle;
 import com.lh64.randomdungeon.levels.DeadEndLevel;
-import com.lh64.randomdungeon.levels.Terrain;
+import com.lh64.randomdungeon.levels.TownLevel;
 import com.lh64.randomdungeon.scenes.GameScene;
-import com.lh64.randomdungeon.utils.GLog;
 import com.lh64.randomdungeon.windows.WndMessage;
+import com.lh64.utils.Random;
 
 public class Sign {
 
@@ -38,23 +35,23 @@ public class Sign {
 		"Not all doors in the dungeon are visible at first sight. If you are stuck, search for hidden doors.",
 		"Remember, that raising your strength is not the only way to access better equipment. You can go " +
 			"the other way, lowering its strength requirement with Scrolls of Upgrade.",
-		"You can spend your gold in shops on deeper levels of the dungeon. The first one is on the 6th level.",
+		"You can spend your gold in shops on deeper levels of the dungeon. ",
 			
-		"Beware of Goo!",
+		"Performing sneak attacks on enemies gives you a 100% chance to hit them.",
 		
-		"Pixel-Mart - all you need for successful adventure!",
+		"You can easily kill wraiths with wands.",
 		"Identify your potions and scrolls as soon as possible. Don't put it off to the moment " +
 			"when you actually need them.",
 		"Being hungry doesn't hurt, but starving does hurt.",
 		"Surprise attack has a better chance to hit. For example, you can ambush your enemy behind " +
 			"a closed door when you know it is approaching.",
 		
-		"Don't let The Tengu out!",
+		"Good luck killing monsters! \n -someone",
 		
 		"Pixel-Mart. Spend money. Live longer.",
 		"When you're attacked by several monsters at the same time, try to retreat behind a door.",
 		"If you are burning, you can't put out the fire in the water while levitating.",
-		"There is no sense in possessing more than one Ankh at the same time, because you will lose them upon resurrecting.",
+		"There is no sense in possessing more than one Ankh at the same time, because you will lose them upon resurrecting. (Unless it's not in your bag)",
 		
 		"DANGER! Heavy machinery can cause injury, loss of limbs or death!",
 		
@@ -63,13 +60,12 @@ public class Sign {
 		"Weapons and armors deteriorate faster than wands and rings, but there are more ways to fix them.",
 		"The only way to obtain a Scroll of Wipe Out is to receive it as a gift from the dungeon spirits.",
 		
-		"No weapons allowed in the presence of His Majesty!",
+		"Save money for bags.  They will save your main bag's space.",
 		
 		"Pixel-Mart. Special prices for demon hunters!"
 	};
 	
-	private static final String TXT_BURN =
-		"As you try to read the sign it bursts into greenish flames.";
+	
 	
 	public static void read( int pos ) {
 		
@@ -77,24 +73,16 @@ public class Sign {
 			
 			GameScene.show( new WndMessage( TXT_DEAD_END ) );
 			
+		} 
+		else if (Dungeon.level instanceof TownLevel ){
+			GameScene.show(new WndMessage("This is the city, the place that lies above the dungeon."));
 		} else {
 			
-			int index = Dungeon.depth - 1;
+			int index;
+			index = Random.Int(0,22);
 			
-			if (index < TIPS.length) {
 				GameScene.show( new WndMessage( TIPS[index] ) );
-			} else {
-				
-				Dungeon.level.destroy( pos );
-				GameScene.updateMap( pos );
-				GameScene.discoverTile( pos, Terrain.SIGN );
-				
-				CellEmitter.get( pos ).burst( ElmoParticle.FACTORY, 6 );
-				Sample.INSTANCE.play( Assets.SND_BURNING );
-				
-				GLog.w( TXT_BURN );
-				
-			}
+			
 		}
 	}
 }

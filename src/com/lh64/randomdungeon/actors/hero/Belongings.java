@@ -35,7 +35,7 @@ import com.lh64.utils.Random;
 
 public class Belongings implements Iterable<Item> {
 
-	public static final int BACKPACK_SIZE	= 19;
+	public static final int BACKPACK_SIZE	= 23;
 	
 	private Hero owner;
 	
@@ -45,6 +45,7 @@ public class Belongings implements Iterable<Item> {
 	public Armor armor = null;
 	public Ring ring1 = null;
 	public Ring ring2 = null;
+	public Ring ring3 = null;
 	
 	public Belongings( Hero owner ) {
 		this.owner = owner;
@@ -60,6 +61,7 @@ public class Belongings implements Iterable<Item> {
 	private static final String ARMOR		= "armor";
 	private static final String RING1		= "ring1";
 	private static final String RING2		= "ring2";
+	private static final String RING3       = "ring3";
 	
 	public void storeInBundle( Bundle bundle ) {
 		
@@ -69,6 +71,7 @@ public class Belongings implements Iterable<Item> {
 		bundle.put( ARMOR, armor );
 		bundle.put( RING1, ring1 );
 		bundle.put( RING2, ring2 );
+		bundle.put(RING3, ring3);
 	}
 	
 	public void restoreFromBundle( Bundle bundle ) {
@@ -91,6 +94,10 @@ public class Belongings implements Iterable<Item> {
 		ring2 = (Ring)bundle.get( RING2 );
 		if (ring2 != null) {
 			ring2.activate( owner );
+		}
+		ring3 = (Ring)bundle.get( RING3 );
+		if(ring3 != null){
+			ring3.activate(owner);
 		}
 	}
 	
@@ -152,6 +159,10 @@ public class Belongings implements Iterable<Item> {
 			ring2.identify();
 			Badges.validateItemLevelAquired( ring2 );
 		}
+		if (ring3 != null) {
+			ring3.identify();
+			Badges.validateItemLevelAquired( ring3 );
+		}
 		for (Item item : backpack) {
 			item.cursedKnown = true;
 		}
@@ -194,6 +205,10 @@ public class Belongings implements Iterable<Item> {
 		if (ring2 != null) {
 			ring2.cursed = false;
 			ring2.activate( owner );
+		}
+		if (ring3 != null) {
+			ring3.cursed = false;
+			ring3.activate( owner );
 		}
 	}
 	
@@ -246,7 +261,7 @@ public class Belongings implements Iterable<Item> {
 		
 		private Iterator<Item> backpackIterator = backpack.iterator();
 		
-		private Item[] equipped = {weapon, armor, ring1, ring2};
+		private Item[] equipped = {weapon, armor, ring1, ring2, ring3};
 		private int backpackIndex = equipped.length;
 		
 		@Override
@@ -289,6 +304,8 @@ public class Belongings implements Iterable<Item> {
 			case 3:
 				equipped[3] = ring2 = null;
 				break;
+			case 4:
+				equipped[4] = ring3 = null;
 			default:
 				backpackIterator.remove();
 			}

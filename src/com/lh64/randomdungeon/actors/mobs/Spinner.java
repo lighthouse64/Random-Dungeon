@@ -19,6 +19,7 @@ package com.lh64.randomdungeon.actors.mobs;
 
 import java.util.HashSet;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.blobs.Blob;
 import com.lh64.randomdungeon.actors.blobs.Web;
@@ -37,11 +38,19 @@ public class Spinner extends Mob {
 		name = "cave spinner";
 		spriteClass = SpinnerSprite.class;
 		
-		HP = HT = 50;
-		defenseSkill = 14;
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
+			} else {
+				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
+			}
+		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
 		
-		EXP = 9;
-		maxLvl = 16;
+		if(Dungeon.hero.lvl <= 1){
+			EXP = Dungeon.hero.lvl;
+			} else{
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl+1);
+			}
+		maxLvl = Dungeon.hero.lvl / 5 + Dungeon.hero.lvl + 2;
 		
 		loot = new MysteryMeat();
 		lootChance = 0.125f;
@@ -51,17 +60,21 @@ public class Spinner extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 12, 16 );
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
+			}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 20;
+		return ((Dungeon.hero.lvl/3 +1) * 2) + 7;
 	}
 	
 	@Override
 	public int dr() {
-		return 6;
+		return (Dungeon.hero.lvl /3 +1) + 2;
 	}
 	
 	@Override
@@ -78,12 +91,14 @@ public class Spinner extends Mob {
 	
 	@Override
 	public int attackProc( Char enemy, int damage ) {
-		if (Random.Int( 2 ) == 0) {
+		if(Dungeon.hero.lvl > 6){
+		if (Random.Int( 0,9  ) == 0) {
 			Buff.affect( enemy, Poison.class ).set( Random.Int( 7, 9 ) * Poison.durationFactor( enemy ) );
 			state = FLEEING;
 		}
-		
+		}
 		return damage;
+		
 	}
 	
 	@Override

@@ -19,6 +19,7 @@ package com.lh64.randomdungeon.actors.hero;
 
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Badges;
+import com.lh64.randomdungeon.items.DewVial;
 import com.lh64.randomdungeon.items.TomeOfMastery;
 import com.lh64.randomdungeon.items.armor.ClothArmor;
 import com.lh64.randomdungeon.items.bags.Keyring;
@@ -114,6 +115,8 @@ public enum HeroClass {
 		(hero.belongings.armor = new ClothArmor()).identify();
 		new Food().identify().collect();
 		new Keyring().collect();
+		new DewVial().collect();
+		
 	}
 	
 	public Badges.Badge masteryBadge() {
@@ -135,7 +138,6 @@ public enum HeroClass {
 		
 		(hero.belongings.weapon = new ShortSword()).identify();
 		new Dart( 8 ).identify().collect();
-		
 		QuickSlot.primaryValue = Dart.class;
 		
 		new PotionOfStrength().setKnown();

@@ -22,12 +22,15 @@ import java.util.HashSet;
 import com.lh64.randomdungeon.Badges;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.Statistics;
+import com.lh64.randomdungeon.Badges.Badge;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.blobs.ToxicGas;
 import com.lh64.randomdungeon.actors.buffs.Buff;
 import com.lh64.randomdungeon.actors.buffs.Ooze;
+import com.lh64.randomdungeon.actors.hero.HeroSubClass;
 import com.lh64.randomdungeon.effects.Speck;
 import com.lh64.randomdungeon.items.LloydsBeacon;
+import com.lh64.randomdungeon.items.TomeOfMastery;
 import com.lh64.randomdungeon.items.keys.SkeletonKey;
 import com.lh64.randomdungeon.items.scrolls.ScrollOfPsionicBlast;
 import com.lh64.randomdungeon.items.weapon.enchantments.Death;
@@ -48,9 +51,9 @@ public class Goo extends Mob {
 	{
 		name = Dungeon.depth == Statistics.deepestFloor ? "Goo" : "spawn of Goo";
 		
-		HP = HT = 80;
-		EXP = 10;
-		defenseSkill = 12;
+		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*15 +5,(Dungeon.hero.lvl /3 +1)*17 +5);
+		EXP = Dungeon.hero.lvl;
+		defenseSkill = (Dungeon.hero.lvl) * 2;
 		spriteClass = GooSprite.class;
 		
 		loot = new LloydsBeacon();
@@ -63,20 +66,20 @@ public class Goo extends Mob {
 	@Override
 	public int damageRoll() {
 		if (pumpedUp) {
-			return Random.NormalIntRange( 5, 30 );
+			return Random.Int( (Dungeon.hero.lvl/3 +1 ) +4 ,(Dungeon.hero.lvl/2 ) +8);
 		} else {
-			return Random.NormalIntRange( 2, 12 );
+			return Random.Int( (Dungeon.hero.lvl/3 +1 ) +3 ,(Dungeon.hero.lvl/3 )*2 +8);
 		}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return pumpedUp && !jumped ? 30 : 15;
+		return pumpedUp && !jumped ? (Dungeon.hero.lvl) * 4 : (Dungeon.hero.lvl) * 2;
 	}
 	
 	@Override
 	public int dr() {
-		return 2;
+		return (Dungeon.hero.lvl /3 +1) + 1;
 	}
 	
 	@Override
@@ -193,7 +196,24 @@ public class Goo extends Mob {
 	
 	@Override
 	public void die( Object cause ) {
-		
+		Badges.Badge badgeToCheck = null;
+		switch (Dungeon.hero.heroClass) {
+		case WARRIOR:
+			badgeToCheck = Badge.MASTERY_WARRIOR;
+			break;
+		case MAGE:
+			badgeToCheck = Badge.MASTERY_MAGE;
+			break;
+		case ROGUE:
+			badgeToCheck = Badge.MASTERY_ROGUE;
+			break;
+		case HUNTRESS:
+			badgeToCheck = Badge.MASTERY_HUNTRESS;
+			break;
+		}
+		if (!Badges.isUnlocked( badgeToCheck ) || Dungeon.hero.subClass != HeroSubClass.NONE) {
+			Dungeon.level.drop( new TomeOfMastery(), pos ).sprite.drop();
+		}
 		super.die( cause );
 		
 		((SewerBossLevel)Dungeon.level).unseal();

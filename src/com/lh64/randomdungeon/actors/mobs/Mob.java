@@ -364,7 +364,9 @@ public abstract class Mob extends Char {
 		}
 
 		if (Dungeon.hero.isAlive() && !Dungeon.visible[pos]) {	
+			if(Dungeon.depth != 0){
 			GLog.i( TXT_DIED );
+			}
 		}
 	}
 	

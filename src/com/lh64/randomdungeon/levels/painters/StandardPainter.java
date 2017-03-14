@@ -18,6 +18,8 @@
 package com.lh64.randomdungeon.levels.painters;
 
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.actors.mobs.Mob;
+import com.lh64.randomdungeon.actors.mobs.npcs.HouseHuman;
 import com.lh64.randomdungeon.items.Generator;
 import com.lh64.randomdungeon.items.Gold;
 import com.lh64.randomdungeon.items.Heap;
@@ -36,7 +38,7 @@ public class StandardPainter extends Painter {
 			door.set( Room.Door.Type.REGULAR );
 		}
 		
-		if (!Dungeon.bossLevel() && Random.Int( 5 ) == 0) {
+		if (!Dungeon.bossLevel() && Random.Int( 5 ) == 0 && Dungeon.depth > 0) {
 			switch (Random.Int( 6 )) {
 			case 0:
 				if (level.feeling != Level.Feeling.GRASS) {
@@ -83,7 +85,11 @@ public class StandardPainter extends Painter {
 					return;
 				}
 				break;
-			}
+			} 
+			
+		} else if (Dungeon.depth == 0){
+			paintTownRoom(level, room);
+			return;
 		}
 		
 		fill( level, room, 1, Terrain.EMPTY );
@@ -236,5 +242,32 @@ public class StandardPainter extends Painter {
 				}
 			}
 		}
+	}
+	private static void paintTownRoom(Level level, Room room) {
+		int pos = room.random();
+		Mob human = new HouseHuman();
+		 
+		
+		fill( level, room, 1, Terrain.EMPTY_SP);
+		switch (Random.Int(1,3)) {
+		case 1:
+			set( level, pos, Terrain.PEDESTAL );
+			break;
+		case 2:
+			set( level, pos, Terrain.BOOKSHELF);
+		break;
+		default:
+			set( level, pos, Terrain.STATUE_SP);
+		}
+		while (true){
+			int personpos = room.random();
+			if(personpos != pos){
+				human.pos = personpos;
+				level.mobs.add(human);
+				break;
+			}
+			
+		}
+		
 	}
 }

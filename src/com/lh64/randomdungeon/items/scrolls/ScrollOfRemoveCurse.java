@@ -50,7 +50,8 @@ public class ScrollOfRemoveCurse extends Scroll {
 			curUser.belongings.weapon, 
 			curUser.belongings.armor, 
 			curUser.belongings.ring1, 
-			curUser.belongings.ring2 ) || procced;
+			curUser.belongings.ring2,
+			curUser.belongings.ring3) || procced;
 		
 		Weakness.detach( curUser, Weakness.class );
 		

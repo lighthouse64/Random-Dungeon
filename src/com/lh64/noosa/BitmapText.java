@@ -54,6 +54,8 @@ public class BitmapText extends Visual {
 		this.font = font;
 	}
 	
+	
+
 	@Override
 	public void destroy() {
 		text = null;

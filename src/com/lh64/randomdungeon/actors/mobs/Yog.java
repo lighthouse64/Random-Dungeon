@@ -60,7 +60,7 @@ public class Yog extends Mob {
 		name = Dungeon.depth == Statistics.deepestFloor ? "Yog-Dzewa" : "echo of Yog-Dzewa";
 		spriteClass = YogSprite.class;
 		
-		HP = HT = 300;
+		HP = HT = Dungeon.hero.lvl *2 +250;
 		
 		EXP = 50;
 		

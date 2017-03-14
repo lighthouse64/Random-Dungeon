@@ -100,6 +100,7 @@ public class Toolbar extends Component {
 			@Override
 			protected void onClick() {
 				Dungeon.storage = false;
+				Dungeon.ShopkeeperBag = false;
 				GameScene.show( new WndBag( Dungeon.hero.belongings.backpack, null, WndBag.Mode.ALL, null ) );
 			}
 			protected boolean onLongClick() {

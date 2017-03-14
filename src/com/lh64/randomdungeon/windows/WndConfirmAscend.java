@@ -20,6 +20,8 @@ package com.lh64.randomdungeon.windows;
 import com.lh64.noosa.BitmapTextMultiline;
 import com.lh64.noosa.Game;
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.Statistics;
+import com.lh64.randomdungeon.actors.buffs.Hunger;
 import com.lh64.randomdungeon.scenes.InterlevelScene;
 import com.lh64.randomdungeon.scenes.PixelScene;
 import com.lh64.randomdungeon.ui.RedButton;
@@ -28,7 +30,7 @@ import com.lh64.randomdungeon.ui.Window;
 public class WndConfirmAscend extends Window {
 	
 	private static final String TXT_MESSAGE	= "Do you want to go back to the hub? "
-																					+ "\n Note: all of your gold and non-equipped items will be purged.";
+																					+ "\n Note: half of your gold and non-equipped items will be purged.";
 	private static final String TXT_YES		= "Yes, I will return";
 	private static final String TXT_NO		= "No, I'm continuing";
 	
@@ -57,9 +59,14 @@ public class WndConfirmAscend extends Window {
 			protected void onClick() {
 				hide();
 				go = true;
+				Hunger.level = 0;
+				Statistics.deepestFloor = 1;
 				Dungeon.hero.resurrect(-1);
+				Dungeon.deleteLevels(Dungeon.hero.heroClass);
+				Dungeon.levelTheme = 0;
 				InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
 				Game.switchScene( InterlevelScene.class );
+				Dungeon.initshop = true;
 			}
 		};
 		btnYes.setRect( 0, message.y + message.height() + GAP, WIDTH, BTN_HEIGHT );

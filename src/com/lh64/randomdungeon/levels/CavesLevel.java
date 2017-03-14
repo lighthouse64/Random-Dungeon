@@ -24,7 +24,9 @@ import com.lh64.noosa.particles.PixelParticle;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.DungeonTilemap;
+import com.lh64.randomdungeon.actors.mobs.Mob;
 import com.lh64.randomdungeon.actors.mobs.npcs.Blacksmith;
+import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
 import com.lh64.randomdungeon.levels.Room.Type;
 import com.lh64.randomdungeon.levels.painters.Painter;
 import com.lh64.utils.PointF;
@@ -141,12 +143,19 @@ public class CavesLevel extends RegularLevel {
 			}
 		}
 		
+		Mob chest = new Chest();
 		while (true) {
 			int pos = roomEntrance.random();
-			if (pos != entrance) {
+			int newpos = roomEntrance.random();
+			if (pos != entrance && newpos != pos && newpos != entrance) {
 				map[pos] = Terrain.SIGN;
+				chest.pos = newpos;
+				
+				mobs.add(chest);
+			
 				break;
-			}
+			} 
+			
 		}
 		
 		if (Dungeon.bossLevel( Dungeon.depth + 1 )) {

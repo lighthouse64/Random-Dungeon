@@ -35,28 +35,28 @@ public class FetidRat extends Mob {
 		name = "fetid rat";
 		spriteClass = FetidRatSprite.class;
 		
-		HP = HT = 15;
-		defenseSkill = 5;
+		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1) * 3 +4,(Dungeon.hero.lvl/3 +1) *3 +6);
+		defenseSkill =  ((Dungeon.hero.lvl/3 +1) * 2) + 2;
 		
-		EXP = 3;
-		maxLvl = 5;	
+		EXP = Dungeon.hero.lvl;
+		maxLvl = Dungeon.hero.lvl + 3;
 		
 		state = WANDERING;
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 2, 6 );
+		return Random.Int( (Dungeon.hero.lvl/3 + 1) +1,(Dungeon.hero.lvl/3 + 1) +4);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 12;
+		return (Dungeon.hero.lvl/3 +1) + 9;
 	}
 	
 	@Override
 	public int dr() {
-		return 2;
+		return (Dungeon.hero.lvl /3 +1) ;
 	}
 	
 	@Override
@@ -82,7 +82,7 @@ public class FetidRat extends Mob {
 	@Override
 	public String description() {
 		return
-			"This marsupial rat is much larger than a regular one. It is surrounded by a foul cloud.";
+			"This sewer rat is much larger than a regular one. It is surrounded by a foul cloud of paralyzing gas.";
 	}
 	
 	private static final HashSet<Class<?>> IMMUNITIES = new HashSet<Class<?>>();

@@ -45,7 +45,7 @@ public class InterlevelScene extends PixelScene {
 	private static final String TXT_RETURNING	= "Returning...";
 	private static final String TXT_FALLING		= "Falling...";
 	
-	private static final String ERR_FILE_NOT_FOUND	= "File not found. For some reason.";
+	private static final String ERR_FILE_NOT_FOUND	= "File not found for some reason.";
 	private static final String ERR_GENERIC			= "Something went wrong..."	;	
 	
 	public static enum Mode {
@@ -212,6 +212,7 @@ public class InterlevelScene extends PixelScene {
 			if (noStory) {
 				Dungeon.chapters.add( WndStory.ID_SEWERS );
 				noStory = false;
+				
 			}
 			GameLog.wipe();
 		} else {
@@ -219,6 +220,7 @@ public class InterlevelScene extends PixelScene {
 		}
 		
 		Level level;
+		
 		if (Dungeon.depth >= Statistics.deepestFloor) {
 			level = Dungeon.newLevel();
 		} else {
@@ -226,6 +228,7 @@ public class InterlevelScene extends PixelScene {
 			level = Dungeon.loadLevel( Dungeon.hero.heroClass );
 		}
 		Dungeon.switchLevel( level, level.entrance );
+		
 	}
 	
 	private void fall() throws Exception {
@@ -248,8 +251,21 @@ public class InterlevelScene extends PixelScene {
 		
 		Dungeon.saveLevel();
 		Dungeon.depth--;
-		Level level = Dungeon.loadLevel( Dungeon.hero.heroClass );
+		Level level;
+		if(Dungeon.depth == 0 ){
+			if (Dungeon.zerocheck == true){
+			level = Dungeon.newLevel();
+			Dungeon.zerocheck = false;
+			Dungeon.switchLevel( level, level.entrance );
+			} else {
+				level = Dungeon.loadLevel( Dungeon.hero.heroClass );
+				Dungeon.switchLevel( level, level.entrance );
+			}
+		}else{
+		level = Dungeon.loadLevel( Dungeon.hero.heroClass );
 		Dungeon.switchLevel( level, level.exit );
+		}
+		
 	}
 	
 	private void returnTo() throws Exception {

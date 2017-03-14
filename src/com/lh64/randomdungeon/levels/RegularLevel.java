@@ -39,7 +39,7 @@ import com.lh64.utils.Random;
 import com.lh64.utils.Rect;
 
 public abstract class RegularLevel extends Level {
-
+	public static int chestpos;
 	protected HashSet<Room> rooms;
 	
 	protected Room roomEntrance;
@@ -131,10 +131,17 @@ public abstract class RegularLevel extends Level {
 			}
 		}
 		
+		
 		specials = new ArrayList<Room.Type>( Room.SPECIALS );
 		if (Dungeon.bossLevel( Dungeon.depth + 1 )) {
 			specials.remove( Room.Type.WEAK_FLOOR );
+		} 
+		else if (Dungeon.depth <= 0 ){
+			specials.removeAll(specials);
 		}
+			
+		
+	
 		assignRoomType();
 		
 		paint();

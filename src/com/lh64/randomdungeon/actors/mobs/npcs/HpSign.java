@@ -37,29 +37,19 @@ public class HpSign extends NPC {
 	public int defenseSkill( Char enemy ) {
 		return 1000;
 	}
-	
 	@Override
-	public float speed() {
-		return 1f;
+	public boolean act(){
+		throwItem();
+		spend( TICK );
+		return true;
 	}
 	
-	@Override
-	protected Char chooseEnemy() {
-		return null;
-	}
-	
-	@Override
-	public void damage( int dmg, Object src ) {
-	}
+
 	
 	@Override
 	public void add( Buff buff ) {
 	}
 	
-	@Override
-	public boolean reset() {
-		return true;
-	}
 	
 	@Override
 	public void interact() {

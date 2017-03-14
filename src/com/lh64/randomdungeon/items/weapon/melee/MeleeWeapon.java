@@ -70,11 +70,7 @@ public class MeleeWeapon extends Weapon {
 		return upgrade( enchantment != null );
 	}
 	
-	@Override
-	public Item degrade() {		
-		STR++;
-		return super.degrade();
-	}
+
 	
 	public int typicalSTR() {
 		return 8 + tier * 2;

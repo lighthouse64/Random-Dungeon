@@ -18,6 +18,7 @@
 package com.lh64.randomdungeon.actors.mobs;
 
 import com.lh64.randomdungeon.Badges;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.sprites.ShieldedSprite;
 
 public class Shielded extends Brute {
@@ -26,12 +27,12 @@ public class Shielded extends Brute {
 		name = "shielded brute";
 		spriteClass = ShieldedSprite.class;
 		
-		defenseSkill = 20;
+		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
 	}
 	
 	@Override
 	public int dr() {
-		return 10;
+		return (Dungeon.hero.lvl /3 +1) + 4;
 	}
 	
 	@Override

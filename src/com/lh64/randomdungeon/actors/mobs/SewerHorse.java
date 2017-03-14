@@ -28,31 +28,45 @@ import com.lh64.utils.Random;
 
 public class SewerHorse extends Mob {
 	public String Deathwords;
-	public int ChooseWord = Random.Int(0,3);
+	public int ChooseWord;
 
 	{
 		name = "Sewer Horse";
 		spriteClass = SewerHorseSprite.class;
-		
-		HP = HT = Dungeon.hero.HT/2 - Dungeon.hero.HT/5;
-		defenseSkill = Dungeon.hero.defenseSkill - Dungeon.hero.defenseSkill/4;
-		
-		maxLvl = Dungeon.hero.lvl + 2;
+		if(Dungeon.hero.lvl <= 6){
+		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
+		} else {
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
+		}
+		defenseSkill = (Dungeon.hero.lvl/3 +1) + 2;
+		if(Dungeon.hero.lvl <= 1){
+			EXP = Dungeon.hero.lvl;
+			} else{
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
+			}
+		maxLvl = Dungeon.hero.lvl / 5 + Dungeon.hero.lvl + 2;
 	}
 	
 	@Override
 	public int damageRoll() {
-		return Random.Int( Dungeon.hero.damageRoll()/2 - Dungeon.hero.damageRoll()/6,Dungeon.hero.damageRoll() - Dungeon.hero.damageRoll()/3);
+		if(Dungeon.hero.lvl <= 8){
+		return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 3);
+		} else {
+		return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3 )*2 + 6);
+		}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return Dungeon.hero.attackSkill - Dungeon.hero.attackSkill/5;
+		return (Dungeon.hero.lvl/3 +1)*2 + 7;
 	}
 	
 	@Override
 	public int attackProc( Char enemy, int damage ) {
-		if (Random.Int( 50 ) == 0) {
+		if (Random.Int( 0,49 ) == 0 && Dungeon.hero.lvl <= 6) {
+			Buff.affect( enemy, Ooze.class );
+		} 
+		else if(Random.Int(0,34) == 0 && Dungeon.hero.lvl > 6){
 			Buff.affect( enemy, Ooze.class );
 		}
 		
@@ -61,11 +75,12 @@ public class SewerHorse extends Mob {
 	
 	@Override
 	public int dr() {
-		return 1;
+		return (Dungeon.hero.lvl /3 +1) + 1;
 	}
 	
 	@Override
 	public void die( Object cause ) {
+		ChooseWord = Random.Int(0,3);
 		switch (ChooseWord){
 		case 0:
 			Deathwords = "NEEEEIIGH";
@@ -79,6 +94,9 @@ public class SewerHorse extends Mob {
 		case 3:
 			Deathwords = "ssssssssssss";
 			break;
+		default:
+			Deathwords = "grunt";
+			break;
 		}
 		Ghost.Quest.processSewersKill( pos );
 		sprite.showStatus( CharSprite.NEGATIVE, Deathwords );
@@ -89,7 +107,6 @@ public class SewerHorse extends Mob {
 	public String description() {
 		return
 			"Although it may appear to be a horse, this creature is actually formed from the grime of the sewer.  " +
-			"It's spots are made of a special mold that gives away its mood.  Its bite only has a rare chance to actually cause significant annoyance." +
-			"\n Current hp: " + HP + " / " + HT;
+			"It's spots are made of a special mold that gives away its mood.  Its bite only has a rare chance to actually cause significant annoyance.";
 	}
 }

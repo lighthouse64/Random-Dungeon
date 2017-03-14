@@ -29,6 +29,7 @@ import com.lh64.noosa.Game;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.buffs.Amok;
+import com.lh64.randomdungeon.actors.buffs.Hunger;
 import com.lh64.randomdungeon.actors.buffs.Light;
 import com.lh64.randomdungeon.actors.buffs.Rage;
 import com.lh64.randomdungeon.actors.hero.Hero;
@@ -45,20 +46,16 @@ import com.lh64.randomdungeon.items.scrolls.Scroll;
 import com.lh64.randomdungeon.items.wands.Wand;
 import com.lh64.randomdungeon.levels.CavesBossLevel;
 import com.lh64.randomdungeon.levels.CavesLevel;
-import com.lh64.randomdungeon.levels.CityBossLevel;
-import com.lh64.randomdungeon.levels.CityLevel;
 import com.lh64.randomdungeon.levels.DeadEndLevel;
-import com.lh64.randomdungeon.levels.HallsBossLevel;
-import com.lh64.randomdungeon.levels.HallsLevel;
 import com.lh64.randomdungeon.levels.HubLevel;
 import com.lh64.randomdungeon.levels.LastLevel;
-import com.lh64.randomdungeon.levels.LastShopLevel;
 import com.lh64.randomdungeon.levels.Level;
 import com.lh64.randomdungeon.levels.PrisonBossLevel;
 import com.lh64.randomdungeon.levels.PrisonLevel;
 import com.lh64.randomdungeon.levels.Room;
 import com.lh64.randomdungeon.levels.SewerBossLevel;
 import com.lh64.randomdungeon.levels.SewerLevel;
+import com.lh64.randomdungeon.levels.TownLevel;
 import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.randomdungeon.scenes.StartScene;
 import com.lh64.randomdungeon.ui.QuickSlot;
@@ -70,6 +67,8 @@ import com.lh64.utils.Bundle;
 import com.lh64.utils.PathFinder;
 import com.lh64.utils.Random;
 import com.lh64.utils.SparseArray;
+import com.lh64.randomdungeon.scenes.InterlevelScene;
+import com.lh64.randomdungeon.scenes.InterlevelScene.Mode;
 
 public class Dungeon {
 	
@@ -80,15 +79,28 @@ public class Dungeon {
 
 	
 	public static int challenges;
-	public static boolean storage;
-	
+	public static boolean storage =false;
+	public static boolean ShopkeeperBag = false;
+	public static boolean zerocheck = true;
 	
 	public static Hero hero;
 	public static Level level;
 	
+	public static boolean changename = true;
+	public static String name = "";
+	
 	public static int depth;
+	public static boolean initshop = true;
+	public static int shop1;
+	public static boolean shop1visit;
+	public static boolean shop2visit;
+	public static boolean shop3visit;
+	public static boolean shop4visit;
+	public static int shop2;
+	public static int shop3;
 	public static int gold;
-	public static int levelCount = Random.IntRange(20, 30);
+	public static int levelTheme = 0;
+	public static int coins = 0;
 	// Reason of death
 	public static String resultDescription;
 	
@@ -119,15 +131,24 @@ public class Dungeon {
 		
 		depth = 0;
 		gold = 0;
-		
+		Hunger.level = 0;
+		initshop = true;
 		droppedItems = new SparseArray<ArrayList<Item>>();
-		
+		levelTheme = 0;
 		potionOfStrength = 0;
 		scrollsOfUpgrade = 0;
 		scrollsOfEnchantment = 0;
-		dewVial = true;
-		
+		dewVial = false;
+		zerocheck = true;
+		shop1visit = false;
+		shop2visit = false;
+		shop3visit = false;
+		shop4visit = false;
 		chapters = new HashSet<Integer>();
+
+		shop1 = Random.Int(3,10);
+		shop2 = Random.Int(11,19);
+		shop3 = Random.Int(20,27);
 		
 		Ghost.Quest.reset();
 		Wandmaker.Quest.reset();
@@ -155,9 +176,12 @@ public class Dungeon {
 		
 		Dungeon.level = null;
 		Actor.clear();
-
+		if (InterlevelScene.mode == Mode.ASCEND){
+			
+		} else {
 
 		depth++;
+		}
 
 		if (depth > Statistics.deepestFloor) {
 			Statistics.deepestFloor = depth;
@@ -175,56 +199,80 @@ public class Dungeon {
 		switch (depth) {
 		case -1:
 		case 0:
+			level = new TownLevel();
+			break;
 		case 1:
 			level = new HubLevel();
 			break;
 		case 2:
+			levelTheme = Random.Int(1,4);
+			if (levelTheme == 1){
+				level = new SewerLevel();
+			}
+			else if (levelTheme == 2){
+				level = new PrisonLevel();
+			}
+			else if (levelTheme == 3){
+				level = new CavesLevel();
+			}
+			else{
+				level = new DeadEndLevel();
+			}
+			break;
 		case 3:
 		case 4:
-			level = new SewerLevel();
-			break;
 		case 5:
-			level = new SewerBossLevel();
-			break;
 		case 6:
 		case 7:
 		case 8:
 		case 9:
-			level = new PrisonLevel();
-			break;
 		case 10:
-			level = new PrisonBossLevel();
-			break;
 		case 11:
 		case 12:
 		case 13:
 		case 14:
-			level = new CavesLevel();
-			break;
 		case 15:
-			level = new CavesBossLevel();
-			break;
 		case 16:
 		case 17:
 		case 18:
 		case 19:
-			level = new CityLevel();
-			break;
 		case 20:
-			level = new CityBossLevel();
-			break;
 		case 21:
-			level = new LastShopLevel();
-			break;
 		case 22:
 		case 23:
 		case 24:
-			level = new HallsLevel();
-			break;
 		case 25:
-			level = new HallsBossLevel();
-			break;
 		case 26:
+		case 27:
+		case 28:
+			if (levelTheme == 1){
+				level = new SewerLevel();
+			}
+			else if (levelTheme == 2){
+				level = new PrisonLevel();
+			}
+			else if (levelTheme == 3){
+				level = new CavesLevel();
+			}
+			else{
+				level = new DeadEndLevel();
+			}
+			break;
+		case 29:
+			if(levelTheme == 1){
+				level = new SewerBossLevel();
+			}
+			else if (levelTheme == 2){
+				level = new PrisonBossLevel();
+			}
+			else if (levelTheme == 3){
+				level = new CavesBossLevel();
+			} 
+			else {
+				level = new DeadEndLevel();
+			}
+			break;
+		case 30:
 			level = new LastLevel();
 			break;
 		default:
@@ -250,7 +298,7 @@ public class Dungeon {
 	}
 	
 	public static boolean shopOnLevel() {
-		return depth == 6 || depth == 11 || depth == 16;
+		return depth == 0 || depth == shop1 || depth == shop2 || depth == shop3 || depth == 28;
 	}
 	
 	public static boolean bossLevel() {
@@ -258,7 +306,7 @@ public class Dungeon {
 	}
 	
 	public static boolean bossLevel( int depth ) {
-		return depth == 5 || depth == 10 || depth == 15 || depth == 20 || depth == 25;
+		return depth == 29;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -344,6 +392,18 @@ public class Dungeon {
 	private static final String CHAPTERS	= "chapters";
 	private static final String QUESTS		= "quests";
 	private static final String BADGES		= "badges";
+	private static final String LEVELTHEME  = "levelTheme";
+	private static final String SHOP1       = "first shop";
+	private static final String SHOP2       = "second shop";
+	private static final String SHOP3       = "third shop";
+	private static final String SHOP1VISIT  = "first shop visit check";
+	private static final String SHOP2VISIT  = "second shop visit check";
+	private static final String SHOP3VISIT  = "third shop visit check";
+	private static final String SHOP4VISIT  = "fourth shop visit check";
+	private static final String ZEROCHECK   = "zerocheck";
+	private static final String COINS       = "coins";
+	private static final String NAME        = "name";
+	private static final String CHANGENAME  = "change name";
 	
 	public static String gameFile( HeroClass cl ) {
 		switch (cl) {
@@ -370,7 +430,14 @@ public class Dungeon {
 			return RG_DEPTH_FILE;
 		}
 	}
-	
+	public static void saveNameDetails (String fileName) throws IOException {
+		Bundle bundle = new Bundle();
+		bundle.put(NAME, name);
+		bundle.put(CHANGENAME, changename);
+		OutputStream output = Game.instance.openFileOutput( fileName, Game.MODE_PRIVATE );
+		Bundle.write( bundle, output );
+		output.close();
+	}
 	public static void saveGame( String fileName ) throws IOException {
 		try {
 			Bundle bundle = new Bundle();
@@ -380,6 +447,18 @@ public class Dungeon {
 			bundle.put( HERO, hero );
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
+			bundle.put(LEVELTHEME, levelTheme);
+			bundle.put(SHOP1, shop1);
+			bundle.put(SHOP2, shop2);
+			bundle.put(SHOP3, shop3);
+			bundle.put(SHOP1VISIT, shop1visit);
+			bundle.put(SHOP2VISIT, shop2visit);
+			bundle.put(SHOP3VISIT, shop3visit);
+			bundle.put(SHOP4VISIT, shop4visit);
+			bundle.put(ZEROCHECK, zerocheck);
+			bundle.put(COINS, coins);
+			loadName("Name");
+			bundle.put(NAME, name);
 			
 			for (int d : droppedItems.keyArray()) {
 				bundle.put( String.format( DROPPED, d ), droppedItems.get( d ) );
@@ -455,7 +534,14 @@ public class Dungeon {
 			
 		}
 	}
-	
+	public static void saveName() throws IOException {
+		saveNameDetails("Name");
+	}
+	public static void loadName(String fileName) throws IOException {
+		Bundle bundle = gameBundle(fileName);
+		Dungeon.name = bundle.getString(NAME);
+		Dungeon.changename = bundle.getBoolean(CHANGENAME);
+	}
 	public static void loadGame( HeroClass cl ) throws IOException {
 		loadGame( gameFile( cl ), true );
 	}
@@ -472,7 +558,7 @@ public class Dungeon {
 		
 		Dungeon.level = null;
 		Dungeon.depth = -1;
-		
+		name = bundle.getString(NAME);
 		if (fullLoad) {
 			PathFinder.setMapSize( Level.WIDTH, Level.HEIGHT );
 		}
@@ -531,6 +617,18 @@ public class Dungeon {
 		
 		gold = bundle.getInt( GOLD );
 		depth = bundle.getInt( DEPTH );
+		levelTheme = bundle.getInt(LEVELTHEME);
+		shop1 = bundle.getInt(SHOP1);
+		shop2 = bundle.getInt(SHOP2);
+		shop3 = bundle.getInt(SHOP3);
+		shop1visit = bundle.getBoolean(SHOP1VISIT);
+		shop2visit = bundle.getBoolean(SHOP2VISIT);
+		shop3visit = bundle.getBoolean(SHOP3VISIT);
+		shop4visit = bundle.getBoolean(SHOP4VISIT);
+		zerocheck  = bundle.getBoolean(ZEROCHECK);
+		coins      = bundle.getInt(COINS);
+		name       = bundle.getString(NAME);
+		changename = bundle.getBoolean(CHANGENAME);
 		
 		Statistics.restoreFromBundle( bundle );
 		Journal.restoreFromBundle( bundle );
@@ -571,6 +669,13 @@ public class Dungeon {
 		}
 		
 		GamesInProgress.delete( cl );
+	}
+	
+	public static void deleteLevels(HeroClass cl){
+		int depth = 2;
+		while (Game.instance.deleteFile( Utils.format( depthFile( cl ), depth ) )) {
+			depth++;
+		}
 	}
 	
 	public static Bundle gameBundle( String fileName ) throws IOException {

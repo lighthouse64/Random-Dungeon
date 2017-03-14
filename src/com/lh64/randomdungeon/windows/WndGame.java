@@ -74,6 +74,7 @@ public class WndGame extends Window {
 			addButton( btnStart = new RedButton( TXT_START ) {
 				@Override
 				protected void onClick() {
+					Dungeon.levelTheme = 0;
 					Dungeon.hero = null;
 					PixelDungeon.challenges( Dungeon.challenges );
 					InterlevelScene.mode = InterlevelScene.Mode.DESCEND;

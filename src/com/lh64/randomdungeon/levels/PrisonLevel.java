@@ -22,6 +22,9 @@ import com.lh64.noosa.particles.Emitter;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.DungeonTilemap;
+import com.lh64.randomdungeon.actors.mobs.Mob;
+import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
+import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.actors.mobs.npcs.Wandmaker;
 import com.lh64.randomdungeon.effects.Halo;
 import com.lh64.randomdungeon.effects.particles.FlameParticle;
@@ -68,7 +71,7 @@ public class PrisonLevel extends RegularLevel {
 	@Override
 	protected void createMobs() {
 		super.createMobs();
-		
+		Ghost.Quest.spawn( this );
 		Wandmaker.Quest.spawn( this, roomEntrance );
 	}
 	
@@ -117,12 +120,19 @@ public class PrisonLevel extends RegularLevel {
 			}
 		}
 		
+		Mob chest = new Chest();
 		while (true) {
 			int pos = roomEntrance.random();
-			if (pos != entrance) {
+			int newpos = roomEntrance.random();
+			if (pos != entrance && newpos != pos && newpos != entrance) {
 				map[pos] = Terrain.SIGN;
+				chest.pos = newpos;
+				
+				mobs.add(chest);
+			
 				break;
-			}
+			} 
+			
 		}
 	}
 	

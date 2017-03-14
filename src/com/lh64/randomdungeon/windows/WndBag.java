@@ -59,6 +59,7 @@ public class WndBag extends WndTabbed {
 		UPGRADEABLE,
 		QUICKSLOT,
 		FOR_SALE,
+		BUY,
 		WEAPON,
 		ARMOR,
 		ENCHANTABLE,
@@ -66,10 +67,10 @@ public class WndBag extends WndTabbed {
 		SEED
 	}
 	
-	protected static final int COLS_P	= 4;
+	protected static final int COLS_P	= 6;
 	protected static final int COLS_L	= 6;
 	
-	protected static final int SLOT_SIZE	= 28;
+	protected static final int SLOT_SIZE	= 24;
 	protected static final int SLOT_MARGIN	= 1;
 	
 	protected static final int TAB_WIDTH	= 25;
@@ -88,7 +89,7 @@ public class WndBag extends WndTabbed {
 	protected int row;
 	
 	private static Mode lastMode;
-	private static Bag lastBag;
+	public static Bag lastBag;
 	
 	public WndBag( Bag bag, Listener listener, Mode mode, String title ) {
 		
@@ -102,10 +103,13 @@ public class WndBag extends WndTabbed {
 		lastBag = bag;
 		
 		nCols = PixelDungeon.landscape() ? COLS_L : COLS_P;
+		if(Dungeon.storage==false || Dungeon.ShopkeeperBag == false){
 		nRows = (Belongings.BACKPACK_SIZE + 4 + 1) / nCols + ((Belongings.BACKPACK_SIZE + 4 + 1) % nCols > 0 ? 1 : 0);
-		
+		} else{
+			nRows = (Belongings.BACKPACK_SIZE + 4) / nCols + ((Belongings.BACKPACK_SIZE + 4) % nCols > 0 ? 1 : 0);
+		}
 		int slotsWidth = SLOT_SIZE * nCols + SLOT_MARGIN * (nCols - 1);
-		int slotsHeight = SLOT_SIZE * nRows + SLOT_MARGIN * (nRows - 1);
+		int slotsHeight = SLOT_SIZE * nRows + SLOT_MARGIN * (nRows -1);
 		
 		BitmapText txtTitle = PixelScene.createText( title != null ? title : Utils.capitalize( bag.name() ), 9 );
 		txtTitle.hardlight( TITLE_COLOR );
@@ -116,27 +120,36 @@ public class WndBag extends WndTabbed {
 		
 		placeItems( bag );
 		
-		resize( slotsWidth, slotsHeight + TITLE_HEIGHT );
-		
+		if (Dungeon.storage==true || Dungeon.ShopkeeperBag == true){
+			resize( slotsWidth, slotsHeight + TITLE_HEIGHT + 24 );
+		} else{
+			resize( slotsWidth, slotsHeight + TITLE_HEIGHT );
+		}
 
 		
 		Belongings stuff = Dungeon.hero.belongings;
+		
 		Bag[] bags = {
 			stuff.backpack, 
 			stuff.getItem( SeedPouch.class ), 
 			stuff.getItem( ScrollHolder.class ),
 			stuff.getItem( WandHolster.class ),
 			stuff.getItem( Keyring.class )};
-		
+		if(Dungeon.storage == false){
+			if(Dungeon.ShopkeeperBag == false){
 		for (Bag b : bags) {
+			
 			if (b != null) {
 				BagTab tab = new BagTab( b );
 				tab.setSize( TAB_WIDTH, tabHeight() );
 				add( tab );
 				
 				tab.select( b == bag );
+				}
+				}
+				}
 			}
-		}
+		
 		
 	}
 	
@@ -155,6 +168,7 @@ public class WndBag extends WndTabbed {
 	}
 	
 	public static WndBag seedPouch( Listener listener, Mode mode, String title ) {
+		Dungeon.ShopkeeperBag = false;
 		SeedPouch pouch = Dungeon.hero.belongings.getItem( SeedPouch.class );
 		return pouch != null ?
 			new WndBag( pouch, listener, mode, title ) :
@@ -165,14 +179,18 @@ public class WndBag extends WndTabbed {
 	protected void placeItems( Bag container ) {
 		
 		// Equipped items
+		if(Dungeon.storage == false){
+			if(Dungeon.ShopkeeperBag == false){
 		Belongings stuff = Dungeon.hero.belongings;
 		placeItem( stuff.weapon != null ? stuff.weapon : new Placeholder( ItemSpriteSheet.WEAPON ) );
 		placeItem( stuff.armor != null ? stuff.armor : new Placeholder( ItemSpriteSheet.ARMOR ) );
 		placeItem( stuff.ring1 != null ? stuff.ring1 : new Placeholder( ItemSpriteSheet.RING ) );
 		placeItem( stuff.ring2 != null ? stuff.ring2 : new Placeholder( ItemSpriteSheet.RING ) );
-		
+		placeItem( stuff.ring3 != null ? stuff.ring3 : new Placeholder( ItemSpriteSheet.RING  ) );
+			}
+		}
 		boolean backpack = (container == Dungeon.hero.belongings.backpack);
-		if (!backpack) {
+		if (!backpack || !Dungeon.storage == true || !Dungeon.ShopkeeperBag==true) {
 			count = nCols;
 			col = 0;
 			row = 1;
@@ -215,6 +233,12 @@ public class WndBag extends WndTabbed {
 	public void onMenuPressed() {
 		if (listener == null) {
 			hide();
+			if(mode == Mode.BUY){
+				Dungeon.ShopkeeperBag = false;
+			}
+			else if(mode == Mode.STORAGE){
+				Dungeon.storage = false;
+			}
 		}
 	}
 	
@@ -247,9 +271,10 @@ public class WndBag extends WndTabbed {
 			super();
 			
 			this.bag = bag;
-			
+			if(mode != Mode.STORAGE || mode != Mode.BUY){
 			icon = icon();
 			add( icon );
+			}
 		}
 		
 		@Override
@@ -274,6 +299,7 @@ public class WndBag extends WndTabbed {
 		}
 		
 		private Image icon() {
+
 			if (bag instanceof SeedPouch) {
 				return Icons.get( Icons.SEED_POUCH );
 			} else if (bag instanceof ScrollHolder) {
@@ -397,7 +423,8 @@ public class WndBag extends WndTabbed {
 						mode == Mode.WAND && (item instanceof Wand) ||
 						mode == Mode.SEED && (item instanceof Seed) ||
 						mode == Mode.ALL||
-						mode == Mode.STORAGE
+						mode == Mode.STORAGE ||
+						mode == Mode.BUY
 					);
 				}
 			} else {
@@ -417,7 +444,7 @@ public class WndBag extends WndTabbed {
 		
 		@Override
 		protected void onClick() {
-			if (mode == Mode.STORAGE){
+			if (mode == Mode.STORAGE || mode==Mode.BUY){
 				
 			}
 			if (listener != null) {
@@ -434,12 +461,15 @@ public class WndBag extends WndTabbed {
 		
 		@Override
 		protected boolean onLongClick() {
-			
+			if (mode != Mode.STORAGE || mode != Mode.BUY){
 			if (listener == null && item.defaultAction != null) {
 				hide();
 				QuickSlot.primaryValue = item.stackable ? item.getClass() : item;
 				QuickSlot.refresh();
 				return true;
+			} else {
+				return false;
+			}
 			} else {
 				return false;
 			}

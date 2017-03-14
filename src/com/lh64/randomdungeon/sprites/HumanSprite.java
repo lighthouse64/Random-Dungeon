@@ -15,33 +15,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
-package com.lh64.randomdungeon.items.bags;
+package com.lh64.randomdungeon.sprites;
 
-import com.lh64.randomdungeon.items.Item;
-import com.lh64.randomdungeon.sprites.ItemSpriteSheet;
+import com.lh64.noosa.TextureFilm;
+import com.lh64.randomdungeon.Assets;
 
-public class Storage extends Bag {
-
-	{
-		name = "Storage";
-		image = ItemSpriteSheet.CHEST;
+public class HumanSprite extends MobSprite {
+	
+	public HumanSprite() {
+		super();
 		
-		size = 24;
-	}
-	
-	@Override
-	public boolean grab( Item item ) {
-		return item instanceof Item;
-	}
-	
-	@Override
-	public int price() {
-		return 50;
-	}
-	
-	@Override
-	public String info() {
-		return
-			"It's your storage for items.";
+		texture( Assets.HUMAN );
+		
+		TextureFilm frames = new TextureFilm( texture, 10, 16 );
+		
+		idle = new Animation( 2, true );
+		idle.frames( frames, 0, 0, 0, 0, 1 );
+		
+		run = new Animation( 10, true );
+		run.frames( frames, 2, 3 );
+		
+		attack = idle.clone();
+		
+		die = idle.clone();
+		
+		play( idle );
 	}
 }

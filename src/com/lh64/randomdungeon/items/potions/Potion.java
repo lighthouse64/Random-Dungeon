@@ -115,7 +115,11 @@ public class Potion extends Item {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
+		if(Dungeon.storage==false){
+			if(Dungeon.ShopkeeperBag == false){
 		actions.add( AC_DRINK );
+			}
+		}
 		return actions;
 	}
 	

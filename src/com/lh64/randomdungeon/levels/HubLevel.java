@@ -23,18 +23,22 @@ import com.lh64.noosa.Scene;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.actors.mobs.Mob;
 import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
+import com.lh64.randomdungeon.actors.mobs.npcs.Coinbox;
 import com.lh64.randomdungeon.actors.mobs.npcs.HpSign;
 import com.lh64.randomdungeon.actors.mobs.npcs.Shopkeeper;
+import com.lh64.randomdungeon.items.Amulet;
 import com.lh64.randomdungeon.levels.painters.Painter;
 import com.lh64.utils.Random;
 
 public class HubLevel extends Level {
 
 	public static final int SIZE = 7;
-	
+	public static int bottomleft = SIZE*WIDTH +1;
+	public static int test = (SIZE+1)*WIDTH;
 	{
 		color1 = 0x801500;
 		color2 = 0xa68521;
+		
 	}
 	
 	private int pedestal;
@@ -59,6 +63,7 @@ public class HubLevel extends Level {
 		
 		entrance = SIZE * WIDTH + SIZE / 2 + 1;
 		map[entrance] = Terrain.ENTRANCE;
+		map[bottomleft +1] = Terrain.BOOKSHELF;
 		
 		
 		
@@ -87,6 +92,7 @@ public class HubLevel extends Level {
 		createShopKeeper();
 		createHpSign();
 		createChest();
+		createCoinbox();
 	}
 	
 	protected void createShopKeeper(){
@@ -102,13 +108,18 @@ public class HubLevel extends Level {
 	protected void createChest(){
 		Mob chest = new Chest();
 		chest.pos = pedestal -2;
+		RegularLevel.chestpos = chest.pos;
 		mobs.add(chest);
 	}
-
+	protected void createCoinbox(){
+		Mob coinbox = new Coinbox();
+		coinbox.pos = pedestal - 3;
+		mobs.add(coinbox);
+	}
 
 	@Override
 	protected void createItems() {
-		
+		drop( new Amulet(), bottomleft );
 	}
 	
 

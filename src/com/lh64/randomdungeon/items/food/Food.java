@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import com.lh64.noosa.audio.Sample;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Badges;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.Statistics;
 import com.lh64.randomdungeon.actors.buffs.Hunger;
 import com.lh64.randomdungeon.actors.hero.Hero;
@@ -50,7 +51,9 @@ public class Food extends Item {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
+		if(Dungeon.storage == false && Dungeon.ShopkeeperBag == false){
 		actions.add( AC_EAT );
+		}
 		return actions;
 	}
 	

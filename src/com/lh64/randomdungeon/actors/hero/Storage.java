@@ -19,17 +19,15 @@ package com.lh64.randomdungeon.actors.hero;
 
 import java.util.Iterator;
 
-import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.bags.Bag;
-import com.lh64.randomdungeon.items.keys.IronKey;
 import com.lh64.randomdungeon.items.keys.Key;
 import com.lh64.utils.Bundle;
 import com.lh64.utils.Random;
 
 public class Storage implements Iterable<Item> {
 
-	public static final int BACKPACK_SIZE	= 20;
+	public static final int BACKPACK_SIZE	= 30;
 	
 	private Hero owner;
 	
@@ -86,14 +84,7 @@ public class Storage implements Iterable<Item> {
 	}
 	
 	public void countIronKeys() {
-		
-		IronKey.curDepthQuantity = 0;
-		
-		for (Item item : backpack) {
-			if (item instanceof IronKey && ((IronKey)item).depth == Dungeon.depth) {
-				IronKey.curDepthQuantity++;
-			}
-		}
+	
 	}
 	
 	public void identify() {
@@ -116,11 +107,7 @@ public class Storage implements Iterable<Item> {
 	public Item randomUnequipped() {
 		return Random.element( backpack.items );
 	}
-	
-	public void resurrect( int depth ) {
 
-	}
-	
 	public int charge( boolean full) {
 		
 		int count = 0;

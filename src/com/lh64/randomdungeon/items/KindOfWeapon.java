@@ -19,6 +19,7 @@ package com.lh64.randomdungeon.items;
 
 import java.util.ArrayList;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.hero.Hero;
 import com.lh64.randomdungeon.ui.QuickSlot;
@@ -34,7 +35,9 @@ abstract public class KindOfWeapon extends EquipableItem {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
+		if(Dungeon.ShopkeeperBag == false && Dungeon.storage == false){
 		actions.add( isEquipped( hero ) ? AC_UNEQUIP : AC_EQUIP );
+		}
 		return actions;
 	}
 	
