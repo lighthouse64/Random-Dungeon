@@ -116,8 +116,21 @@ public class Bestiary {
 			}
 			break;
 		case 29:
+			if(Dungeon.levelTheme == 1){
 			chances = new float[]{ 1};
-			classes = new Class<?>[]{ Yog.class };
+			classes = new Class<?>[]{ Goo.class };
+			}
+			else if (Dungeon.levelTheme == 2){
+				chances = new float[]{ 1};
+				classes = new Class<?>[]{ Tengu.class };
+			}
+			else if (Dungeon.levelTheme == 3){
+				chances = new float[]{ 1 };
+				classes = new Class<?>[]{ DM300.class };
+			} else{
+				chances = new float[]{ 1 };
+				classes = new Class<?>[]{ Eye.class };
+			}
 			break;
 		default:
 			chances = new float[]{ 0.5f };

@@ -51,9 +51,9 @@ public class DM300 extends Mob {
 		name = Dungeon.depth == Statistics.deepestFloor ? "DM-300" : "DM-350";
 		spriteClass = DM300Sprite.class;
 		
-		HP = HT = 200;
-		EXP = 30;
-		defenseSkill = 18;
+		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*13 +5,(Dungeon.hero.lvl /3 +1)*15 +5);
+		EXP = Dungeon.hero.lvl;
+		defenseSkill = Dungeon.hero.lvl + 2;
 		
 		loot = new RingOfThorns().random();
 		lootChance = 0.333f;
@@ -61,17 +61,17 @@ public class DM300 extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 18, 24 );
+		return Random.IntRange( Dungeon.hero.lvl, Dungeon.hero.lvl + (Dungeon.hero.lvl / 3) );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 28;
+		return Dungeon.hero.lvl;
 	}
 	
 	@Override
 	public int dr() {
-		return 10;
+		return (Dungeon.hero.lvl /2 ) + 2;
 	}
 	
 	@Override

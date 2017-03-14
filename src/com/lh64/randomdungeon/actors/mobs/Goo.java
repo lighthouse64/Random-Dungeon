@@ -74,7 +74,7 @@ public class Goo extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return pumpedUp && !jumped ? (Dungeon.hero.lvl) * 4 : (Dungeon.hero.lvl) * 2;
+		return pumpedUp && !jumped ? (Dungeon.hero.lvl) * 2 : (Dungeon.hero.lvl) + 2;
 	}
 	
 	@Override
