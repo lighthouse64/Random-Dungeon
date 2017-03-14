@@ -38,7 +38,7 @@ import com.lh64.randomdungeon.windows.WndRanking;
 
 public class RankingsScene extends PixelScene {
 	
-	private static final int DEFAULT_COLOR	= 0xCCCCCC;
+	private static final int DEFAULT_COLOR	= 0x0cd8f7;
 	
 	private static final String TXT_TITLE		= "Top Rankings";
 	private static final String TXT_TOTAL		= "Games played: ";

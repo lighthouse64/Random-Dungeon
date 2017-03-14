@@ -283,6 +283,7 @@ public class Dungeon {
 		level.create();
 		
 		Statistics.qualifiedForNoKilling = !bossLevel();
+
 		
 		return level;
 	}

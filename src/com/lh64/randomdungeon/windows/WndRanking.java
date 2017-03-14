@@ -50,7 +50,7 @@ public class WndRanking extends WndTabbed {
 	private static final String TXT_ITEMS	= "Items";
 	private static final String TXT_BADGES	= "Badges";
 	
-	private static final int WIDTH			= 112;
+	private static final int WIDTH			= 120;
 	private static final int HEIGHT			= 134;
 	
 	private static final int TAB_WIDTH	= 40;
@@ -198,7 +198,7 @@ public class WndRanking extends WndTabbed {
 			
 			pos += GAP;
 			
-			pos = statSlot( this, TXT_DEPTH, Integer.toString( Statistics.deepestFloor ), pos );
+			pos = statSlot( this, TXT_DEPTH, "obscured", pos );
 			pos = statSlot( this, TXT_ENEMIES, Integer.toString( Statistics.enemiesSlain ), pos );
 			pos = statSlot( this, TXT_GOLD, Integer.toString( Statistics.goldCollected ), pos );
 			

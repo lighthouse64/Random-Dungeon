@@ -153,7 +153,7 @@ public class Mimic extends Mob {
 		
 		Mimic m = new Mimic();
 		m.items = new ArrayList<Item>( items );
-		m.adjustStats( Dungeon.depth );
+		m.adjustStats( Dungeon.hero.lvl );
 		m.HP = m.HT;
 		m.pos = pos;
 		m.state = m.HUNTING;

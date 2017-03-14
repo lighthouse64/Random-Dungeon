@@ -260,7 +260,7 @@ public class GameScene extends PixelScene {
 				WndStory.showChapter( WndStory.ID_SEWERS );
 				break;
 			}
-			if (Dungeon.hero.isAlive() && Dungeon.depth != 1) {
+			if (Dungeon.hero.isAlive() && Dungeon.depth > 2) {
 				Badges.validateNoKilling();
 			}
 			break;
