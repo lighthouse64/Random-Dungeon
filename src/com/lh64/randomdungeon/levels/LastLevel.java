@@ -21,9 +21,11 @@ import java.util.Arrays;
 
 import com.lh64.noosa.Scene;
 import com.lh64.randomdungeon.Assets;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.mobs.Mob;
 import com.lh64.randomdungeon.actors.mobs.npcs.Portal;
 import com.lh64.randomdungeon.items.Amulet;
+import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.levels.painters.Painter;
 import com.lh64.utils.Random;
 
@@ -91,7 +93,10 @@ public class LastLevel extends Level {
 	}
 	@Override
 	protected void createItems() {
+		Item amulet = Dungeon.hero.belongings.getItem(Amulet.class);
+		if( amulet == null){
 		drop( new Amulet(), pedestal-2 );
+		}
 	}
 	
 	@Override
@@ -118,7 +123,7 @@ public class LastLevel extends Level {
 	public String tileDesc(int tile) {
 		switch (tile) {
 		case Terrain.WATER:
-			return "It looks like lava, but it's cold and probably safe to touch.";
+			return "Water...";
 		case Terrain.STATUE:
 		case Terrain.STATUE_SP:
 			return "The pillar is made of real humanoid skulls. Awesome."; 

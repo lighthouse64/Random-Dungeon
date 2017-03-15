@@ -26,7 +26,7 @@ import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
 import com.lh64.randomdungeon.actors.mobs.npcs.Coinbox;
 import com.lh64.randomdungeon.actors.mobs.npcs.HpSign;
 import com.lh64.randomdungeon.actors.mobs.npcs.Shopkeeper;
-import com.lh64.randomdungeon.items.Amulet;
+import com.lh64.randomdungeon.items.Gold;
 import com.lh64.randomdungeon.levels.painters.Painter;
 import com.lh64.utils.Random;
 
@@ -119,7 +119,7 @@ public class HubLevel extends Level {
 
 	@Override
 	protected void createItems() {
-		drop( new Amulet(), bottomleft );
+		drop( new Gold(), bottomleft );
 	}
 	
 

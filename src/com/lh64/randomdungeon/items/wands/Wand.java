@@ -55,7 +55,7 @@ public abstract class Wand extends KindOfWeapon {
 	private static final String TXT_DAMAGE	= "When this wand is used as a melee weapon, its average damage is %d points per hit.";
 	private static final String TXT_WEAPON	= "You can use this wand as a melee weapon.";
 			
-	private static final String TXT_FIZZLES		= "your wand fizzles; it must be out of charges for now";
+	private static final String TXT_FIZZLES		= "Your wand fizzles; it must be out of charges for now";
 	private static final String TXT_SELF_TARGET	= "You can't target yourself";
 	
 	private static final String TXT_IDENTIFY	= "You are now familiar enough with your %s.";
@@ -139,12 +139,14 @@ public abstract class Wand extends KindOfWeapon {
 	@Override
 	public ArrayList<String> actions( Hero hero ) {
 		ArrayList<String> actions = super.actions( hero );
+		if(Dungeon.ShopkeeperBag == false && Dungeon.storage == false){
 		if (curCharges > 0 || !curChargeKnown) {
 			actions.add( AC_ZAP );
 		}
 		if (hero.heroClass != HeroClass.MAGE) {
 			actions.remove( AC_EQUIP );
 			actions.remove( AC_UNEQUIP );
+		}
 		}
 		return actions;
 	}

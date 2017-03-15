@@ -68,7 +68,7 @@ public class Crab extends Mob {
 	public int attackProc( Char enemy, int damage ) {
 		if(Dungeon.hero.lvl > 6){
 		if (Random.Int( 0,15 ) == 0) {
-			Buff.affect( enemy, Bleeding.class );
+			Buff.affect( enemy, Bleeding.class ).set(damage);
 		}
 		}
 		return damage;
