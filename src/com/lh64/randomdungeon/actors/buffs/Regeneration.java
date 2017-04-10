@@ -17,6 +17,7 @@
  */
 package com.lh64.randomdungeon.actors.buffs;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.hero.Hero;
 import com.lh64.randomdungeon.items.rings.RingOfMending;
 
@@ -27,9 +28,12 @@ public class Regeneration extends Buff {
 	@Override
 	public boolean act() {
 		if (target.isAlive()) {
-
-			if (target.HP < target.HT && !((Hero)target).isStarving()) {
-				target.HP += 1;
+			int effect =(Dungeon.hero.HT/100) + 1;
+			if(effect > (Dungeon.hero.HT-Dungeon.hero.HP)){
+				effect = Dungeon.hero.HT- Dungeon.hero.HP;
+			}
+			if (!((Hero)target).isStarving()) {
+				target.HP += effect;
 			}
 			
 			int bonus = 0;

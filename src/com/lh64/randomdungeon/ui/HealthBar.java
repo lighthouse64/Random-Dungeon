@@ -17,8 +17,10 @@
  */
 package com.lh64.randomdungeon.ui;
 
+
 import com.lh64.noosa.ColorBlock;
 import com.lh64.noosa.ui.Component;
+
 
 public class HealthBar extends Component {
 
@@ -29,6 +31,7 @@ public class HealthBar extends Component {
 	
 	private ColorBlock hpBg;
 	private ColorBlock hpLvl;
+
 	
 	private float level;
 	
@@ -39,6 +42,8 @@ public class HealthBar extends Component {
 		
 		hpLvl = new ColorBlock( 1, 1, COLOR_LVL );
 		add( hpLvl );
+		
+		
 		
 		height = HEIGHT;
 	}
@@ -51,6 +56,7 @@ public class HealthBar extends Component {
 		
 		hpBg.size( width, HEIGHT );
 		hpLvl.size( width * level, HEIGHT );
+		
 		
 		height = HEIGHT;
 	}

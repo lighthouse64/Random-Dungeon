@@ -276,6 +276,7 @@ public class CharSprite extends MovieClip implements Tweener.Listener, MovieClip
 		case ILLUMINATED:
 			GameScene.effect( halo = new TorchHalo( this ) );
 			break;
+		
 		}
 	}
 	

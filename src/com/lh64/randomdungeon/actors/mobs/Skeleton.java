@@ -24,6 +24,7 @@ import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.ResultDescriptions;
 import com.lh64.randomdungeon.actors.Char;
+import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.items.Generator;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.weapon.enchantments.Death;
@@ -46,8 +47,11 @@ public class Skeleton extends Mob {
 			} else {
 			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
 			}
+		if(Dungeon.hero.lvl <= 6){
 		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
-		
+		} else{
+			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
+		}
 		if(Dungeon.hero.lvl <= 1){
 			EXP = Dungeon.hero.lvl;
 			} else{
@@ -67,14 +71,14 @@ public class Skeleton extends Mob {
 	
 	@Override
 	public void die( Object cause ) {
-		
+		Ghost.Quest.processSewersKill( pos );
 		super.die( cause );
 		
 		boolean heroKilled = false;
 		for (int i=0; i < Level.NEIGHBOURS8.length; i++) {
 			Char ch = findChar( pos + Level.NEIGHBOURS8[i] );
 			if (ch != null && ch.isAlive()) {
-				int damage = Math.max( 0,  damageRoll() - Random.IntRange( 0, ch.dr() / 3 ) );
+				int damage = Math.max( 0,  damageRoll() /2 + damageRoll()/3 - Random.IntRange( 0, ch.dr() / 2 ) );
 				ch.damage( damage, this );
 				if (ch == Dungeon.hero && !ch.isAlive()) {
 					heroKilled = true;
@@ -108,7 +112,11 @@ public class Skeleton extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
+		if(Dungeon.hero.lvl <= 7){
 		return (Dungeon.hero.lvl/3 +1)*2 + 8;
+		} else{
+			return (Dungeon.hero.lvl/3 +1)*2 + 8 + (Dungeon.hero.lvl/6 + 1);
+		}
 	}
 	
 	@Override

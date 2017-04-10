@@ -35,8 +35,16 @@ public class FetidRat extends Mob {
 		name = "fetid rat";
 		spriteClass = FetidRatSprite.class;
 		
-		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1) * 3 +4,(Dungeon.hero.lvl/3 +1) *3 +6);
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
+			} else {
+				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
+			}
+		if(Dungeon.hero.lvl <= 6){
 		defenseSkill =  ((Dungeon.hero.lvl/3 +1) * 2) + 2;
+		} else{
+			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
+		}
 		
 		EXP = Dungeon.hero.lvl;
 		maxLvl = Dungeon.hero.lvl + 3;
@@ -46,17 +54,25 @@ public class FetidRat extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.Int( (Dungeon.hero.lvl/3 + 1) +1,(Dungeon.hero.lvl/3 + 1) +4);
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3 + 1) +2,(Dungeon.hero.lvl/3)*2 + 6);
+			}  
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return (Dungeon.hero.lvl/3 +1) + 9;
+		if(Dungeon.hero.lvl <= 7){
+		return (Dungeon.hero.lvl/3 +1)*2 + 9;
+		} else{
+			return (Dungeon.hero.lvl /3 + 1)*2 + (Dungeon.hero.lvl /6 + 1) +9;
+		}
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) ;
+		return (Dungeon.hero.lvl /3 +1 + Dungeon.hero.lvl/6) ;
 	}
 	
 	@Override

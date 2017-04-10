@@ -18,14 +18,19 @@
 package com.lh64.randomdungeon;
 
 
+
+
 import javax.microedition.khronos.opengles.GL10;
 
 import android.annotation.SuppressLint;
+
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+
 
 import com.lh64.noosa.Game;
 import com.lh64.noosa.audio.Music;
@@ -240,6 +245,8 @@ public class PixelDungeon extends Game {
 		} );
 	}
 	
+	
+	
 	@Override
 	public void onSurfaceChanged( GL10 gl, int width, int height ) {
 		super.onSurfaceChanged( gl, width, height );
@@ -249,6 +256,10 @@ public class PixelDungeon extends Game {
 			immersiveModeChanged = false;
 		}
 	}
+	
+	
+	
+	
 	
 	@SuppressLint("NewApi")
 	public static void updateImmersiveMode() {

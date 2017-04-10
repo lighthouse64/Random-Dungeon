@@ -21,6 +21,7 @@ import java.util.HashSet;
 
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
+import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.effects.Speck;
 import com.lh64.randomdungeon.items.potions.PotionOfHealing;
 import com.lh64.randomdungeon.items.weapon.enchantments.Leech;
@@ -38,15 +39,19 @@ public class Bat extends Mob {
 			} else {
 				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
 			}
+		if(Dungeon.hero.lvl <= 6){
 		defenseSkill = (Dungeon.hero.lvl/3 +1) + 2;
+		} else{
+			defenseSkill = (Dungeon.hero.lvl/3 +1) + 3 + Dungeon.hero.lvl/6;
+		}
 		baseSpeed = 2f;
 		
 		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl;
+			EXP = Dungeon.hero.lvl + Random.Int(0,2);
 			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
 			}
-		maxLvl = 15;
+		maxLvl = Dungeon.hero.lvl + 5;
 		
 		flying = true;
 		
@@ -65,12 +70,16 @@ public class Bat extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return ((Dungeon.hero.lvl/3 +1) * 2) + 7;
+		if(Dungeon.hero.lvl <= 7){
+		return ((Dungeon.hero.lvl/3 +1) * 2) + 6;
+		} else{
+			return((Dungeon.hero.lvl/3 +1) * 2) + (Dungeon.hero.lvl/6 + 1) + 6+ (Dungeon.hero.lvl/9);
+		}
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1);
+		return (Dungeon.hero.lvl /3 +1 + Dungeon.hero.lvl/9);
 	}
 	
 	@Override
@@ -97,7 +106,11 @@ public class Bat extends Mob {
 			"These brisk and tenacious inhabitants of cave domes may defeat much larger opponents by " +
 			"replenishing their health with each successful attack.";
 	}
-	
+	@Override
+	public void die( Object cause ) {
+		Ghost.Quest.processSewersKill( pos );
+		super.die( cause );
+	}
 	private static final HashSet<Class<?>> RESISTANCES = new HashSet<Class<?>>();
 	static {
 		RESISTANCES.add( Leech.class );

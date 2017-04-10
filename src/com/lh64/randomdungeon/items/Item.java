@@ -82,7 +82,7 @@ public class Item implements Bundlable {
 	protected int quantity = 1;
 	
 	private int level = 0;
-	private int durability = maxDurability();
+
 	public boolean levelKnown = false;
 	
 	public boolean cursed;
@@ -111,13 +111,24 @@ public class Item implements Bundlable {
 			}
 		else if(Dungeon.ShopkeeperBag == true && Dungeon.storage ==false){
 			if(quantity == 1){
+				if (Dungeon.hero.buff( RingOfHaggler.Haggling.class ) != null && itemprice >= 2) {
+					AC_BUY = "Buy for " + price()*5 + " gold";
+				} else{
 			AC_BUY = "Buy for " + price()*10 + " gold";
+				}
 			actions.add(AC_BUY);
 			} else{
-				AC_BUY = "Buy for all " + price()*10 + " gold";
-				actions.add(AC_BUY);
-				AC_BUY1 = "Buy 1 for " + price()*10/quantity() + " gold";
-				actions.add(AC_BUY1);
+				if (Dungeon.hero.buff( RingOfHaggler.Haggling.class ) != null && itemprice >= 2) {
+					AC_BUY = "Buy all for " + price()*5 + " gold";
+					AC_BUY1 = "Buy 1 for " + price()*5/quantity() + " gold";
+				} else{
+			AC_BUY = "Buy for " + price()*10 + " gold";
+			AC_BUY1 = "Buy 1 for " + price()*10/quantity() + " gold";
+				}
+			actions.add(AC_BUY);
+		actions.add(AC_BUY1);
+				
+				
 			}
 		}
 		
@@ -140,15 +151,26 @@ public class Item implements Bundlable {
 		}
 }
 	public void doStore (Hero hero){
+		ArrayList<Item> items = Dungeon.hero.storage.backpack.items;
+		if(items.size()< Dungeon.hero.storage.backpack.size){
 		collect(hero.storage.backpack);
 		detachAll(hero.belongings.backpack);
+		}else{
+			GLog.n("Your storage is full.");
+		}
 	}
 	public void doRetrieve (Hero hero){
+		ArrayList<Item> items = Dungeon.hero.belongings.backpack.items;
+		if(items.size() < Dungeon.hero.belongings.backpack.size){
 		collect(hero.belongings.backpack);
 		detachAll(hero.storage.backpack);
+		} else{
+			GLog.n("Your backpack is full.");
+		}
 	}
 	
 	public void doBuy1(Hero hero){
+		ArrayList<Item> items = Dungeon.hero.belongings.backpack.items;
 		itemprice = price()*10/quantity();
 		if (Dungeon.hero.buff( RingOfHaggler.Haggling.class ) != null && itemprice >= 2) {
 			itemprice /= 2;
@@ -156,7 +178,11 @@ public class Item implements Bundlable {
 		if (Dungeon.gold < itemprice){
 			GLog.n("You're too poor to buy that.");
 			Dungeon.ShopkeeperBag = false;
-			}else{
+			}
+		else if(items.size() >= Dungeon.hero.belongings.backpack.size){
+			GLog.n("Other items fill your back at the moment.");
+		}
+		else{
 			collect(hero.belongings.backpack);
 			detach(hero.shopkeeperbag.backpack);
 			Dungeon.gold -= itemprice;
@@ -166,7 +192,7 @@ public class Item implements Bundlable {
 	}
 	
 	public void doBuy(Hero hero){
-		
+		ArrayList<Item> items = Dungeon.hero.belongings.backpack.items;
 		itemprice = price()*10;
 		if (Dungeon.hero.buff( RingOfHaggler.Haggling.class ) != null && itemprice >= 2) {
 			itemprice /= 2;
@@ -175,6 +201,9 @@ public class Item implements Bundlable {
 			if (Dungeon.gold < itemprice){
 			GLog.n("You're too poor to buy that.");
 			Dungeon.ShopkeeperBag = false;
+			}
+			else if(items.size() >= Dungeon.hero.belongings.backpack.size){
+				GLog.n("Other items fill your back at the moment.");
 			}else{
 			collect(hero.belongings.backpack);
 			detachAll(hero.shopkeeperbag.backpack);
@@ -269,8 +298,9 @@ public class Item implements Bundlable {
 			return true;
 			
 		} else {
-			
+			if(Dungeon.ShopkeeperBag == false && Dungeon.storage == false){
 			GLog.n( TXT_PACK_FULL, name() );
+			}
 			return false;
 			
 		}
@@ -346,7 +376,7 @@ public class Item implements Bundlable {
 		cursedKnown = true;
 		
 		level++;
-		fix();
+	
 		
 		return this;
 	}
@@ -361,7 +391,8 @@ public class Item implements Bundlable {
 	
 	public Item degrade() {
 
-		return this;
+		 this.level--;
+		 return this;
 	}
 	
 	final public Item degrade( int n ) {
@@ -376,32 +407,18 @@ public class Item implements Bundlable {
 		
 	}
 	
-	public boolean isBroken() {
-		return durability <= 0;
-	}
 	
-	public void getBroken() {	
-	}
 	
-	public void fix() {
-		
-	}
+	
+	
+	
 	
 	public void polish() {
 		
 	}
 	
-	public int durability() {
-		return durability;
-	}
 	
-	public int maxDurability( int lvl ) {
-		return 1;
-	}
 	
-	final public int maxDurability() {
-		return maxDurability( level );
-	}
 	
 	public int visiblyUpgraded() {
 		return levelKnown ? level : 0;
@@ -411,9 +428,6 @@ public class Item implements Bundlable {
 		return cursed && cursedKnown;
 	}
 	
-	public boolean visiblyBroken() {
-		return levelKnown && isBroken();
-	}
 	
 	public boolean isUpgradable() {
 		return true;
@@ -549,7 +563,7 @@ public class Item implements Bundlable {
 	private static final String LEVEL_KNOWN		= "levelKnown";
 	private static final String CURSED			= "cursed";
 	private static final String CURSED_KNOWN	= "cursedKnown";
-	private static final String DURABILITY		= "durability";
+
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -558,9 +572,7 @@ public class Item implements Bundlable {
 		bundle.put( LEVEL_KNOWN, levelKnown );
 		bundle.put( CURSED, cursed );
 		bundle.put( CURSED_KNOWN, cursedKnown );
-		if (isUpgradable()) {
-			bundle.put( DURABILITY, durability );
-		}
+		
 		QuickSlot.save( bundle, this );
 	}
 	
@@ -579,9 +591,7 @@ public class Item implements Bundlable {
 		
 		cursed	= bundle.getBoolean( CURSED );
 		
-		if (isUpgradable()) {
-			durability = bundle.getInt( DURABILITY );
-		}
+		
 		
 		QuickSlot.restore( bundle, this );
 	}

@@ -79,7 +79,7 @@ public class Goo extends Mob {
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 1;
+		return (Dungeon.hero.lvl /2 +1) + 1;
 	}
 	
 	@Override

@@ -65,12 +65,12 @@ public class Wraith extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1, 3 + level );
+		return Random.NormalIntRange( 1, 2 + level );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 10 + level;
+		return 8 + level;
 	}
 	
 	public void adjustStats( int level ) {

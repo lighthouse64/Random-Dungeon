@@ -22,8 +22,10 @@ import com.lh64.noosa.Scene;
 
 import com.lh64.noosa.particles.PixelParticle;
 import com.lh64.randomdungeon.Assets;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.mobs.Mob;
 import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
+import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.utils.ColorMath;
 import com.lh64.utils.Random;
 
@@ -54,12 +56,12 @@ public class TownLevel extends RegularLevel {
 	
 	@Override
 	protected void decorate() {
-
+		
 		Mob chest = new Chest();
 		while (true) {
 			int pos = roomEntrance.random();
 			int newpos = roomEntrance.random();
-			if (pos != entrance && newpos != pos) {
+			if (pos != entrance && newpos != pos && newpos != entrance) {
 				map[pos] = Terrain.SIGN;
 				chest.pos = newpos;
 				

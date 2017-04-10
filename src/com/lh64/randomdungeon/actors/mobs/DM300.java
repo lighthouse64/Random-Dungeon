@@ -25,15 +25,18 @@ import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Badges;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.Statistics;
+import com.lh64.randomdungeon.Badges.Badge;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.blobs.Blob;
 import com.lh64.randomdungeon.actors.blobs.ToxicGas;
 import com.lh64.randomdungeon.actors.buffs.Buff;
 import com.lh64.randomdungeon.actors.buffs.Paralysis;
+import com.lh64.randomdungeon.actors.hero.HeroSubClass;
 import com.lh64.randomdungeon.effects.CellEmitter;
 import com.lh64.randomdungeon.effects.Speck;
 import com.lh64.randomdungeon.effects.particles.ElmoParticle;
+import com.lh64.randomdungeon.items.TomeOfMastery;
 import com.lh64.randomdungeon.items.keys.SkeletonKey;
 import com.lh64.randomdungeon.items.rings.RingOfThorns;
 import com.lh64.randomdungeon.items.scrolls.ScrollOfPsionicBlast;
@@ -51,9 +54,9 @@ public class DM300 extends Mob {
 		name = Dungeon.depth == Statistics.deepestFloor ? "DM-300" : "DM-350";
 		spriteClass = DM300Sprite.class;
 		
-		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*13 +5,(Dungeon.hero.lvl /3 +1)*15 +5);
+		HP = HT = Random.Int(Dungeon.hero.lvl * 15);
 		EXP = Dungeon.hero.lvl;
-		defenseSkill = Dungeon.hero.lvl + 2;
+		defenseSkill = Dungeon.hero.lvl + (Dungeon.hero.lvl /9);
 		
 		loot = new RingOfThorns().random();
 		lootChance = 0.333f;
@@ -71,7 +74,7 @@ public class DM300 extends Mob {
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /2 ) + 2;
+		return (Dungeon.hero.lvl/3 )+ (Dungeon.hero.lvl/2) + 2;
 	}
 	
 	@Override
@@ -126,7 +129,24 @@ public class DM300 extends Mob {
 	public void die( Object cause ) {
 		
 		super.die( cause );
-		
+		Badges.Badge badgeToCheck = null;
+		switch (Dungeon.hero.heroClass) {
+		case WARRIOR:
+			badgeToCheck = Badge.MASTERY_WARRIOR;
+			break;
+		case MAGE:
+			badgeToCheck = Badge.MASTERY_MAGE;
+			break;
+		case ROGUE:
+			badgeToCheck = Badge.MASTERY_ROGUE;
+			break;
+		case HUNTRESS:
+			badgeToCheck = Badge.MASTERY_HUNTRESS;
+			break;
+		}
+		if (!Badges.isUnlocked( badgeToCheck ) || Dungeon.hero.subClass != HeroSubClass.NONE) {
+			Dungeon.level.drop( new TomeOfMastery(), pos ).sprite.drop();
+		}
 		GameScene.bossSlain();
 		Dungeon.level.drop( new SkeletonKey(), pos ).sprite.drop();
 		

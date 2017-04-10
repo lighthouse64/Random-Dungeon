@@ -36,7 +36,8 @@ public class Journal {
 		GHOST					( "Sad ghost" ),
 		WANDMAKER				( "Old wandmaker" ),
 		TROLL					( "Troll blacksmith" ),
-		IMP						( "Ambitious imp" );
+		IMP						( "Ambitious imp" ),
+		TROLLSMITH              ( "Greedy Troll blacksmith" );
 		
 		public String desc;
 		

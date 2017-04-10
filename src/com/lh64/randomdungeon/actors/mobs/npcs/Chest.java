@@ -17,9 +17,14 @@
  */
 package com.lh64.randomdungeon.actors.mobs.npcs;
 
+import java.util.HashSet;
+
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
+import com.lh64.randomdungeon.actors.buffs.Amok;
 import com.lh64.randomdungeon.actors.buffs.Buff;
+import com.lh64.randomdungeon.actors.buffs.Paralysis;
+import com.lh64.randomdungeon.actors.buffs.Poison;
 import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.randomdungeon.sprites.ChestSprite;
 import com.lh64.randomdungeon.windows.WndBag;
@@ -30,7 +35,7 @@ public static int cpos;
 		name = "Storage";
 		spriteClass = ChestSprite.class;
 		
-		state = PASSIVE;
+		state = NOTHING;
 	}
 	
 	@Override
@@ -77,9 +82,19 @@ public static int cpos;
 	GameScene.show(new WndBag(Dungeon.hero.storage.backpack,null,WndBag.Mode.STORAGE,null));
 	}
 	
+	
+	private static final HashSet<Class<?>> IMMUNITIES = new HashSet<Class<?>>();
+	static{
+		IMMUNITIES.add(Amok.class);
+		IMMUNITIES.add(Paralysis.class);
+		IMMUNITIES.add(Poison.class);
+	}
+	
 	@Override
 	public String description() {
 		return 
 			"Your storage";
 	}
+	
 }
+

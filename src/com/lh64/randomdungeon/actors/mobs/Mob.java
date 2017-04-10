@@ -44,7 +44,7 @@ import com.lh64.utils.Random;
 
 public abstract class Mob extends Char {
 	
-	private static final String	TXT_DIED	= "You hear something died in the distance";
+	private static final String	TXT_DIED	= "You hear something die in the distance";
 	
 	protected static final String	TXT_ECHO	= "echo of ";
 	
@@ -57,7 +57,9 @@ public abstract class Mob extends Char {
 	public AiState WANDERING	= new Wandering();
 	public AiState FLEEING		= new Fleeing();
 	public AiState PASSIVE		= new Passive();
+	public AiState NOTHING      = new Nothing();
 	public AiState state = SLEEPEING;
+
 	
 	public Class<? extends CharSprite> spriteClass;
 	
@@ -94,6 +96,8 @@ public abstract class Mob extends Char {
 			bundle.put( STATE, Fleeing.TAG );
 		} else if (state == PASSIVE) {
 			bundle.put( STATE, Passive.TAG );
+		} else if (state == NOTHING){
+			bundle.put(STATE, Nothing.TAG);
 		}
 		bundle.put( TARGET, target );
 	}
@@ -114,6 +118,8 @@ public abstract class Mob extends Char {
 			this.state = FLEEING;
 		} else if (state.equals( Passive.TAG )) {
 			this.state = PASSIVE;
+		} else if (state.equals( Nothing.TAG)){
+			this.state = NOTHING;
 		}
 
 		target = bundle.getInt( TARGET );
@@ -424,7 +430,18 @@ public abstract class Mob extends Char {
 		public boolean act( boolean enemyInFOV, boolean justAlerted );
 		public String status();
 	}
-	
+	private class Nothing implements AiState{
+		public static final String TAG ="NOTHING";
+		@Override public boolean act(boolean enemyInFOV, boolean justAlerted ){
+			enemySeen = false;
+			spend( TICK );
+			return true;
+		}
+		@Override
+		public String status(){
+			return "";
+		}
+	}
 	private class Sleeping implements AiState {
 		
 		public static final String TAG	= "SLEEPING";

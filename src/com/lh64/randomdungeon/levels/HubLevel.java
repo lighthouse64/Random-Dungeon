@@ -24,17 +24,16 @@ import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.actors.mobs.Mob;
 import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
 import com.lh64.randomdungeon.actors.mobs.npcs.Coinbox;
-import com.lh64.randomdungeon.actors.mobs.npcs.HpSign;
 import com.lh64.randomdungeon.actors.mobs.npcs.Shopkeeper;
 import com.lh64.randomdungeon.items.Gold;
 import com.lh64.randomdungeon.levels.painters.Painter;
-import com.lh64.utils.Random;
 
 public class HubLevel extends Level {
 
 	public static final int SIZE = 7;
 	public static int bottomleft = SIZE*WIDTH +1;
-	public static int test = (SIZE+1)*WIDTH;
+	public static int bottomleftvertical = SIZE*(WIDTH/2)+1;
+	public static int test = (SIZE/3 + 1) * (WIDTH/2) + 1;
 	{
 		color1 = 0x801500;
 		color2 = 0xa68521;
@@ -50,22 +49,30 @@ public class HubLevel extends Level {
 	
 	@Override
 	public String waterTex() {
-		return Assets.WATER_HALLS;
+		return Assets.WATER_CAVES;
 	}
 	
 	@Override
 	protected boolean build() {
-
+		
 		Arrays.fill( map, Terrain.WALL );
+		//starting room
 		Painter.fill( this, 1, 1, SIZE, SIZE, Terrain.EMPTY );
-		Painter.fill( this, 2, 2, SIZE-2, SIZE-2, Terrain.EMPTY );
+		
+		//2nd room
+		Painter.fill(this, entrance + 11, 1, 4,6, Terrain.EMPTY_SP);
+		
+		Painter.fill(this, entrance + 6, SIZE, 8,1, Terrain.EMPTY);
+		Painter.fill(this, entrance+11,SIZE,3,1, Terrain.EMPTY_SP);
 		
 		
 		entrance = SIZE * WIDTH + SIZE / 2 + 1;
 		map[entrance] = Terrain.ENTRANCE;
 		map[bottomleft +1] = Terrain.BOOKSHELF;
+		map[entrance + 6] = Terrain.DOOR;
+		map[entrance + 10] = Terrain.ALCHEMY;
 		
-		
+	
 		
 		pedestal = (SIZE / 2 + 1) * (WIDTH + 1);
 		exit = pedestal;
@@ -80,17 +87,12 @@ public class HubLevel extends Level {
 
 	@Override
 	protected void decorate() {
-		for (int i=0; i < LENGTH; i++) {
-			if (map[i] == Terrain.EMPTY && Random.Int( 10 ) == 0) { 
-				map[i] = Terrain.EMPTY_DECO;
-			}
-		}
+		
 	}
 
 	@Override
 	protected void createMobs() {
 		createShopKeeper();
-		createHpSign();
 		createChest();
 		createCoinbox();
 	}
@@ -100,20 +102,16 @@ public class HubLevel extends Level {
 		shopkeeper.pos = pedestal + 1;
 		mobs.add(shopkeeper);
 	}
-	protected void createHpSign(){
-		Mob hpsign = new HpSign();
-		hpsign.pos = pedestal-1;
-		mobs.add(hpsign);
-	}
+	
 	protected void createChest(){
 		Mob chest = new Chest();
-		chest.pos = pedestal -2;
+		chest.pos = pedestal -1;
 		RegularLevel.chestpos = chest.pos;
 		mobs.add(chest);
 	}
 	protected void createCoinbox(){
 		Mob coinbox = new Coinbox();
-		coinbox.pos = pedestal - 3;
+		coinbox.pos = pedestal - 2;
 		mobs.add(coinbox);
 	}
 

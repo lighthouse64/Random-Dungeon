@@ -21,7 +21,11 @@ import java.io.IOException;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.opengl.GLES20;
+import android.text.InputType;
+import android.widget.EditText;
 
 import com.lh64.noosa.BitmapText;
 import com.lh64.noosa.Camera;
@@ -38,6 +42,8 @@ import com.lh64.randomdungeon.effects.Fireball;
 import com.lh64.randomdungeon.ui.Archs;
 import com.lh64.randomdungeon.ui.ExitButton;
 import com.lh64.randomdungeon.ui.PrefsButton;
+import com.lh64.randomdungeon.ui.RedButton;
+
 
 public class TitleScene extends PixelScene {
 
@@ -51,7 +57,9 @@ public class TitleScene extends PixelScene {
 	public void create() {
 		
 		super.create();
-		
+		if(Dungeon.changename == true){
+			goStore();
+			} 
 		Music.INSTANCE.play( Assets.THEME, true );
 		Music.INSTANCE.volume( 1f );
 		
@@ -106,6 +114,7 @@ public class TitleScene extends PixelScene {
 			@Override
 			protected void onClick() {
 				PixelDungeon.switchNoFade( AboutScene.class );
+				
 			}
 		};
 		add( btnAbout );
@@ -146,6 +155,16 @@ public class TitleScene extends PixelScene {
 		version.x = w - version.width();
 		version.y = h - version.height();
 		add( version );
+		
+		RedButton test = new RedButton("Change your name"){
+			@Override
+			protected void onClick() {
+				goStore();
+			}
+			
+		};
+		test.setRect(version.x -100, version.y + 10, 70, 15);
+		add(test);
 		try {
 			Dungeon.loadName("Name");
 		} catch (IOException e) {
@@ -153,9 +172,10 @@ public class TitleScene extends PixelScene {
 			e.printStackTrace();
 		}
 		BitmapText str = new BitmapText(Dungeon.name + "'s",PixelScene.font3x);
+		str.hardlight(Dungeon.color);
 		str.measure();
 		str.x = title.x ;
-		str.y = title.y -20 ;
+		str.y = title.y -23 ;
 		add(str);
 		
 		PrefsButton btnPrefs = new PrefsButton();
@@ -225,5 +245,70 @@ public class TitleScene extends PixelScene {
 		protected void onTouchUp() {
 			image.resetColor();
 		}
+	}
+	public static void goStore(){
+		
+		PixelDungeon.instance.runOnUiThread( new Runnable(){
+			@Override
+			public void run(){
+				final EditText input = new EditText(PixelDungeon.instance);
+				AlertDialog.Builder builder = new AlertDialog.Builder(PixelDungeon.instance);
+				builder.setTitle("Choose your name (Max: 12 characters)");
+
+				// Set up the input
+				
+				input.setInputType(InputType.TYPE_CLASS_TEXT);
+				builder.setView(input);
+
+				// Set up the buttons
+				builder.setPositiveButton("Choose Name", new DialogInterface.OnClickListener() { 
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				        String name = input.getText().toString();
+				        if(name.length() < 13){
+				        Dungeon.name = name;
+				        Dungeon.changename = false;
+				        try {
+							Dungeon.saveName();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+				        Game.resetScene();
+				        } else{
+				        	dialog.cancel();
+				        	retry();
+				        }
+				    }
+				});
+				builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				        dialog.cancel();
+				    }
+				});
+
+				builder.show();
+			}
+		});
+	}
+	
+	public static void retry(){
+		AlertDialog.Builder retry = new AlertDialog.Builder(PixelDungeon.instance);
+		retry.setTitle("Please try again");
+		retry.setPositiveButton("retry", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				goStore();
+				dialog.cancel();
+				
+			}
+		});
+		retry.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		    @Override
+		    public void onClick(DialogInterface dialog, int which) {
+		        dialog.cancel();
+		    }
+		});
+		retry.show();
 	}
 }

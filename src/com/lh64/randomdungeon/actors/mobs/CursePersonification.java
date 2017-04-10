@@ -30,6 +30,7 @@ import com.lh64.randomdungeon.effects.Pushing;
 import com.lh64.randomdungeon.items.weapon.enchantments.Death;
 import com.lh64.randomdungeon.levels.Level;
 import com.lh64.randomdungeon.sprites.CursePersonificationSprite;
+import com.lh64.randomdungeon.utils.GLog;
 import com.lh64.utils.Random;
 
 public class CursePersonification extends Mob {
@@ -38,11 +39,11 @@ public class CursePersonification extends Mob {
 		name = "curse personification";
 		spriteClass = CursePersonificationSprite.class;
 		
-		HP = HT = 10 + Dungeon.depth * 3;
-		defenseSkill = 10 + Dungeon.depth;
+		HP = HT = 10 + Dungeon.hero.lvl * 3;
+		defenseSkill = 10 + Dungeon.hero.lvl;
 		
-		EXP = 3;
-		maxLvl = 5;	
+		EXP = Dungeon.hero.lvl;
+		maxLvl = Dungeon.hero.lvl + 3;	
 		
 		state = HUNTING;
 		baseSpeed = 0.5f;
@@ -51,17 +52,21 @@ public class CursePersonification extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 3, 5 );
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
+			}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 10 + Dungeon.depth;
+		return 10 + Dungeon.hero.lvl;
 	}
 	
 	@Override
 	public int dr() {
-		return 1;
+		return (Dungeon.hero.lvl /3 +1 + Dungeon.hero.lvl/9);
 	}
 	
 	@Override
@@ -76,7 +81,7 @@ public class CursePersonification extends Mob {
 					Actor.addDelayed( new Pushing( enemy, enemy.pos, newPos ), -1 );
 					
 					enemy.pos = newPos;
-					// FIXME
+					
 					if (enemy instanceof Mob) {
 						Dungeon.level.mobPress( (Mob)enemy );
 					} else {
@@ -101,6 +106,7 @@ public class CursePersonification extends Mob {
 	
 	@Override
 	public void die( Object cause ) {
+		GLog.p("Thank you !!!");
 		Ghost ghost = new Ghost();
 		ghost.state = ghost.PASSIVE;
 		Ghost.replace( this, ghost );

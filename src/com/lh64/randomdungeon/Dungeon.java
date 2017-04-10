@@ -67,6 +67,7 @@ import com.lh64.utils.Bundle;
 import com.lh64.utils.PathFinder;
 import com.lh64.utils.Random;
 import com.lh64.utils.SparseArray;
+
 import com.lh64.randomdungeon.scenes.InterlevelScene;
 import com.lh64.randomdungeon.scenes.InterlevelScene.Mode;
 
@@ -82,12 +83,14 @@ public class Dungeon {
 	public static boolean storage =false;
 	public static boolean ShopkeeperBag = false;
 	public static boolean zerocheck = true;
+	public static boolean resethub;
 	
 	public static Hero hero;
 	public static Level level;
 	
 	public static boolean changename = true;
 	public static String name = "";
+	public static int color = 0xFFFFFF;
 	
 	public static int depth;
 	public static boolean initshop = true;
@@ -101,6 +104,9 @@ public class Dungeon {
 	public static int gold;
 	public static int levelTheme = 0;
 	public static int coins = 0;
+	public static int usedSOU = 0;
+	public static float version;
+	public static float realversion = 0.2f;
 	// Reason of death
 	public static String resultDescription;
 	
@@ -118,7 +124,7 @@ public class Dungeon {
 		challenges = PixelDungeon.challenges();
 		
 		Actor.clear();
-		
+		resethub = false;
 		PathFinder.setMapSize( Level.WIDTH, Level.HEIGHT );
 		
 		Scroll.initLabels();
@@ -128,9 +134,9 @@ public class Dungeon {
 		
 		Statistics.reset();
 		Journal.reset();
-		
+		usedSOU = 0;
 		depth = 0;
-		gold = 0;
+		gold = 100;
 		Hunger.level = 0;
 		initshop = true;
 		droppedItems = new SparseArray<ArrayList<Item>>();
@@ -341,31 +347,26 @@ public class Dungeon {
 	}
 	
 	public static boolean posNeeded() {
-		int[] quota = {4, 2, 9, 4, 14, 6, 19, 8, 24, 9};
-		return chance( quota, potionOfStrength );
+		if((Random.Int(0,4) )== 0 || (Dungeon.hero.lvl/3) + 1 > potionOfStrength + 1){
+		return true;
+		} else{
+			return false;
+		}
 	}
 	
 	public static boolean souNeeded() {
-		int[] quota = {5, 3, 10, 6, 15, 9, 20, 12, 25, 13};
-		return chance( quota, scrollsOfUpgrade );
+		if(Random.Int(0,2)  == 1 || (Dungeon.hero.lvl/3)+ 1 > scrollsOfUpgrade){
+			return true;
+		} else{
+			return false;
+		}
 	}
 	
 	public static boolean soeNeeded() {
-		return Random.Int( 12 * (1 + scrollsOfEnchantment) ) < depth;
+		return Random.Int( 9 * (1 + scrollsOfEnchantment) ) < hero.lvl;
 	}
 	
-	private static boolean chance( int[] quota, int number ) {
-		
-		for (int i=0; i < quota.length; i += 2) {
-			int qDepth = quota[i];
-			if (depth <= qDepth) {
-				int qNumber = quota[i + 1];
-				return Random.Float() < (float)(qNumber - number) / (qDepth - depth + 1);
-			}
-		}
-		
-		return false;
-	}
+
 	
 	private static final String RG_GAME_FILE	= "game.dat";
 	private static final String RG_DEPTH_FILE	= "depth%d.dat";
@@ -405,6 +406,10 @@ public class Dungeon {
 	private static final String COINS       = "coins";
 	private static final String NAME        = "name";
 	private static final String CHANGENAME  = "change name";
+	private static final String COLOR       = "name color";
+	private static final String USEDSOU     = "SOU's read";
+	private static final String V2          = "Secondary version";
+	private static final String HUBRESET    = "Reset hub?";
 	
 	public static String gameFile( HeroClass cl ) {
 		switch (cl) {
@@ -431,18 +436,26 @@ public class Dungeon {
 			return RG_DEPTH_FILE;
 		}
 	}
+	
+
+	
 	public static void saveNameDetails (String fileName) throws IOException {
+		Dungeon.version = realversion;
 		Bundle bundle = new Bundle();
 		bundle.put(NAME, name);
 		bundle.put(CHANGENAME, changename);
+		bundle.put(COLOR, color);
+		
 		OutputStream output = Game.instance.openFileOutput( fileName, Game.MODE_PRIVATE );
 		Bundle.write( bundle, output );
 		output.close();
 	}
+	
 	public static void saveGame( String fileName ) throws IOException {
 		try {
 			Bundle bundle = new Bundle();
-			
+			version = realversion;
+			bundle.put(V2, version);
 			bundle.put( VERSION, Game.version );
 			bundle.put( CHALLENGES, challenges );
 			bundle.put( HERO, hero );
@@ -458,8 +471,13 @@ public class Dungeon {
 			bundle.put(SHOP4VISIT, shop4visit);
 			bundle.put(ZEROCHECK, zerocheck);
 			bundle.put(COINS, coins);
+			bundle.put(HUBRESET, resethub);
 			loadName("Name");
-			bundle.put(NAME, name);
+			saveName();
+			
+			bundle.put(USEDSOU, usedSOU);
+			
+			
 			
 			for (int d : droppedItems.keyArray()) {
 				bundle.put( String.format( DROPPED, d ), droppedItems.get( d ) );
@@ -542,6 +560,9 @@ public class Dungeon {
 		Bundle bundle = gameBundle(fileName);
 		Dungeon.name = bundle.getString(NAME);
 		Dungeon.changename = bundle.getBoolean(CHANGENAME);
+		Dungeon.color = bundle.getInt(COLOR);
+		
+		
 	}
 	public static void loadGame( HeroClass cl ) throws IOException {
 		loadGame( gameFile( cl ), true );
@@ -560,6 +581,7 @@ public class Dungeon {
 		Dungeon.level = null;
 		Dungeon.depth = -1;
 		name = bundle.getString(NAME);
+		
 		if (fullLoad) {
 			PathFinder.setMapSize( Level.WIDTH, Level.HEIGHT );
 		}
@@ -630,6 +652,12 @@ public class Dungeon {
 		coins      = bundle.getInt(COINS);
 		name       = bundle.getString(NAME);
 		changename = bundle.getBoolean(CHANGENAME);
+		usedSOU    = bundle.getInt(USEDSOU);
+		Dungeon.version    = bundle.getFloat(V2);
+		resethub   = bundle.getBoolean(HUBRESET);
+		
+		
+		
 		
 		Statistics.restoreFromBundle( bundle );
 		Journal.restoreFromBundle( bundle );

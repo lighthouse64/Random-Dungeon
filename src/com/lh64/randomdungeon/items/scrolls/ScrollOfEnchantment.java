@@ -51,7 +51,7 @@ public class ScrollOfEnchantment extends InventoryScroll {
 		
 		}
 		
-		item.fix();
+	
 		
 		curUser.sprite.emitter().start( Speck.factory( Speck.LIGHT ), 0.1f, 5 );
 		Enchanting.show( curUser, item );

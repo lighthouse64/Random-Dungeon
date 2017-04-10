@@ -32,7 +32,7 @@ public class HumanSprite extends MobSprite {
 		idle = new Animation( 2, true );
 		idle.frames( frames, 0, 0, 0, 0, 1 );
 		
-		run = new Animation( 10, true );
+		run = new Animation( 4, true );
 		run.frames( frames, 2, 3 );
 		
 		attack = idle.clone();

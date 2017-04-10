@@ -17,8 +17,10 @@
  */
 package com.lh64.randomdungeon.items.bags;
 
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.scrolls.Scroll;
+import com.lh64.randomdungeon.items.scrolls.ScrollOfReturn;
 import com.lh64.randomdungeon.sprites.ItemSpriteSheet;
 
 public class ScrollHolder extends Bag {
@@ -27,12 +29,14 @@ public class ScrollHolder extends Bag {
 		name = "scroll holder";
 		image = ItemSpriteSheet.HOLDER;
 		
-		size = 12;
+		size = 18;
 	}
 	
 	@Override
 	public boolean grab( Item item ) {
-		return item instanceof Scroll;
+		
+		return item instanceof Scroll || item instanceof ScrollOfReturn;
+		
 	}
 	
 	@Override
@@ -40,6 +44,27 @@ public class ScrollHolder extends Bag {
 		return 50;
 	}
 	
+	@Override
+	public boolean collect(Bag container) {
+		if(super.collect(container)){
+		
+		return true;
+		} else{
+			return false;
+		}
+	}
+	
+	@Override
+	public void onDetach( ) {
+		if(Dungeon.storage == true || Dungeon.ShopkeeperBag == true){
+		for (Item item : Dungeon.hero.belongings.backpack.items.toArray( new Item[0] )) {
+			if (grab( item ) ) {
+				item.detachAll( Dungeon.hero.belongings.backpack );
+				item.collect( this );
+			}
+		}
+		}
+	}
 	@Override
 	public String info() {
 		return

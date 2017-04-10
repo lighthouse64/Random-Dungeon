@@ -43,12 +43,16 @@ public class Spinner extends Mob {
 			} else {
 				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
 			}
-		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
+		if(Dungeon.hero.lvl <= 6){
+		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 1;
+		} else{
+			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
+		}
 		
 		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl;
+			EXP = Dungeon.hero.lvl + Random.Int(0,2);
 			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl+1);
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
 			}
 		maxLvl = Dungeon.hero.lvl / 5 + Dungeon.hero.lvl + 2;
 		
@@ -69,12 +73,15 @@ public class Spinner extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return ((Dungeon.hero.lvl/3 +1) * 2) + 7;
+		if(Dungeon.hero.lvl <= 7){
+		return (Dungeon.hero.lvl/3 +1)*2 + 7;
+		} else{
+			return (Dungeon.hero.lvl/3 +1)*2 + 7 + (Dungeon.hero.lvl /6 + 1) + Dungeon.hero.lvl/9;
+		}
 	}
-	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 2;
+		return (Dungeon.hero.lvl /3 +1) + 2 + Dungeon.hero.lvl/6;
 	}
 	
 	@Override

@@ -21,6 +21,7 @@ import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.buffs.Terror;
 import com.lh64.randomdungeon.actors.hero.Hero;
+import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.items.Gold;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.rings.RingOfHaggler;
@@ -47,7 +48,11 @@ public class Thief extends Mob {
 			} else {
 				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
 			}
+		if(Dungeon.hero.lvl <= 6){
 		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
+		} else{
+			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
+		}
 		
 		if(Dungeon.hero.lvl <= 1){
 			EXP = Dungeon.hero.lvl;
@@ -81,7 +86,7 @@ public class Thief extends Mob {
 		if(Dungeon.hero.lvl <= 8){
 			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
 			} else {
-			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
+			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 4);
 			}
 	}
 	
@@ -92,7 +97,7 @@ public class Thief extends Mob {
 	
 	@Override
 	public void die( Object cause ) {
-
+		Ghost.Quest.processSewersKill( pos );
 		super.die( cause );
 		
 		if (item != null) {
@@ -102,12 +107,16 @@ public class Thief extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return ((Dungeon.hero.lvl/3 +1) * 2) + 7;
+		if(Dungeon.hero.lvl <= 7){
+			return (Dungeon.hero.lvl/3 +1)*2 + 7;
+			} else{
+				return (Dungeon.hero.lvl/3 +1)*2 + 7 + (Dungeon.hero.lvl /6 + 1) + Dungeon.hero.lvl/9;
+			}
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 1;
+		return (Dungeon.hero.lvl /3 +1) + 1 + Dungeon.hero.lvl/9;
 	}
 	
 	@Override

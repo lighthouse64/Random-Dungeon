@@ -41,7 +41,7 @@ public class Bones {
 	public static void leave() {
 		
 		item = null;
-		switch (Random.Int( 4 )) {
+		switch (Random.Int( 5 )) {
 		case 0:
 			item = Dungeon.hero.belongings.weapon;
 			break;
@@ -53,6 +53,8 @@ public class Bones {
 			break;
 		case 3:
 			item = Dungeon.hero.belongings.ring2;
+		case 4:
+			item = Dungeon.hero.belongings.ring3;
 			break;
 		}
 		if (item == null) {
@@ -106,7 +108,7 @@ public class Bones {
 					if (item.isUpgradable()) {
 						int lvl = (Dungeon.depth - 1) * 3 / 5 + 1;
 						if (lvl < item.level()) {
-							item.degrade( item.level() - lvl );
+							
 						}
 						item.levelKnown = false;
 					}

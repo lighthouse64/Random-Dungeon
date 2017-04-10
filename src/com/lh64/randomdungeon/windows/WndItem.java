@@ -44,7 +44,7 @@ public class WndItem extends Window {
 		titlebar.icon( new ItemSprite( item.image(), item.glowing() ) );
 		titlebar.label( Utils.capitalize( item.toString() ) );
 		if (item.isUpgradable() && item.levelKnown) {
-			titlebar.health( (float)item.durability() / item.maxDurability() );
+			titlebar.health( (float)4 / 4 );
 		}
 		titlebar.setRect( 0, 0, WIDTH, 0 );
 		add( titlebar );
@@ -53,7 +53,7 @@ public class WndItem extends Window {
 			if (item.level() < 0) {
 				titlebar.color( ItemSlot.DEGRADED );				
 			} else if (item.level() > 0) {
-				titlebar.color( item.isBroken() ? ItemSlot.WARNING : ItemSlot.UPGRADED );				
+				titlebar.color( ItemSlot.UPGRADED );				
 			}
 		}
 		

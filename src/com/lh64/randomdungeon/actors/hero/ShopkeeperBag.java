@@ -48,7 +48,7 @@ public class ShopkeeperBag implements Iterable<Item> {
 
 	
 	public void storeInBundle( Bundle bundle ) {
-		
+	
 		backpack.storeInBundle( bundle );
 	}
 	

@@ -25,6 +25,7 @@ import com.lh64.randomdungeon.actors.hero.HeroClass;
 import com.lh64.randomdungeon.effects.Speck;
 import com.lh64.randomdungeon.sprites.CharSprite;
 import com.lh64.randomdungeon.sprites.ItemSpriteSheet;
+import com.lh64.randomdungeon.utils.GLog;
 
 public class Dewdrop extends Item {
 
@@ -44,7 +45,7 @@ public class Dewdrop extends Item {
 		
 		if (hero.HP < hero.HT || vial == null || vial.isFull()) {
 			
-			int value = 1 + (Dungeon.depth - 1) / 5;
+			int value = 1 + (Dungeon.hero.lvl - 1) / 5;
 			if (hero.heroClass == HeroClass.HUNTRESS) {
 				value++;
 			}
@@ -54,6 +55,9 @@ public class Dewdrop extends Item {
 				hero.HP += effect;
 				hero.sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
 				hero.sprite.showStatus( CharSprite.POSITIVE, TXT_VALUE, effect );
+			} else{
+				GLog.b("You'd be wasting the dew if you used it now.");
+				return false;
 			}
 			
 		} else if (vial != null) {

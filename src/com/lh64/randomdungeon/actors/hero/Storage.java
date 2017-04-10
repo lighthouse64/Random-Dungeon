@@ -48,12 +48,12 @@ public class Storage implements Iterable<Item> {
 
 	
 	public void storeInBundle( Bundle bundle ) {
-		
+		Bag.ITEMS = "storage";
 		backpack.storeInBundle( bundle );
 	}
 	
 	public void restoreFromBundle( Bundle bundle ) {
-		
+		Bag.ITEMS = "storage";
 		backpack.clear();
 		backpack.restoreFromBundle( bundle );
 

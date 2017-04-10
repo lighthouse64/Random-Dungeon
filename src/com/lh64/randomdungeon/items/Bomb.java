@@ -71,7 +71,7 @@ public class Bomb extends Item {
 					
 					Char ch = Actor.findChar( c );
 					if (ch != null) {
-						int dmg = Random.Int( 1 + Dungeon.depth, 10 + Dungeon.depth * 2 ) - Random.Int( ch.dr() );
+						int dmg = Random.Int( 1 + Dungeon.hero.lvl, 8 + Dungeon.hero.lvl/2 + Dungeon.hero.lvl ) - Random.Int( ch.dr() );
 						if (dmg > 0) {
 							ch.damage( dmg, this );
 							if (ch.isAlive()) {

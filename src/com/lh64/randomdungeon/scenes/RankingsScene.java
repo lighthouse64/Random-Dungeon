@@ -42,7 +42,7 @@ public class RankingsScene extends PixelScene {
 	
 	private static final String TXT_TITLE		= "Top Rankings";
 	private static final String TXT_TOTAL		= "Games played: ";
-	private static final String TXT_NO_GAMES	= "No games have been played yet.";
+	private static final String TXT_NO_GAMES	= "No games have been completed yet.";
 	
 	private static final String TXT_NO_INFO	= "No additional information";
 	

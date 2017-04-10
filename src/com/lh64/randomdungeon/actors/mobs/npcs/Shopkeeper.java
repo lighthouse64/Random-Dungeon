@@ -27,11 +27,13 @@ import com.lh64.randomdungeon.items.Generator;
 import com.lh64.randomdungeon.items.Heap;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.Weightstone;
+import com.lh64.randomdungeon.items.bags.PotionBag;
 import com.lh64.randomdungeon.items.bags.ScrollHolder;
 import com.lh64.randomdungeon.items.bags.SeedPouch;
 import com.lh64.randomdungeon.items.bags.WandHolster;
 import com.lh64.randomdungeon.items.food.OverpricedRation;
 import com.lh64.randomdungeon.items.potions.PotionOfHealing;
+import com.lh64.randomdungeon.items.scrolls.ScrollOfIdentify;
 import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.randomdungeon.sprites.ShopkeeperSprite;
 import com.lh64.randomdungeon.utils.GLog;
@@ -39,6 +41,7 @@ import com.lh64.randomdungeon.windows.WndBag;
 import com.lh64.randomdungeon.windows.WndPurchaseItem;
 
 import com.lh64.randomdungeon.windows.WndTradeItem;
+import com.lh64.utils.Random;
 
 public class Shopkeeper extends NPC {
 
@@ -103,19 +106,15 @@ public class Shopkeeper extends NPC {
 	public static void buy(){
 		
 	}
-
-	public static void playerbuy(){
+	public static void shopinit(){
 		Dungeon.storage=false;
 		Dungeon.ShopkeeperBag=true;
-		if(Dungeon.depth > 1){
-			Dungeon.initshop = false;
-		}
-		if(Dungeon.initshop == true){
 		Dungeon.hero.shopkeeperbag.resurrect();
 		Item item = new Bomb();
 		item.collect(Dungeon.hero.shopkeeperbag.backpack);
 		Item scroll = Generator.random(Generator.Category.SCROLL);
 		scroll.collect(Dungeon.hero.shopkeeperbag.backpack);
+		new ScrollOfIdentify().collect(Dungeon.hero.shopkeeperbag.backpack);
 		item = Generator.random(Generator.Category.POTION);
 		item.collect(Dungeon.hero.shopkeeperbag.backpack);
 		new Ankh().collect(Dungeon.hero.shopkeeperbag.backpack);
@@ -123,117 +122,72 @@ public class Shopkeeper extends NPC {
 		for (int j = 1; j < 3; j++){
 		new OverpricedRation().collect(Dungeon.hero.shopkeeperbag.backpack);
 		}
+		for (int i = 1; i<4; i++){
+			item = new PotionOfHealing();
+			item.collect(Dungeon.hero.shopkeeperbag.backpack);
+}
+		if(Dungeon.depth != Dungeon.shop3){
 		Generator.random(Generator.Category.WAND).collect(Dungeon.hero.shopkeeperbag.backpack);
+		}
 		new Weightstone().collect(Dungeon.hero.shopkeeperbag.backpack);
 		item = Generator.random(Generator.Category.RING);
+		if(Random.Int(0,3)== 0){
+			item.degrade(Random.Int(0,4));
+			item.cursed = true;
+			item.cursedKnown = false;
+		}
 		item.collect(Dungeon.hero.shopkeeperbag.backpack);
+		Dungeon.initshop = false;
+	}
+	public static void playerbuy(){
+		Dungeon.storage = false;
+		Dungeon.ShopkeeperBag = true;
+		if(Dungeon.depth > 1){
+			Dungeon.initshop = false;
+		}
+		if(Dungeon.initshop == true){
+		shopinit();
+		Item cheeckbag = Dungeon.hero.belongings.getItem(PotionBag.class);
+		if(cheeckbag == null){
+			Item newbag = new PotionBag();
+			newbag.collect(Dungeon.hero.shopkeeperbag.backpack);
+		}
+		Item holster = Dungeon.hero.belongings.getItem(WandHolster.class);
+		if(holster == null){
+			new WandHolster().collect(Dungeon.hero.shopkeeperbag.backpack);
+		}
 		Dungeon.initshop = false;
 		} 
 		else if(Dungeon.shop1visit == false && Dungeon.depth == Dungeon.shop1){
-			Dungeon.hero.shopkeeperbag.resurrect();
-			Item item = new Bomb();
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			Item scroll = Generator.random(Generator.Category.SCROLL);
-			scroll.collect(Dungeon.hero.shopkeeperbag.backpack);
-			item = Generator.random(Generator.Category.POTION);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			new Ankh().collect(Dungeon.hero.shopkeeperbag.backpack);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			for (int j = 1; j < 3; j++){
-				new OverpricedRation().collect(Dungeon.hero.shopkeeperbag.backpack);
-				}
-			for (int i = 1; i<4; i++){
-				item = new PotionOfHealing();
-				item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			}
+			shopinit();
 			Item checkpouch = Dungeon.hero.belongings.getItem(SeedPouch.class);
 			if(checkpouch == null){
 				Item getholder = new SeedPouch();
 				getholder.collect(Dungeon.hero.shopkeeperbag.backpack);
 			}
-			Generator.random(Generator.Category.WAND).collect(Dungeon.hero.shopkeeperbag.backpack);
-			new Weightstone().collect(Dungeon.hero.shopkeeperbag.backpack);
-			item = Generator.random(Generator.Category.RING);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
+			  
 			Dungeon.shop1visit = true;
 		}
 		else if(Dungeon.shop2visit == false && Dungeon.depth == Dungeon.shop2){
-			Dungeon.hero.shopkeeperbag.resurrect();
-			Item item = new Bomb();
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			Item scroll = Generator.random(Generator.Category.SCROLL);
-			scroll.collect(Dungeon.hero.shopkeeperbag.backpack);
-			item = Generator.random(Generator.Category.POTION);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			new Ankh().collect(Dungeon.hero.shopkeeperbag.backpack);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			for (int j = 1; j < 3; j++){
-				new OverpricedRation().collect(Dungeon.hero.shopkeeperbag.backpack);
-				}
-			for (int i = 1; i<4; i++){
-				item = new PotionOfHealing();
-				item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			}
+			shopinit();
 			Item scrollholder = Dungeon.hero.belongings.getItem(ScrollHolder.class);
 			if(scrollholder == null){
 				Item getholder = new ScrollHolder();
 				getholder.collect(Dungeon.hero.shopkeeperbag.backpack);
 			}
-			Generator.random(Generator.Category.WAND).collect(Dungeon.hero.shopkeeperbag.backpack);
-			new Weightstone().collect(Dungeon.hero.shopkeeperbag.backpack);
-			item = Generator.random(Generator.Category.RING);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
 			Dungeon.shop2visit = true;
 		}
 		else if(Dungeon.shop3visit == false && Dungeon.depth == Dungeon.shop3){
-			Dungeon.hero.shopkeeperbag.resurrect();
-			Item item = new Bomb();
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			Item scroll = Generator.random(Generator.Category.SCROLL);
-			scroll.collect(Dungeon.hero.shopkeeperbag.backpack);
-			item = Generator.random(Generator.Category.POTION);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			new Ankh().collect(Dungeon.hero.shopkeeperbag.backpack);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			for (int j = 1; j < 3; j++){
-				new OverpricedRation().collect(Dungeon.hero.shopkeeperbag.backpack);
-				}
-			for (int i = 1; i<4; i++){
-				item = new PotionOfHealing();
-				item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			}
+			shopinit();
 			Item holster = Dungeon.hero.belongings.getItem(WandHolster.class);
 			if(holster == null){
 				new WandHolster().collect(Dungeon.hero.shopkeeperbag.backpack);
 			}
-			Generator.random(Generator.Category.WAND).collect(Dungeon.hero.shopkeeperbag.backpack);
-			new Weightstone().collect(Dungeon.hero.shopkeeperbag.backpack);
-			item = Generator.random(Generator.Category.RING);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
+			
 			Dungeon.shop3visit = true;
 		}
 		else if(Dungeon.shop4visit == false && Dungeon.depth == 28){
-			Dungeon.hero.shopkeeperbag.resurrect();
-			Item item = new Bomb();
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			new Ankh().collect(Dungeon.hero.shopkeeperbag.backpack);
-			Item scroll = Generator.random(Generator.Category.SCROLL);
-			scroll.collect(Dungeon.hero.shopkeeperbag.backpack);
-			item = Generator.random(Generator.Category.POTION);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			for (int j = 1; j < 3; j++){
-				new OverpricedRation().collect(Dungeon.hero.shopkeeperbag.backpack);
-				}
-			for (int i = 1; i<4; i++){
-				item = new PotionOfHealing();
-				item.collect(Dungeon.hero.shopkeeperbag.backpack);
-			}
-			Generator.random(Generator.Category.WAND).collect(Dungeon.hero.shopkeeperbag.backpack);
-			new Weightstone().collect(Dungeon.hero.shopkeeperbag.backpack);
-			item = Generator.random(Generator.Category.RING);
-			item.collect(Dungeon.hero.shopkeeperbag.backpack);
+			shopinit();
 			Dungeon.shop4visit = true;
 		}
 		GameScene.show(new WndBag(Dungeon.hero.shopkeeperbag.backpack,null,WndBag.Mode.BUY,null));
@@ -249,6 +203,7 @@ public class Shopkeeper extends NPC {
 		}
 	};
 public static void choose(){
+	TrollSmith.troll = false;
 	GameScene.show(new WndPurchaseItem());
 }
 

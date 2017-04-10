@@ -45,6 +45,7 @@ public enum Icons {
 	SCROLL_HOLDER,
 	WAND_HOLSTER,
 	KEYRING,
+	POTION_POUCH,
 	CHECKED,
 	UNCHECKED,
 	EXIT,
@@ -124,6 +125,9 @@ public enum Icons {
 			break;
 		case KEYRING:
 			icon.frame( icon.texture.uvRect( 64, 29, 74, 39 ) );
+			break;
+		case POTION_POUCH:
+			icon.frame( icon.texture.uvRect(68, 51, 78, 61));
 			break;
 		case CHECKED:
 			icon.frame( icon.texture.uvRect( 54, 12, 66, 24 ) );

@@ -226,30 +226,11 @@ public class Ring extends EquipableItem {
 	
 	@Override
 	public int effectiveLevel() {
-		return isBroken() ? 1 : level();
+		return level();
 	}
 	
-	private void renewBuff() {
-		if (buff != null) {
-			Char owner = buff.target;
-			buff.detach();
-			if ((buff = buff()) != null) {
-				buff.attachTo( owner );
-			}
-		}
-	}
 	
-	@Override
-	public void getBroken() {
-		renewBuff();
-		super.getBroken();
-	}
 	
-	@Override
-	public void fix() {
-		super.fix();
-		renewBuff();
-	}
 	
 	
 	public boolean isKnown() {
@@ -267,8 +248,8 @@ public class Ring extends EquipableItem {
 	@Override
 	public String toString() {
 		return 
-			levelKnown && isBroken() ? 
-				"broken " + super.toString() : 
+			levelKnown ? 
+				 super.toString() : 
 				super.toString();
 	}
 	
@@ -315,8 +296,8 @@ public class Ring extends EquipableItem {
 	
 	@Override
 	public Item random() {
-		int lvl = Random.Int( 1, 3 );
-		if (Random.Float() < 0.3f) {
+		int lvl = Random.Int( 0, 3 );
+		if (Random.Float() < 0.4f) {
 			degrade( lvl );
 			cursed = true;
 		} else {

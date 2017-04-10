@@ -20,17 +20,24 @@ package com.lh64.randomdungeon.windows;
 import com.lh64.noosa.BitmapTextMultiline;
 import com.lh64.noosa.Game;
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.Journal;
 import com.lh64.randomdungeon.Statistics;
 import com.lh64.randomdungeon.actors.buffs.Hunger;
+import com.lh64.randomdungeon.actors.mobs.npcs.Blacksmith;
+import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
+import com.lh64.randomdungeon.actors.mobs.npcs.Wandmaker;
+import com.lh64.randomdungeon.items.potions.PotionOfHealing;
+import com.lh64.randomdungeon.levels.HubLevel;
 import com.lh64.randomdungeon.scenes.InterlevelScene;
 import com.lh64.randomdungeon.scenes.PixelScene;
 import com.lh64.randomdungeon.ui.RedButton;
 import com.lh64.randomdungeon.ui.Window;
+import com.lh64.utils.Random;
 
 public class WndConfirmAscend extends Window {
 	
 	private static final String TXT_MESSAGE	= "Do you want to go back to the hub? "
-																					+ "\n Note: half of your gold and non-equipped items will be purged.";
+																					+ "\n Note: all of your gold and non-equipped items will be purged.";
 	private static final String TXT_YES		= "Yes, I will return";
 	private static final String TXT_NO		= "No, I'm continuing";
 	
@@ -38,17 +45,50 @@ public class WndConfirmAscend extends Window {
 	private static final int BTN_HEIGHT	= 20;
 	private static final float GAP		= 2;
 	public static boolean go = false;
-	
 	public static WndConfirmAscend instance;
 	public static Object causeOfDeath;
 	
+	public static void reset(boolean go){
+		Journal.reset();
+		Ghost.Quest.reset();
+		Wandmaker.Quest.reset();
+		Blacksmith.Quest.reset();
+		Hunger.level = 0;
+		Statistics.deepestFloor = 1;
+		if(go == true){
+		Dungeon.hero.resurrect(-1);
+		Dungeon.gold = 0;
+		} 
+		Dungeon.deleteLevels(Dungeon.hero.heroClass);
+		Dungeon.shop1 = Random.Int(3,10);
+		Dungeon.shop2 = Random.Int(11,19);
+		Dungeon.shop3 = Random.Int(20,27);
+		Dungeon.shop1visit = false;
+		Dungeon.shop2visit = false;
+		Dungeon.shop3visit = false;
+		Dungeon.shop4visit = false;
+		Dungeon.initshop = true;
+		Dungeon.levelTheme = 0;
+		if(go == true){
+		InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
+		Game.switchScene( InterlevelScene.class );
+		} else{
+			InterlevelScene.returnDepth = 1;
+			InterlevelScene.returnPos = HubLevel.bottomleft + 3;
+			InterlevelScene.mode = InterlevelScene.Mode.RETURN;
+			Game.switchScene( InterlevelScene.class );
+		}
+		Dungeon.initshop = true;
+		PotionOfHealing.heal(Dungeon.hero);	
+		((Hunger)Dungeon.hero.buff( Hunger.class )).satisfy( Hunger.STARVING );
+	}
 	public WndConfirmAscend() {
 		
 		super();
 		
 		instance = this;
 		
-		
+
 		BitmapTextMultiline message = PixelScene.createMultiline( TXT_MESSAGE, 6 );
 		message.maxWidth = WIDTH;
 		message.measure();
@@ -58,15 +98,8 @@ public class WndConfirmAscend extends Window {
 			@Override
 			protected void onClick() {
 				hide();
-				go = true;
-				Hunger.level = 0;
-				Statistics.deepestFloor = 1;
-				Dungeon.hero.resurrect(-1);
-				Dungeon.deleteLevels(Dungeon.hero.heroClass);
-				Dungeon.levelTheme = 0;
-				InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
-				Game.switchScene( InterlevelScene.class );
-				Dungeon.initshop = true;
+				go = false;
+				reset(true);
 			}
 		};
 		btnYes.setRect( 0, message.y + message.height() + GAP, WIDTH, BTN_HEIGHT );

@@ -161,10 +161,7 @@ abstract public class Weapon extends KindOfWeapon {
 		return super.upgrade();
 	}
 	
-	@Override
-	public int maxDurability( int lvl ) {
-		return 5 * (lvl < 16 ? 16 - lvl : 1);
-	}
+
 	
 	@Override
 	public String toString() {

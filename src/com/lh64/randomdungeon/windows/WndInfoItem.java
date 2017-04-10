@@ -61,7 +61,7 @@ public class WndInfoItem extends Window {
 				if (item.level() < 0) {
 					color = ItemSlot.DEGRADED;				
 				} else if (item.level() > 0) {
-					color = item.isBroken() ? ItemSlot.WARNING : ItemSlot.UPGRADED;				
+					color =  ItemSlot.UPGRADED;				
 				}
 			}
 			fillFields( item.image(), item.glowing(), color, item.toString(), item.info() );
@@ -99,7 +99,7 @@ public class WndInfoItem extends Window {
 		
 		int color = TITLE_COLOR;
 		if (item.levelKnown) {
-			if (item.level() < 0 || item.isBroken()) {
+			if (item.level() < 0 ) {
 				color = ItemSlot.DEGRADED;				
 			} else if (item.level() > 0) {
 				color = ItemSlot.UPGRADED;				

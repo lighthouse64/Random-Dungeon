@@ -30,6 +30,7 @@ import com.lh64.noosa.ui.Button;
 import com.lh64.noosa.ui.Component;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.actors.buffs.Poison;
 import com.lh64.randomdungeon.effects.Speck;
 import com.lh64.randomdungeon.effects.particles.BloodParticle;
 import com.lh64.randomdungeon.items.keys.IronKey;
@@ -56,6 +57,7 @@ public class StatusPane extends Component {
 	private BitmapText level;
 	private BitmapText depth;
 	private BitmapText keys;
+	public BitmapText hptxt;
 	
 	private DangerIndicator danger;
 	private LootIndicator loot;
@@ -107,6 +109,10 @@ public class StatusPane extends Component {
 		level.hardlight( 0xFFEBA4 );
 		add( level );
 		
+		hptxt = new BitmapText(PixelScene.font1x);
+		hptxt.hardlight(Dungeon.color);
+		add(hptxt);
+		
 		depth = new BitmapText( Integer.toString( Dungeon.depth ), PixelScene.font1x );
 		depth.hardlight( 0xCACFC2 );
 		depth.measure();
@@ -150,6 +156,9 @@ public class StatusPane extends Component {
 		depth.y = 6;
 		
 		keys.y = 6;
+		
+		hptxt.x = 2;
+		hptxt.y = hp.y +37;
 		
 		layoutTags();
 		
@@ -202,9 +211,23 @@ public class StatusPane extends Component {
 		} else if (health < 0.25f) {
 			avatar.tint( 0xcc0000, 0.4f );
 			blood.on = true;
-		} else {
+		} 
+		else if(health >= 0.25f && Dungeon.hero.buff(Poison.class) != null){
+			avatar.tint(0x933fb5, 0.5f);
+		}
+		else {
 			avatar.resetColor();
 			blood.on = false;
+		}
+		
+		if(health > 0.5f){
+			hp.tint(0x0cad16, 0.5f);
+		}
+		else if(health <=0.5f && health > 0.25f){
+			hp.tint(0xf7e813, 0.5f);
+		}
+		else{
+			hp.tint(0xdb2f0d, 0.5f);
 		}
 		
 		hp.scale.x = health;
@@ -233,6 +256,8 @@ public class StatusPane extends Component {
 			keys.measure();
 			keys.x = width - 8 - keys.width()    - 18;
 		}
+		
+		hptxt.text("HP: " + Dungeon.hero.HP + "/" + Dungeon.hero.HT);
 		
 		int tier = Dungeon.hero.tier();
 		if (tier != lastTier) {

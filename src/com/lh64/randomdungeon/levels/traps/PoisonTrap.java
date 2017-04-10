@@ -17,12 +17,12 @@
  */
 package com.lh64.randomdungeon.levels.traps;
 
-import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.buffs.Buff;
 import com.lh64.randomdungeon.actors.buffs.Poison;
 import com.lh64.randomdungeon.effects.CellEmitter;
 import com.lh64.randomdungeon.effects.particles.PoisonParticle;
+import com.lh64.utils.Random;
 
 public class PoisonTrap {
 
@@ -31,7 +31,7 @@ public class PoisonTrap {
 	public static void trigger( int pos, Char ch ) {
 		
 		if (ch != null) {
-			Buff.affect( ch, Poison.class ).set( Poison.durationFactor( ch ) * (4 + Dungeon.hero.lvl / 2) );
+			Buff.affect( ch, Poison.class ).set( Poison.durationFactor( ch ) * (Random.Int(4,8)) );
 		}
 		
 		CellEmitter.center( pos ).burst( PoisonParticle.SPLASH, 3 );

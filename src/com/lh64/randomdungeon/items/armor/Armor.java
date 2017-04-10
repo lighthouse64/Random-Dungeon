@@ -23,6 +23,7 @@ import com.lh64.randomdungeon.Badges;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.hero.Hero;
+import com.lh64.randomdungeon.actors.mobs.npcs.TrollSmith;
 import com.lh64.randomdungeon.items.EquipableItem;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.armor.glyphs.*;
@@ -179,10 +180,7 @@ public class Armor extends EquipableItem {
 	
 
 	
-	@Override
-	public int maxDurability( int lvl ) {
-		return 6 * (lvl < 16 ? 16 - lvl : 1);
-	}
+
 	
 	public int proc( Char attacker, Char defender, int damage ) {
 		
@@ -264,7 +262,7 @@ public class Armor extends EquipableItem {
 	@Override
 	public Item random() {
 		if (Random.Float() < 0.4) {
-			int n = 1;
+			int n = 0;
 			if (Random.Int( 3 ) == 0) {
 				n++;
 				if (Random.Int( 3 ) == 0) {
@@ -297,7 +295,7 @@ public class Armor extends EquipableItem {
 	@Override
 	public int price() {
 		int price = 10 * (1 << (tier - 1));
-		if (glyph != null) {
+		if (glyph != null && TrollSmith.troll == false) {
 			price *= 1.5;
 		}
 		return considerState( price );

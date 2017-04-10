@@ -30,26 +30,26 @@ import com.lh64.input.Touchscreen;
 import com.lh64.noosa.audio.Music;
 import com.lh64.noosa.audio.Sample;
 import com.lh64.randomdungeon.Dungeon;
+
 import com.lh64.utils.BitmapCache;
 import com.lh64.utils.SystemTime;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.text.InputType;
+
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.View;
-import android.widget.EditText;
+
 
 
 public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTouchListener {
@@ -62,7 +62,8 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 	
 	// Density: mdpi=1, hdpi=1.5, xhdpi=2...
 	public static float density = 1;
-	
+	public static int dispWidth;
+	public static int dispHeight;
 	public static String version;
 
 	// Current scene
@@ -95,24 +96,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		super();
 		sceneClass = c;
 	}
-	public void retry(){
-		AlertDialog.Builder retry = new AlertDialog.Builder(this);
-		retry.setTitle("Please try again");
-		retry.setPositiveButton("retry", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.cancel();
-				
-			}
-		});
-		retry.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		        dialog.cancel();
-		    }
-		});
-		retry.show();
-	}
+	
 	@Override
 	protected void onCreate( Bundle savedInstanceState ) {
 		super.onCreate( savedInstanceState );
@@ -121,7 +105,8 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		BitmapCache.context = TextureCache.context = instance  = this;
 		
 		DisplayMetrics m = new DisplayMetrics();
-
+		dispHeight = m.heightPixels;
+		dispWidth = m.widthPixels;
 		getWindowManager().getDefaultDisplay().getMetrics( m );
 		density = m.density;
 		
@@ -158,48 +143,10 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 			
 			e.printStackTrace();
 		}
-		if(Dungeon.changename == true){
-			goStore();
-			} 
-	}
-	public void goStore(){
-		final EditText input = new EditText(this);
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("Choose your name (Max: 12 characters)");
-
-		// Set up the input
 		
-		input.setInputType(InputType.TYPE_CLASS_TEXT);
-		builder.setView(input);
-
-		// Set up the buttons
-		builder.setPositiveButton("Choose Name", new DialogInterface.OnClickListener() { 
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		        String name = input.getText().toString();
-		        if(name.length() < 13){
-		        Dungeon.name = name;
-		        Dungeon.changename = false;
-		        try {
-					Dungeon.saveName();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		        } else{
-		        	dialog.cancel();
-		        	retry();
-		        }
-		    }
-		});
-		builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		        dialog.cancel();
-		    }
-		});
-
-		builder.show();
 	}
+
+	
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -360,6 +307,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 		
 		Game.elapsed = 0f;
 		Game.timeScale = 1f;
+		
 	}
 	
 	protected void update() {

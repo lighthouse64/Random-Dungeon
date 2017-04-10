@@ -253,9 +253,7 @@ public abstract class Wand extends KindOfWeapon {
 			sb.append( " (" + status +  ")" );
 		}
 		
-		if (isBroken()) {
-			sb.insert( 0, "broken " );
-		}
+		
 		
 		return sb.toString();
 	}
@@ -316,10 +314,7 @@ public abstract class Wand extends KindOfWeapon {
 		return this;
 	}
 	
-	@Override
-	public int maxDurability( int lvl ) {
-		return 6 * (lvl < 16 ? 16 - lvl : 1);
-	}
+
 	
 	protected void updateLevel() {
 		maxCharges = Math.min( initialCharges() + level(), 9 );

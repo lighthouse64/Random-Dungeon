@@ -21,6 +21,7 @@ import com.lh64.noosa.BitmapTextMultiline;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.hero.Hero;
 import com.lh64.randomdungeon.actors.mobs.npcs.Shopkeeper;
+import com.lh64.randomdungeon.actors.mobs.npcs.TrollSmith;
 import com.lh64.randomdungeon.items.EquipableItem;
 import com.lh64.randomdungeon.items.Gold;
 import com.lh64.randomdungeon.items.Heap;
@@ -56,7 +57,7 @@ public class WndTradeItem extends Window {
 		super();
 		
 		this.owner = owner; 
-		
+		TrollSmith.troll = false;
 		float pos = createDescription( item, false );
 		
 		if (item.quantity() == 1) {
@@ -178,7 +179,7 @@ public class WndTradeItem extends Window {
 			if (item.level() < 0) {
 				titlebar.color( ItemSlot.DEGRADED );				
 			} else if (item.level() > 0) {
-				titlebar.color( item.isBroken() ? ItemSlot.WARNING : ItemSlot.UPGRADED );				
+				titlebar.color(  ItemSlot.UPGRADED );				
 			}
 		}
 		

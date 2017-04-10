@@ -18,15 +18,9 @@
 package com.lh64.randomdungeon.windows;
 
 import com.lh64.noosa.BitmapTextMultiline;
-import com.lh64.noosa.Game;
-import com.lh64.randomdungeon.Dungeon;
-import com.lh64.randomdungeon.Statistics;
-import com.lh64.randomdungeon.actors.buffs.Hunger;
-import com.lh64.randomdungeon.scenes.InterlevelScene;
 import com.lh64.randomdungeon.scenes.PixelScene;
 import com.lh64.randomdungeon.ui.RedButton;
 import com.lh64.randomdungeon.ui.Window;
-import com.lh64.utils.Random;
 
 public class WndConfirmReturn extends Window {
 	
@@ -37,7 +31,6 @@ public class WndConfirmReturn extends Window {
 	private static final int WIDTH		= 120;
 	private static final int BTN_HEIGHT	= 20;
 	private static final float GAP		= 2;
-	public static boolean go = false;
 	
 	public static WndConfirmReturn instance;
 	public static Object causeOfDeath;
@@ -58,19 +51,8 @@ public class WndConfirmReturn extends Window {
 			@Override
 			protected void onClick() {
 				hide();
-				go = true;
-				Hunger.level = 0;
-				Statistics.deepestFloor = 1;
-				Dungeon.deleteLevels(Dungeon.hero.heroClass);
-				Dungeon.shop1 = Random.Int(3,10);
-				Dungeon.shop2 = Random.Int(11,19);
-				Dungeon.shop3 = Random.Int(20,27);
-				Dungeon.initshop = true;
-				Dungeon.levelTheme = 0;
-				InterlevelScene.returnDepth = 1;
-				InterlevelScene.returnPos = 165;
-				InterlevelScene.mode = InterlevelScene.Mode.RETURN;
-				Game.switchScene( InterlevelScene.class );
+				WndConfirmAscend.go = true;
+				WndConfirmAscend.reset(false);
 			}
 		};
 		btnYes.setRect( 0, message.y + message.height() + GAP, WIDTH, BTN_HEIGHT );

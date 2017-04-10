@@ -117,6 +117,7 @@ public enum HeroClass {
 		new Keyring().collect();
 		new DewVial().collect();
 		
+		
 	}
 	
 	public Badges.Badge masteryBadge() {

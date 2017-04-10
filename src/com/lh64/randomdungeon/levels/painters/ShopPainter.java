@@ -40,9 +40,7 @@ public class ShopPainter extends Painter {
 		
 		placeShopkeeper( level, room );
 		
-		for (Room.Door door : room.connected.values()) {
-			door.set( Room.Door.Type.REGULAR );
-		}
+		
 	}
 	
 

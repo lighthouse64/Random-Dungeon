@@ -81,8 +81,8 @@ public abstract class Level implements Bundlable {
 		GRASS
 	};
 	
-	public static final int WIDTH = 32;
-	public static final int HEIGHT = 32;
+	public static final int WIDTH = 48;
+	public static final int HEIGHT = 48;
 	public static final int LENGTH = WIDTH * HEIGHT;
 	
 	public static final int[] NEIGHBOURS4 = {-WIDTH, +1, +WIDTH, -1}; 
@@ -173,7 +173,7 @@ public abstract class Level implements Bundlable {
 				Dungeon.scrollsOfEnchantment++;
 			}
 			
-			if (Dungeon.depth > 1) {
+			if (Dungeon.depth > 2) {
 				switch (Random.Int( 10 )) {
 				case 0:
 					if (!Dungeon.bossLevel( Dungeon.depth + 1 )) {
@@ -190,7 +190,7 @@ public abstract class Level implements Bundlable {
 			}
 		}
 		
-		boolean pitNeeded = Dungeon.depth > 1 && weakFloorCreated;
+		boolean pitNeeded = Dungeon.depth > 2 && weakFloorCreated;
 		
 		do {
 			Arrays.fill( map, feeling == Feeling.CHASM ? Terrain.CHASM : Terrain.WALL );

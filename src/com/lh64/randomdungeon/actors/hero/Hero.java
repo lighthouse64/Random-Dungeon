@@ -1081,7 +1081,7 @@ public class Hero extends Char {
 		
 		if (subClass == HeroSubClass.WARLOCK) {
 			
-			int value = Math.min( HT - HP, 1 + (Dungeon.depth - 1) / 5 );
+			int value = Math.min( HT - HP, 1 + (Dungeon.hero.lvl - 1) / 5 );
 			if (value > 0) {
 				HP += value;
 				sprite.emitter().burst( Speck.factory( Speck.HEALING ), 1 );
@@ -1092,7 +1092,11 @@ public class Hero extends Char {
 	}
 	
 	public int maxExp() {
-		return 5 + lvl * 5;
+		if(lvl < 10){
+		return 5 + lvl*5;
+		} else{
+			return lvl*7;
+		}
 	}
 	
 	void updateAwareness() {
@@ -1425,8 +1429,6 @@ public class Hero extends Char {
 	public void resurrect( int resetLevel ) {
 		if(WndConfirmAscend.go == true){
 			HP=HT;
-			Dungeon.gold = Dungeon.gold/2;
-			belongings.resurrect(resetLevel);
 		}
 		else{
 		HP = HT;

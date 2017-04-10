@@ -36,6 +36,8 @@ public class Bestiary {
 		}
 	}
 	
+	
+	
 	public static Mob mutable( int depth ) {
 		@SuppressWarnings("unchecked")
 		Class<? extends Mob> cl = (Class<? extends Mob>)mobClass( depth );
@@ -99,16 +101,16 @@ public class Bestiary {
 		case 27:
 		case 28:	
 			if (Dungeon.levelTheme == 1){
-				chances = new float[]{ 1, 1, 1, 0.8f };
-				classes = new Class<?>[]{ Rat.class, Gnoll.class, SewerHorse.class, Crab.class };
+				chances = new float[]{ 1, 1, 1, 0.8f, 0.7f };
+				classes = new Class<?>[]{ Rat.class, Gnoll.class, SewerHorse.class, Crab.class, ToxicSludge.class };
 			}
 			else if (Dungeon.levelTheme == 2){
 				chances = new float[]{ 1, 1, 0.8f, 1 };
 				classes = new Class<?>[]{ Shaman.class, Gnoll.class, Skeleton.class, Thief.class };
 			}
 			else if (Dungeon.levelTheme == 3){
-				chances = new float[]{ 1, 1, 1, 1, 0.5f };
-				classes = new Class<?>[]{ Bat.class, Gnoll.class, SewerHorse.class, Spinner.class, Brute.class };
+				chances = new float[]{ 1, 1, 1, 0.6f, 1 };
+				classes = new Class<?>[]{ Bat.class, Gnoll.class, Spinner.class, Brute.class, CaveFlower.class };
 			}
 			else{
 				chances = new float[]{ 1 };
@@ -133,7 +135,7 @@ public class Bestiary {
 			}
 			break;
 		default:
-			chances = new float[]{ 0.5f };
+			chances = new float[]{ 1f };
 			classes = new Class<?>[]{ Human.class };
 		}
 		

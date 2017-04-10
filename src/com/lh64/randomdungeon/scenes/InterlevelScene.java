@@ -30,6 +30,7 @@ import com.lh64.randomdungeon.Statistics;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.items.Generator;
 import com.lh64.randomdungeon.levels.Level;
+import com.lh64.randomdungeon.levels.Terrain;
 import com.lh64.randomdungeon.ui.GameLog;
 import com.lh64.randomdungeon.windows.WndError;
 import com.lh64.randomdungeon.windows.WndStory;
@@ -223,12 +224,44 @@ public class InterlevelScene extends PixelScene {
 		
 		if (Dungeon.depth >= Statistics.deepestFloor) {
 			level = Dungeon.newLevel();
-		} else {
+		} 
+		else if(Dungeon.depth == 1 && Dungeon.resethub == true){
+			level = Dungeon.newLevel();
+			Dungeon.resethub = false;
+		}
+		else {
 			Dungeon.depth++;
 			level = Dungeon.loadLevel( Dungeon.hero.heroClass );
 		}
+		
+		
 		Dungeon.switchLevel( level, level.entrance );
 		
+		if(Dungeon.depth == 1){
+			
+			int length = Level.LENGTH;
+			int[] map = Dungeon.level.map;
+			boolean[] visited = Dungeon.level.visited;
+			boolean[] discoverable = Level.discoverable;
+for (int i=0; i < length; i++) {
+				
+				int terr = map[i];
+				
+				if (discoverable[i]) {
+					
+					visited[i] = true;
+					if ((Terrain.flags[terr] & Terrain.SECRET) != 0) {
+						Level.set( i, Terrain.discover( terr ) );						
+						GameScene.updateMap( i );
+					}
+				}
+			}
+
+		}
+		for (int i=0; i < Level.LENGTH; i++) {
+					GameScene.updateMap( i );
+
+		}
 	}
 	
 	private void fall() throws Exception {
@@ -252,16 +285,61 @@ public class InterlevelScene extends PixelScene {
 		Dungeon.saveLevel();
 		Dungeon.depth--;
 		Level level;
+		int length = Level.LENGTH;
+		int[] map = Dungeon.level.map;
+		boolean[] visited = Dungeon.level.visited;
+		boolean[] discoverable = Level.discoverable;
 		if(Dungeon.depth == 0 ){
 			if (Dungeon.zerocheck == true){
 			level = Dungeon.newLevel();
 			Dungeon.zerocheck = false;
 			Dungeon.switchLevel( level, level.entrance );
+			
+			
+			for (int i=0; i < length; i++) {
+				
+				int terr = map[i];
+				
+				if (discoverable[i]) {
+					
+					visited[i] = true;
+					if ((Terrain.flags[terr] & Terrain.SECRET) != 0) {
+						Level.set( i, Terrain.discover( terr ) );						
+						GameScene.updateMap( i );
+					}
+				}
+			}
+			Dungeon.observe();
+			
 			} else {
+
 				level = Dungeon.loadLevel( Dungeon.hero.heroClass );
 				Dungeon.switchLevel( level, level.entrance );
 			}
-		}else{
+		} else if(Dungeon.depth == 1 && Dungeon.resethub == true){
+			level = Dungeon.newLevel();
+			Dungeon.resethub = false;
+			Dungeon.switchLevel( level, level.entrance );
+			
+			
+			for (int i=0; i < length; i++) {
+				
+				int terr = map[i];
+				
+				if (discoverable[i]) {
+					
+					visited[i] = true;
+					if ((Terrain.flags[terr] & Terrain.SECRET) != 0) {
+						Level.set( i, Terrain.discover( terr ) );						
+						GameScene.updateMap( i );
+					}
+				}
+			}
+			Dungeon.observe();
+			
+		}
+		
+		else{
 		level = Dungeon.loadLevel( Dungeon.hero.heroClass );
 		Dungeon.switchLevel( level, level.exit );
 		}
@@ -274,8 +352,21 @@ public class InterlevelScene extends PixelScene {
 		
 		Dungeon.saveLevel();
 		Dungeon.depth = returnDepth;
+		
+		if(Dungeon.zerocheck == true && Dungeon.depth == 0){
+			Level level = Dungeon.newLevel();
+			Dungeon.switchLevel(level,level.entrance);
+		}
+		
+		else if(Dungeon.resethub == true && Dungeon.depth == 1){
+			Level level = Dungeon.newLevel();
+			Dungeon.switchLevel(level,level.entrance);
+		}
+		else{
 		Level level = Dungeon.loadLevel( Dungeon.hero.heroClass );
 		Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( returnPos ) : returnPos );
+		}
+		
 	}
 	
 	private void restore() throws Exception {
@@ -285,13 +376,76 @@ public class InterlevelScene extends PixelScene {
 		GameLog.wipe();
 		
 		Dungeon.loadGame( StartScene.curClass );
+		
 		if (Dungeon.depth == -1) {
 			Dungeon.depth = Statistics.deepestFloor;
 			Dungeon.switchLevel( Dungeon.loadLevel( StartScene.curClass ), -1 );
 		} else {
-			Level level = Dungeon.loadLevel( StartScene.curClass );
+			Level level;
+			
+			if( Dungeon.version != Dungeon.realversion){
+				if(Dungeon.depth == 1 ){
+				Dungeon.depth--;
+				level = Dungeon.newLevel();
+				
+				Dungeon.switchLevel( level, level.entrance );
+				int length = Level.LENGTH;
+				int[] map = Dungeon.level.map;
+				boolean[] visited = Dungeon.level.visited;
+				boolean[] discoverable = Level.discoverable;
+				
+				for (int i=0; i < length; i++) {
+					
+					int terr = map[i];
+					
+					if (discoverable[i]) {
+						
+						visited[i] = true;
+						if ((Terrain.flags[terr] & Terrain.SECRET) != 0) {
+							Level.set( i, Terrain.discover( terr ) );						
+							GameScene.updateMap( i );
+						}
+					}
+				}
+				Dungeon.zerocheck = true;
+				Dungeon.resethub = false;
+				} else if(Dungeon.depth == 0){
+					Dungeon.depth--;
+					level = Dungeon.newLevel();
+					
+					Dungeon.switchLevel( level, level.entrance );
+					int length = Level.LENGTH;
+					int[] map = Dungeon.level.map;
+					boolean[] visited = Dungeon.level.visited;
+					boolean[] discoverable = Level.discoverable;
+					
+					for (int i=0; i < length; i++) {
+						
+						int terr = map[i];
+						
+						if (discoverable[i]) {
+							
+							visited[i] = true;
+							if ((Terrain.flags[terr] & Terrain.SECRET) != 0) {
+								Level.set( i, Terrain.discover( terr ) );						
+								GameScene.updateMap( i );
+							}
+						}
+					}
+					Dungeon.resethub = true;
+					Dungeon.zerocheck = false;
+				} else{
+					Dungeon.resethub = true;
+					Dungeon.zerocheck = true;
+				}
+			}else{
+			level = Dungeon.loadLevel( StartScene.curClass );
 			Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( Dungeon.hero.pos ) : Dungeon.hero.pos );
+			}
+			
 		}
+		
+		
 	}
 	
 	private void resurrect() throws Exception {

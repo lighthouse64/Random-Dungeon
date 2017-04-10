@@ -35,12 +35,16 @@ public class Rat extends Mob {
 			} else {
 				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
 			}
+		if(Dungeon.hero.lvl <= 6){
 		defenseSkill = (Dungeon.hero.lvl/3 +1) + 2;
+		} else{
+			defenseSkill = (Dungeon.hero.lvl/3 +1) + 3 + Dungeon.hero.lvl/6;
+		}
 		
 		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl;
+			EXP = Dungeon.hero.lvl + Random.Int(0,2);
 			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
 			}
 		maxLvl = Dungeon.hero.lvl+ 5;
 	}
@@ -50,18 +54,24 @@ public class Rat extends Mob {
 		if(Dungeon.hero.lvl <= 8){
 			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
 			} else {
-			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
+			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 6);
 			}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+		if(Dungeon.hero.lvl <= 7){
 		return (Dungeon.hero.lvl/3 +1) + 8;
+		} else{
+			return (Dungeon.hero.lvl /3 + 1) + (Dungeon.hero.lvl / 6 + 1) + 8 + Dungeon.hero.lvl/9;
+		}
+	
+	
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1);
+		return (Dungeon.hero.lvl /3 +1 + Dungeon.hero.lvl/9);
 	}
 	
 	@Override

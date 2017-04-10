@@ -36,13 +36,17 @@ public class Crab extends Mob {
 		} else {
 		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
 		}
+		if(Dungeon.hero.lvl <= 6){
 		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
+		} else {
+			defenseSkill = ((Dungeon.hero.lvl/3 +1) *2) + 3 + Dungeon.hero.lvl/6;
+		}
 		baseSpeed = 2f;
 		
 		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl;
+			EXP = Dungeon.hero.lvl + Random.Int(1,2);
 			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl+1);
+				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
 			}
 		maxLvl = Dungeon.hero.lvl + 4;
 		
@@ -55,13 +59,17 @@ public class Crab extends Mob {
 		if(Dungeon.hero.lvl <= 8){
 		return Random.Int( (Dungeon.hero.lvl/3 + 1) +1 ,(Dungeon.hero.lvl/3 + 1) +5);
 		} else {
-		return Random.Int( (Dungeon.hero.lvl/3 +1 ) +4 ,(Dungeon.hero.lvl/3 )*2 +8);
+		return Random.Int( (Dungeon.hero.lvl/3 +1 ) +5 ,(Dungeon.hero.lvl/3 )*2 +8);
 		}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
+		if(Dungeon.hero.lvl <= 7){
 		return (Dungeon.hero.lvl/3 +1)*2 + 9;
+		} else{
+			return (Dungeon.hero.lvl/3 +1)*2 + 9 + (Dungeon.hero.lvl/6 + 1);
+		}
 	}
 	
 	@Override
@@ -75,7 +83,7 @@ public class Crab extends Mob {
 	}
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 2;
+		return (Dungeon.hero.lvl /3 +1) + 2 + Dungeon.hero.lvl/6;
 	}
 	
 	@Override

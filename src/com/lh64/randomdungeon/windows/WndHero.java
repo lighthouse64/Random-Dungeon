@@ -17,6 +17,7 @@
  */
 package com.lh64.randomdungeon.windows;
 
+import java.io.IOException;
 import java.util.Locale;
 
 import com.lh64.gltextures.SmartTexture;
@@ -33,12 +34,15 @@ import com.lh64.randomdungeon.actors.buffs.Hunger;
 import com.lh64.randomdungeon.actors.hero.Hero;
 import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.randomdungeon.scenes.PixelScene;
+import com.lh64.randomdungeon.ui.BadgesList;
 import com.lh64.randomdungeon.ui.BuffIndicator;
 import com.lh64.randomdungeon.ui.RedButton;
+import com.lh64.randomdungeon.ui.ScrollPane;
 import com.lh64.randomdungeon.utils.Utils;
 
 public class WndHero extends WndTabbed {
 	
+	public static boolean viewbadge;
 	private static final String TXT_STATS	= "Stats";
 	private static final String TXT_BUFFS	= "Buffs";
 	
@@ -47,13 +51,14 @@ public class WndHero extends WndTabbed {
 	private static final String TXT_HEALTH	= "Health";
 	private static final String TXT_HUNGER  = "Satiety";
 	private static final String TXT_GOLD	= "Gold Collected";
-	private static final String TXT_DEPTH	= "Maximum Depth (obscured)";
 	
-	private static final int WIDTH		= 100;
+	private static final int WIDTH		= 120;
+	private static final int HEIGHT     = 134;
 	private static final int TAB_WIDTH	= 40;
 	
 	private StatsTab stats;
 	private BuffsTab buffs;
+	private BadgesTab badges;
 	
 	private SmartTexture icons;
 	private TextureFilm film;
@@ -71,11 +76,15 @@ public class WndHero extends WndTabbed {
 		buffs = new BuffsTab();
 		add( buffs );
 		
+		badges = new BadgesTab();
+		add(badges);
+		
 		add( new LabeledTab( TXT_STATS ) {
 			protected void select( boolean value ) {
 				super.select( value );
 				stats.visible = stats.active = selected;
 			};
+			
 		} );
 		add( new LabeledTab( TXT_BUFFS ) {
 			protected void select( boolean value ) {
@@ -83,11 +92,18 @@ public class WndHero extends WndTabbed {
 				buffs.visible = buffs.active = selected;
 			};
 		} );
+		add( new LabeledTab( "Badges"){
+			protected void select(boolean value) {
+				super.select(value);
+				badges.visible = badges.active = selected;
+				viewbadge = false;
+			}
+		});
 		for (Tab tab : tabs) {
 			tab.setSize( TAB_WIDTH, tabHeight() );
 		}
 		
-		resize( WIDTH, (int)Math.max( stats.height(), buffs.height() ) );
+		resize( WIDTH, (int)Math.max( badges.height(), buffs.height() ) );
 		
 		select( 0 );
 	}
@@ -95,7 +111,7 @@ public class WndHero extends WndTabbed {
 	private class StatsTab extends Group {
 		
 		private static final String TXT_TITLE		= "Level %d %s";
-		private static final String TXT_CATALOGUS	= "Catalogus";
+		private static final String TXT_CATALOGUS	= "Catalogues";
 		private static final String TXT_JOURNAL		= "Journal";
 		
 		private static final int GAP = 5;
@@ -103,13 +119,18 @@ public class WndHero extends WndTabbed {
 		private float pos;
 		
 		public StatsTab() {
-			
+			viewbadge = false;
 			Hero hero = Dungeon.hero; 
-			
+			try {
+				Dungeon.loadName("Name");
+			} catch (IOException e) {
+				
+				e.printStackTrace();
+			}
 
 			BitmapText title = PixelScene.createText( 
-				Utils.format( Dungeon.name + " the " + TXT_TITLE, hero.lvl, hero.className() ).toUpperCase( Locale.ENGLISH ), 9 );
-			title.hardlight( 0x0cd8f7 );
+				Utils.format( Dungeon.name + ": "+ TXT_TITLE, hero.lvl, hero.className() ).toUpperCase( Locale.ENGLISH ), 9 );
+			title.hardlight( Dungeon.color );
 			title.measure();
 			add( title );
 			
@@ -126,7 +147,6 @@ public class WndHero extends WndTabbed {
 			RedButton btnJournal = new RedButton( TXT_JOURNAL ) {
 				@Override
 				protected void onClick() {
-					hide();
 					GameScene.show( new WndJournal() );
 				}
 			};
@@ -145,7 +165,8 @@ public class WndHero extends WndTabbed {
 			pos += GAP;
 			
 			statSlot( TXT_GOLD, Statistics.goldCollected );
-			statSlot( TXT_DEPTH, "" );
+			statSlot( "Enemies slain ", Statistics.enemiesSlain);
+			statSlot( "SOU's read ",Dungeon.usedSOU);
 			
 			pos += GAP;
 		}
@@ -169,9 +190,7 @@ public class WndHero extends WndTabbed {
 			statSlot( label, Integer.toString( value ) );
 		}
 		
-		public float height() {
-			return pos;
-		}
+		
 	}
 	
 	private class BuffsTab extends Group {
@@ -206,8 +225,32 @@ public class WndHero extends WndTabbed {
 			}
 		}
 		
+		
+		
 		public float height() {
 			return pos;
 		}
 	}
+	private class BadgesTab extends Group{
+		private float pos;
+		public BadgesTab() {
+				super();
+				
+			camera = WndHero.this.camera;
+			ScrollPane list = new BadgesList( false );
+			add( list );
+			list.setSize( WIDTH, HEIGHT );
+			list.setPos((WIDTH/2)*(-1), -80);
+			list.controller.x = (WIDTH/3)*(-1);
+			
+			
+		pos += 2 + list.height();
+		}
+		public float height(){
+			return pos;
+		}
+		
+		
+	}
+	
 }

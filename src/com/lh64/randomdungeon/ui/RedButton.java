@@ -24,6 +24,7 @@ import com.lh64.noosa.audio.Sample;
 import com.lh64.noosa.ui.Button;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Chrome;
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.scenes.PixelScene;
 
 public class RedButton extends Button {
@@ -44,6 +45,11 @@ public class RedButton extends Button {
 		super.createChildren();
 		
 		bg = Chrome.get( Chrome.Type.BUTTON );
+		if(Dungeon.color != 0xFFFFFF && Dungeon.color != 0x000000 && Dungeon.color != 0xFF0000){
+			bg.hardlight(Dungeon.color);
+		} else{
+			bg.hardlight(0xB22A2A);
+		}
 		add( bg );
 		
 		text = PixelScene.createText( 9 );
@@ -65,18 +71,30 @@ public class RedButton extends Button {
 		if (icon != null) {
 			icon.x = x + text.x - icon.width() - 2;
 			icon.y = y + (height - icon.height()) / 2;
+			
 		}
 	};
 	
 	@Override
 	protected void onTouchDown() {
+		
 		bg.brightness( 1.2f );
+		if(Dungeon.color != 0xFFFFFF && Dungeon.color != 0x000000 && Dungeon.color != 0xFF0000){
+			bg.hardlight(Dungeon.color);
+		} else{
+			bg.hardlight(0xB22A2A);
+		}
 		Sample.INSTANCE.play( Assets.SND_CLICK );
 	};
 	
 	@Override
 	protected void onTouchUp() {
 		bg.resetColor();
+		if(Dungeon.color != 0xFFFFFF && Dungeon.color != 0x000000 && Dungeon.color != 0xFF0000){
+			bg.hardlight(Dungeon.color);
+		} else{
+			bg.hardlight(0xB22A2A);
+		}
 	};
 	
 	public void enable( boolean value ) {
@@ -101,6 +119,7 @@ public class RedButton extends Button {
 		this.icon = icon;
 		if (this.icon != null) {
 			add( this.icon );
+			
 			layout();
 		}
 	}

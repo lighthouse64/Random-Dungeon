@@ -71,7 +71,7 @@ public abstract class RegularLevel extends Level {
 			Graph.buildDistanceMap( rooms, roomExit );
 			distance = roomEntrance.distance();
 			
-			if (retry++ > 10) {
+			if (retry++ > 11) {
 				return false;
 			}
 			
@@ -135,6 +135,7 @@ public abstract class RegularLevel extends Level {
 		specials = new ArrayList<Room.Type>( Room.SPECIALS );
 		if (Dungeon.bossLevel( Dungeon.depth + 1 )) {
 			specials.remove( Room.Type.WEAK_FLOOR );
+			specials.remove( Room.Type.ABANDONED);
 		} 
 		else if (Dungeon.depth <= 0 ){
 			specials.removeAll(specials);
@@ -201,7 +202,9 @@ public abstract class RegularLevel extends Level {
 						
 						r.type = Type.LABORATORY;
 						
-					} else {
+					} else if(Dungeon.depth % 6 == 0 && specials.contains( Type.TROLLSMITH)) {
+						r.type = Type.TROLLSMITH;
+					}else {
 						
 						int n = specials.size();
 						r.type = specials.get( Math.min( Random.Int( n ), Random.Int( n ) ) );
@@ -608,7 +611,7 @@ public abstract class RegularLevel extends Level {
 				type = Heap.Type.CHEST;
 				break;
 			case 5:
-				type = Dungeon.depth > 1 ? Heap.Type.MIMIC : Heap.Type.CHEST;
+				type = Dungeon.depth > 2 ? Heap.Type.MIMIC : Heap.Type.CHEST;
 				break;
 			default:
 				type = Heap.Type.HEAP;

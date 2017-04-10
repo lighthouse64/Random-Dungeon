@@ -108,9 +108,7 @@ public class WaterOfTransmutation extends WellWater {
 			int level = w.level();
 			if (level > 0) {
 				n.upgrade( level );
-			} else if (level < 0) {
-				n.degrade( -level );
-			}
+			} 
 			
 			if (w.isEnchanted()) {
 				n.enchant();
@@ -139,9 +137,7 @@ public class WaterOfTransmutation extends WellWater {
 		int level = r.level();
 		if (level > 0) {
 			n.upgrade( level );
-		} else if (level < 0) {
-			n.degrade( -level );
-		}
+		} 
 		
 		n.levelKnown = r.levelKnown;
 		n.cursedKnown = r.cursedKnown;

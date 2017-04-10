@@ -29,7 +29,7 @@ public class Coinbox extends NPC {
 		name = "Coin Storage";
 		spriteClass = CoinboxSprite.class;
 		
-		state = PASSIVE;
+		state = NOTHING;
 	}
 	
 	@Override

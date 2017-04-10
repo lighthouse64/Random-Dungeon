@@ -119,7 +119,15 @@ public class GameScene extends PixelScene {
 		if(Dungeon.levelTheme == 1){
 			Music.INSTANCE.play(Assets.SEWERS, true);
 			Music.INSTANCE.volume( 1f );
-		} else {
+		}
+		else if(Dungeon.levelTheme == 3){
+			Music.INSTANCE.play(Assets.CAVES, true);
+			Music.INSTANCE.volume( 1f );
+		}
+		else if(Dungeon.depth <=0){
+			Music.INSTANCE.play(Assets.TOWN, true);
+		}
+		else {
 			Music.INSTANCE.play( Assets.TUNE, true );
 			Music.INSTANCE.volume( 1f );
 		}
@@ -191,8 +199,9 @@ public class GameScene extends PixelScene {
 		
 		fog = new FogOfWar( Level.WIDTH, Level.HEIGHT );
 		fog.updateVisibility( Dungeon.visible, Dungeon.level.visited, Dungeon.level.mapped );
+		if(Dungeon.depth != 1){
 		add( fog );
-		
+		}
 		brightness( PixelDungeon.brightness() );
 		
 		spells = new Group();
@@ -221,6 +230,9 @@ public class GameScene extends PixelScene {
 		toolbar.camera = uiCamera;
 		toolbar.setRect( 0,uiCamera.height - toolbar.height(), uiCamera.width, toolbar.height() );
 		add( toolbar );
+		
+		
+		
 		
 		AttackIndicator attack = new AttackIndicator();
 		attack.camera = uiCamera;
@@ -292,6 +304,7 @@ public class GameScene extends PixelScene {
 					GLog.h("Welcome to the city");
 				} else{
 				GLog.h( TXT_WELCOME, Dungeon.depth );
+				
 				Sample.INSTANCE.play( Assets.SND_DESCEND );
 				}
 			}

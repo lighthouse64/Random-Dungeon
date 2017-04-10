@@ -17,6 +17,8 @@
  */
 package com.lh64.randomdungeon.items.bags;
 
+
+import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.wands.Wand;
 import com.lh64.randomdungeon.sprites.ItemSpriteSheet;
@@ -37,23 +39,38 @@ public class WandHolster extends Bag {
 	
 	@Override
 	public boolean collect( Bag container ) {
+		
 		if (super.collect( container )) {
 			if (owner != null) {
 				for (Item item : items) {
 					((Wand)item).charge( owner );
 				}
 			}
+			
 			return true;
 		} else {
 			return false;
 		}
+		
 	}
 	
 	@Override
 	public void onDetach( ) {
+		
 		for (Item item : items) {
 			((Wand)item).stopCharging();
 		}
+			for (Item item : Dungeon.hero.belongings.backpack.items.toArray( new Item[0] )) {
+				if (grab( item ) ) {
+					if(Dungeon.storage == true || Dungeon.ShopkeeperBag == true){
+					item.detachAll( Dungeon.hero.belongings.backpack );
+					item.collect( this );
+					}
+				}
+			}
+			
+				
+			
 	}
 	
 	@Override

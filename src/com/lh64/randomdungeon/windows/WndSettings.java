@@ -20,15 +20,22 @@ package com.lh64.randomdungeon.windows;
 import java.io.IOException;
 
 import com.lh64.noosa.Camera;
+import com.lh64.noosa.Game;
 import com.lh64.noosa.audio.Sample;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.PixelDungeon;
 import com.lh64.randomdungeon.scenes.PixelScene;
+import com.lh64.randomdungeon.scenes.TitleScene;
 import com.lh64.randomdungeon.ui.CheckBox;
 import com.lh64.randomdungeon.ui.RedButton;
 import com.lh64.randomdungeon.ui.Toolbar;
 import com.lh64.randomdungeon.ui.Window;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.text.InputType;
+import android.widget.EditText;
 
 public class WndSettings extends Window {
 	
@@ -49,6 +56,7 @@ public class WndSettings extends Window {
 	
 	private static final String TXT_SWITCH_PORT	= "Switch to portrait";
 	private static final String TXT_SWITCH_LAND	= "Switch to landscape";
+	public static final  String TXT_COLOR       = "Change name color";
 	
 	private static final int WIDTH		= 112;
 	private static final int BTN_HEIGHT	= 20;
@@ -180,21 +188,102 @@ public class WndSettings extends Window {
 			RedButton btnNewName = new RedButton( "Change your name" ){
 				@Override
 				protected void onClick(){
-					Dungeon.changename = true;
-					try {
-						Dungeon.saveName();
-					} catch (IOException e) {
-						
-						e.printStackTrace();
-					}
 					
-					parent.add(new WndMessage("A prompt for your name to change will appear on the next startup."));
+					TitleScene.goStore();
 					
 				}
 			};
 			btnNewName.setRect(0, btnOrientation.bottom() + GAP, WIDTH, BTN_HEIGHT);
 			add( btnNewName );
-			resize( WIDTH, (int)btnNewName.bottom() );
+			
+			RedButton btnNameColor = new RedButton("Change your name color"){
+				@Override
+				protected void onClick(){
+					parent.add(
+							new WndOptions("Name color change","Change Your Name Color to...","Red","Yellow","Blue","Green","Orange","Purple","White","Custom Color"){
+								@Override
+								protected void onSelect(int index){
+									switch(index){
+									case 0:
+										Dungeon.color = 0xFF0000;
+										try {
+											Dungeon.saveName();
+										} catch (IOException e) {
+											
+											e.printStackTrace();
+										}
+										Game.resetScene();
+										break;
+									case 1:
+										Dungeon.color = 0xffff00;
+										try {
+											Dungeon.saveName();
+										} catch (IOException e) {
+											
+											e.printStackTrace();
+										}
+										Game.resetScene();
+										break;
+									case 2:
+										Dungeon.color = 0x2833cc;
+										try {
+											Dungeon.saveName();
+										} catch (IOException e) {
+											
+											e.printStackTrace();
+										}
+										Game.resetScene();
+										break;
+									case 3:
+										Dungeon.color = 0x19c14b;
+										try {
+											Dungeon.saveName();
+										} catch (IOException e) {
+											
+											e.printStackTrace();
+										}
+										Game.resetScene();
+										break;
+									case 4:
+										Dungeon.color = 0xfc9e1b;
+										try {
+											Dungeon.saveName();
+										} catch (IOException e) {
+											
+											e.printStackTrace();
+										}
+										Game.resetScene();
+										break;
+									case 5:
+										Dungeon.color = 0x9e1bfc;
+										try {
+											Dungeon.saveName();
+										} catch (IOException e) {
+											
+											e.printStackTrace();
+										}
+										Game.resetScene();
+										break;
+									case 6:
+										Dungeon.color = 0xFFFFFF;
+										try {
+											Dungeon.saveName();
+										} catch (IOException e) {
+											
+											e.printStackTrace();
+										}
+										Game.resetScene();
+										break;
+									default:
+										choosecolor("Insert a hex value in the following format\nex:FFFFFF for white");
+									}
+								}
+							});
+				}
+			};
+			btnNameColor.setRect(0, btnNewName.bottom() + GAP, WIDTH, BTN_HEIGHT);
+			add(btnNameColor);
+			resize( WIDTH, (int)btnNameColor.bottom() );
 			
 		}
 	}
@@ -206,7 +295,58 @@ public class WndSettings extends Window {
 
 		updateEnabled();
 	}
-	
+	public void choosecolor(final String title){
+		PixelDungeon.instance.runOnUiThread( new Runnable(){
+			@Override
+			public void run(){
+				
+				final EditText input = new EditText(PixelDungeon.instance);
+				AlertDialog.Builder builder = new AlertDialog.Builder(PixelDungeon.instance);
+				builder.setTitle(title);
+
+				// Set up the input
+				
+				input.setInputType(InputType.TYPE_CLASS_TEXT);
+				builder.setView(input);
+
+				// Set up the buttons
+				builder.setPositiveButton("Choose Color", new DialogInterface.OnClickListener() { 
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	
+				     try{
+				    	int savecolor = Integer.parseInt(input.getText().toString(),16);
+				    	Dungeon.color = savecolor;
+				    	try {
+							Dungeon.saveName();
+						} catch (IOException e) {
+							
+							e.printStackTrace();
+						}
+						Game.resetScene();
+				     } catch (NumberFormatException e){
+				    	dialog.cancel();
+				    	parent.add(new WndMessage("That was not a valid color."));
+				    	
+				     }
+				    	
+				    	
+				    	
+				       
+				    }
+				});
+				builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				    @Override
+				    public void onClick(DialogInterface dialog, int which) {
+				    	
+				        dialog.cancel();
+				    }
+				});
+
+				builder.show();
+			}
+		});
+	}
 	private void updateEnabled() {
 		float zoom = Camera.main.zoom;
 		btnZoomIn.enable( zoom < PixelScene.maxZoom );

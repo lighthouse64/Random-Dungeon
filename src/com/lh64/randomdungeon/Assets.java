@@ -88,10 +88,11 @@ public class Assets {
 	public static final String RATKING	= "ratking.png";
 	public static final String BEE		= "bee.png";
 	public static final String MIMIC	= "mimic.png";
-	public static final String HPSIGN   = "hpsign.png";
 	public static final String CHEST    = "chest.png";
 	public static final String PORTAL   = "portal.png";
 	public static final String COINBOX  = "coinbox.png";
+	public static final String TOXICSLUDGE = "toxicsludge.png";
+	public static final String CAVEFLOWER = "CaveFlowerSprite.png";
 	
 	public static final String HUMAN    = "human.png";
 	public static final String FEMALEHUMAN = "femalehuman.png";
@@ -124,6 +125,8 @@ public class Assets {
 	public static final String THEME	= "theme.mp3";
 	public static final String TUNE		= "game.mp3";
 	public static final String SEWERS   = "Pixel_sewers.mp3";
+	public static final String CAVES    = "Pixel_caves.mp3";
+	public static final String TOWN     = "Pixel_town.mp3";
 	public static final String HAPPY	= "surface.mp3";
 	
 	public static final String SND_CLICK	= "snd_click.mp3";

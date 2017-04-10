@@ -18,6 +18,7 @@
 package com.lh64.randomdungeon.items.weapon.melee;
 
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.actors.mobs.npcs.TrollSmith;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.weapon.Weapon;
 import com.lh64.randomdungeon.utils.Utils;
@@ -48,12 +49,12 @@ public class MeleeWeapon extends Weapon {
 	
 	@Override
 	public int min() {
-		return isBroken() ? min0() : min0() + level(); 
+		return  min0() + level(); 
 	}
 	
 	@Override
 	public int max() {
-		return isBroken() ? max0() : max0() + level() * tier;
+		return  max0() + level() * tier;
 	}
 	
 	@Override
@@ -86,7 +87,7 @@ public class MeleeWeapon extends Weapon {
 		int lvl = visiblyUpgraded();
 		String quality = lvl != 0 ? 
 			(lvl > 0 ? 
-				(isBroken() ? "broken" : "upgraded") : 
+				("upgraded") : 
 				"degraded") : 
 			"";
 		info.append( p );
@@ -167,8 +168,8 @@ public class MeleeWeapon extends Weapon {
 	
 	@Override
 	public int price() {
-		int price = 20 * (1 << (tier - 1));
-		if (enchantment != null) {
+		int price = 15 * (1 << (tier - 1));
+		if (enchantment != null && TrollSmith.troll == false) {
 			price *= 1.5;
 		}
 		return considerState( price );

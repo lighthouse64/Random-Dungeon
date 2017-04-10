@@ -46,7 +46,7 @@ public class WndCatalogus extends WndTabbed {
 	
 	private static final String TXT_POTIONS	= "Potions";
 	private static final String TXT_SCROLLS	= "Scrolls";
-	private static final String TXT_TITLE	= "Catalogus";
+	private static final String TXT_TITLE	= "Catalogues";
 	
 	private BitmapText txtTitle;
 	private ScrollPane list;

@@ -120,6 +120,7 @@ public class ItemSpriteSheet {
 	public static final int SCROLL_ODAL		= 78;
 	public static final int SCROLL_TIWAZ	= 79;
 	public static final int SCROLL_WIPE_OUT	= 117;
+	public static final int SCROLL_RETURN   = 128;
 	
 	// Seeds
 	public static final int SEED_FIREBLOOM	= 88;
@@ -161,6 +162,7 @@ public class ItemSpriteSheet {
 	public static final int HOLDER	= 104;
 	public static final int HOLSTER	= 111;
 	public static final int KEYRING	= 126;
+	public static final int POTIONBAG = 129;
 	
 	// UNUSED
 	public static final int SPARK_UPGRADE	= 117;

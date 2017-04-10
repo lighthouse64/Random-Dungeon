@@ -34,6 +34,7 @@ import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.armor.Armor;
 import com.lh64.randomdungeon.items.bags.Bag;
 import com.lh64.randomdungeon.items.bags.Keyring;
+import com.lh64.randomdungeon.items.bags.PotionBag;
 import com.lh64.randomdungeon.items.bags.ScrollHolder;
 import com.lh64.randomdungeon.items.bags.SeedPouch;
 import com.lh64.randomdungeon.items.bags.WandHolster;
@@ -67,13 +68,13 @@ public class WndBag extends WndTabbed {
 		SEED
 	}
 	
-	protected static final int COLS_P	= 5;
-	protected static final int COLS_L	= 5;
+	protected static final int COLS_P	= 6;
+	protected static final int COLS_L	= 6;
 	
 	protected static final int SLOT_SIZE	= 20;
 	protected static final int SLOT_MARGIN	= 1;
 	
-	protected static final int TAB_WIDTH	= 25;
+	protected static final int TAB_WIDTH	= 20;
 	
 	protected static final int TITLE_HEIGHT	= 12;
 	
@@ -123,10 +124,11 @@ public class WndBag extends WndTabbed {
 		if (Dungeon.storage==true || Dungeon.ShopkeeperBag == true){
 			resize( slotsWidth, slotsHeight + TITLE_HEIGHT + 24 );
 		} else{
-			resize( slotsWidth, slotsHeight + TITLE_HEIGHT );
+			resize( slotsWidth, slotsHeight + TITLE_HEIGHT);
 		}
 
 		
+			
 		Belongings stuff = Dungeon.hero.belongings;
 		
 		Bag[] bags = {
@@ -134,21 +136,22 @@ public class WndBag extends WndTabbed {
 			stuff.getItem( SeedPouch.class ), 
 			stuff.getItem( ScrollHolder.class ),
 			stuff.getItem( WandHolster.class ),
-			stuff.getItem( Keyring.class )};
-		if(Dungeon.storage == false){
-			if(Dungeon.ShopkeeperBag == false){
+			stuff.getItem( Keyring.class ),
+			stuff.getItem( PotionBag.class)};
+		
 		for (Bag b : bags) {
 			
 			if (b != null) {
 				BagTab tab = new BagTab( b );
 				tab.setSize( TAB_WIDTH, tabHeight() );
+				if(Dungeon.storage == false && Dungeon.ShopkeeperBag == false){
 				add( tab );
-				
+				}
 				tab.select( b == bag );
 				}
 				}
-				}
-			}
+		
+
 		
 		
 	}
@@ -179,18 +182,17 @@ public class WndBag extends WndTabbed {
 	protected void placeItems( Bag container ) {
 		
 		// Equipped items
-		if(Dungeon.storage == false){
-			if(Dungeon.ShopkeeperBag == false){
+		if(Dungeon.storage == false && Dungeon.ShopkeeperBag == false){
+			
 		Belongings stuff = Dungeon.hero.belongings;
 		placeItem( stuff.weapon != null ? stuff.weapon : new Placeholder( ItemSpriteSheet.WEAPON ) );
 		placeItem( stuff.armor != null ? stuff.armor : new Placeholder( ItemSpriteSheet.ARMOR ) );
 		placeItem( stuff.ring1 != null ? stuff.ring1 : new Placeholder( ItemSpriteSheet.RING ) );
 		placeItem( stuff.ring2 != null ? stuff.ring2 : new Placeholder( ItemSpriteSheet.RING ) );
 		placeItem( stuff.ring3 != null ? stuff.ring3 : new Placeholder( ItemSpriteSheet.RING  ) );
-			}
 		}
 		boolean backpack = (container == Dungeon.hero.belongings.backpack);
-		if (!backpack || !Dungeon.storage == true || !Dungeon.ShopkeeperBag==true) {
+		if ( !Dungeon.storage == true && !Dungeon.ShopkeeperBag==true) {
 			count = nCols;
 			col = 0;
 			row = 1;
@@ -233,12 +235,7 @@ public class WndBag extends WndTabbed {
 	public void onMenuPressed() {
 		if (listener == null) {
 			hide();
-			if(mode == Mode.BUY){
-				Dungeon.ShopkeeperBag = false;
-			}
-			else if(mode == Mode.STORAGE){
-				Dungeon.storage = false;
-			}
+			
 		}
 	}
 	
@@ -254,6 +251,7 @@ public class WndBag extends WndTabbed {
 	protected void onClick( Tab tab ) {
 		hide();
 		GameScene.show( new WndBag( ((BagTab)tab).bag, listener, mode, title ) );
+
 	}
 	
 	@Override
@@ -271,8 +269,9 @@ public class WndBag extends WndTabbed {
 			super();
 			
 			this.bag = bag;
-			if(mode != Mode.STORAGE || mode != Mode.BUY){
 			icon = icon();
+			if(mode != Mode.STORAGE && mode != Mode.BUY){
+			
 			add( icon );
 			}
 		}
@@ -308,7 +307,9 @@ public class WndBag extends WndTabbed {
 				return Icons.get( Icons.WAND_HOLSTER );
 			} else if (bag instanceof Keyring) {
 				return Icons.get( Icons.KEYRING );
-			} else {
+			} else if (bag instanceof PotionBag){
+				return Icons.get( Icons.POTION_POUCH);
+			}else {
 				return Icons.get( Icons.BACKPACK );
 			}
 		}
@@ -398,7 +399,7 @@ public class WndBag extends WndTabbed {
 				
 				if (lastBag.owner.isAlive() && item.isUpgradable() && item.levelKnown) {
 					durability = new ColorBlock[NBARS];
-					int nBars = (int)GameMath.gate( 0, Math.round( (float)NBARS * item.durability() / item.maxDurability() ), NBARS );
+					int nBars = (int)GameMath.gate( 0, Math.round( (float)NBARS * 4 / 4 ), NBARS );
 					for (int i=0; i < nBars; i++) {
 						durability[i] = new ColorBlock( 2, 2, 0xFF00EE00 );
 						add( durability[i] );

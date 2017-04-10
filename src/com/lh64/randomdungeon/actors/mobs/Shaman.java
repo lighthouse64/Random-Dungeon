@@ -23,6 +23,7 @@ import com.lh64.noosa.Camera;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.ResultDescriptions;
 import com.lh64.randomdungeon.actors.Char;
+import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.effects.particles.SparkParticle;
 import com.lh64.randomdungeon.items.Generator;
 import com.lh64.randomdungeon.levels.Level;
@@ -45,8 +46,16 @@ public class Shaman extends Mob implements Callback {
 		name = "gnoll shaman";
 		spriteClass = ShamanSprite.class;
 		
-		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*2 +6,(Dungeon.hero.lvl /3 +1)*3 +7);
+		if(Dungeon.hero.lvl <= 6){
+			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
+			} else {
+				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
+			}
+		if(Dungeon.hero.lvl <=6){
 		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
+		} else{
+			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
+		}
 		if(Dungeon.hero.lvl <= 1){
 			EXP = Dungeon.hero.lvl;
 			} else{
@@ -60,17 +69,25 @@ public class Shaman extends Mob implements Callback {
 	
 	@Override
 	public int damageRoll() {
-		return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 3);
+		if(Dungeon.hero.lvl <= 8){
+			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
+			} else {
+			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
+			}
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return ((Dungeon.hero.lvl/3 +1) * 2) + 7;
+		if(Dungeon.hero.lvl <= 7){
+			return (Dungeon.hero.lvl/3 +1) + 8;
+			} else{
+				return (Dungeon.hero.lvl /3 + 1) + (Dungeon.hero.lvl / 6 + 1) + 8 + Dungeon.hero.lvl/9;
+			}
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1);
+		return (Dungeon.hero.lvl /3 +1) + Dungeon.hero.lvl/9;
 	}
 	
 	@Override
@@ -126,7 +143,11 @@ public class Shaman extends Mob implements Callback {
 	public void call() {
 		next();
 	}
-	
+	@Override
+	public void die( Object cause ) {
+		Ghost.Quest.processSewersKill( pos );
+		super.die( cause );
+	}
 	@Override
 	public String description() {
 		return

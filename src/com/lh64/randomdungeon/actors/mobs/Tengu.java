@@ -62,17 +62,17 @@ public class Tengu extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.Int( (Dungeon.hero.lvl/2 ) +3 ,(Dungeon.hero.lvl/2 )*2 +5);
+		return Random.Int( Dungeon.hero.lvl - Dungeon.hero.lvl/4 ,(Dungeon.hero.lvl/2 )*2 +5);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return Dungeon.hero.lvl + 11;
+		return Dungeon.hero.lvl + Dungeon.hero.lvl/3;
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 2;
+		return (Dungeon.hero.lvl /2 +1) + 2 + Dungeon.hero.lvl/8;
 	}
 	
 	@Override

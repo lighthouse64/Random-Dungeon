@@ -20,21 +20,26 @@ package com.lh64.randomdungeon.sprites;
 import com.lh64.noosa.TextureFilm;
 import com.lh64.randomdungeon.Assets;
 
-public class hpsignSprite extends MobSprite {
+public class ToxicSludgeSprite extends MobSprite {
 	
-	public hpsignSprite() {
+	public ToxicSludgeSprite() {
 		super();
 		
-		texture( Assets.HPSIGN );
+		texture( Assets.TOXICSLUDGE );
 		
 		TextureFilm frames = new TextureFilm( texture, 16, 16 );
 		
 		idle = new Animation( 2, true );
-		idle.frames( frames, 0,0,0,1 );
-		run = idle.clone();
-		attack = idle.clone();
-		die = idle.clone();
+		idle.frames( frames, 0, 0, 0, 0, 1 );
 		
+		run = new Animation( 10, true );
+		run.frames( frames, 6, 0 );
+		
+		attack = new Animation( 15, false );
+		attack.frames( frames, 2, 3, 4, 5, 0 );
+		
+		die = new Animation( 10, false );
+		die.frames( frames, 7, 8, 9, 10, 11 );
 		
 		play( idle );
 	}
