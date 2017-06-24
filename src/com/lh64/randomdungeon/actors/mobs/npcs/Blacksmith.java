@@ -70,11 +70,16 @@ public class Blacksmith extends NPC {
 	{
 		name = "troll blacksmith";
 		spriteClass = BlacksmithSprite.class;
+		discovered = Dungeon.trollsmithdiscovered;
 	}
 	
 	@Override
 	protected boolean act() {
 		throwItem();		
+		if(Dungeon.visible[pos]){
+			Dungeon.trollsmithdiscovered = true;
+			
+		}
 		return super.act();
 	}
 	

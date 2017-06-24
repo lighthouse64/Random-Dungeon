@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.lh64.randomdungeon.Bones;
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.Quests;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.mobs.Bestiary;
 import com.lh64.randomdungeon.actors.mobs.Mob;
@@ -58,7 +59,7 @@ public abstract class RegularLevel extends Level {
 
 		int distance;
 		int retry = 0;
-		int minDistance = (int)Math.sqrt( rooms.size() );
+		int minDistance = Random.Int((int)Math.sqrt( rooms.size() ),(int)0.5*rooms.size());
 		do {
 			do {
 				roomEntrance = Random.element( rooms );
@@ -182,7 +183,7 @@ public abstract class RegularLevel extends Level {
 
 				if (specials.size() > 0 &&
 					r.width() > 3 && r.height() > 3 &&
-					Random.Int( specialRooms * specialRooms + 2 ) == 0) {
+					Random.Int( specialRooms * specialRooms + 1 ) == 0) {
 
 					if (pitRoomNeeded) {
 
@@ -202,8 +203,6 @@ public abstract class RegularLevel extends Level {
 						
 						r.type = Type.LABORATORY;
 						
-					} else if(Dungeon.depth % 6 == 0 && specials.contains( Type.TROLLSMITH)) {
-						r.type = Type.TROLLSMITH;
 					}else {
 						
 						int n = specials.size();
@@ -350,7 +349,7 @@ public abstract class RegularLevel extends Level {
 	}
 	
 	protected int minRoomSize = 7;
-	protected int maxRoomSize = 9;
+	protected int maxRoomSize = 11;
 	
 	protected void split( Rect rect ) {
 		
@@ -371,7 +370,7 @@ public abstract class RegularLevel extends Level {
 			split( new Rect( rect.left, vh, rect.right, rect.bottom ) );
 			
 		} else 	
-		if ((Math.random() <= (minRoomSize * minRoomSize / rect.square()) && w <= maxRoomSize && h <= maxRoomSize) || w < minRoomSize || h < minRoomSize) {
+		if ((Random.Float() <= ((float)minRoomSize * minRoomSize / rect.square()) && w <= maxRoomSize && h <= maxRoomSize)) {
 
 			rooms.add( (Room)new Room().set( rect ) );
 			
@@ -530,7 +529,7 @@ public abstract class RegularLevel extends Level {
 	
 	@Override
 	public int nMobs() {
-		return 2 + Dungeon.depth % 5 + Random.Int( 3 );
+		return 2 + Random.Int( 6, 12 );
 	}
 	
 	@Override
@@ -538,12 +537,19 @@ public abstract class RegularLevel extends Level {
 		int nMobs = nMobs();
 		for (int i=0; i < nMobs; i++) {
 			Mob mob = Bestiary.mob( Dungeon.depth );
+			
 			do {
 				mob.pos = randomRespawnCell();
 			} while (mob.pos == -1);
 			mobs.add( mob );
 			Actor.occupyCell( mob );
 		}
+		for(Quests.Quest quest : Quests.heroquests){
+			if(quest.type1 == 3){
+			quest.addMob(this);
+			}
+		}
+		
 	}
 	
 	@Override

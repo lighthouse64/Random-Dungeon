@@ -19,15 +19,18 @@ package com.lh64.randomdungeon.actors.hero;
 
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Badges;
+import com.lh64.randomdungeon.items.Amulet;
 import com.lh64.randomdungeon.items.DewVial;
 import com.lh64.randomdungeon.items.TomeOfMastery;
 import com.lh64.randomdungeon.items.armor.ClothArmor;
 import com.lh64.randomdungeon.items.bags.Keyring;
 import com.lh64.randomdungeon.items.food.Food;
+import com.lh64.randomdungeon.items.potions.PotionOfMindVision;
 import com.lh64.randomdungeon.items.potions.PotionOfStrength;
 import com.lh64.randomdungeon.items.rings.RingOfShadows;
 import com.lh64.randomdungeon.items.scrolls.ScrollOfIdentify;
 import com.lh64.randomdungeon.items.scrolls.ScrollOfMagicMapping;
+import com.lh64.randomdungeon.items.scrolls.ScrollOfUpgrade;
 import com.lh64.randomdungeon.items.wands.WandOfMagicMissile;
 import com.lh64.randomdungeon.items.weapon.melee.Dagger;
 import com.lh64.randomdungeon.items.weapon.melee.Knuckles;
@@ -116,8 +119,8 @@ public enum HeroClass {
 		new Food().identify().collect();
 		new Keyring().collect();
 		new DewVial().collect();
-		
-		
+		new ScrollOfUpgrade().collect();
+
 	}
 	
 	public Badges.Badge masteryBadge() {
@@ -135,7 +138,7 @@ public enum HeroClass {
 	}
 	
 	private static void initWarrior( Hero hero ) {
-		hero.STR = hero.STR + 1;
+		
 		
 		(hero.belongings.weapon = new ShortSword()).identify();
 		new Dart( 8 ).identify().collect();

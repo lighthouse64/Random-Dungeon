@@ -19,7 +19,6 @@ package com.lh64.randomdungeon.items;
 
 import java.util.HashMap;
 
-import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.hero.Hero;
 import com.lh64.randomdungeon.items.armor.*;
 import com.lh64.randomdungeon.items.bags.Bag;
@@ -48,7 +47,8 @@ public class Generator {
 		SEED	( 5,	Plant.Seed.class ),
 		FOOD	( 0,	Food.class ),
 		GOLD	( 50,	Gold.class ),
-		MISC	( 5,	Item.class );
+		MISC	( 5,	Item.class ),
+		QUEST   ( 0,    Item.class);
 		
 		public Class<?>[] classes;
 		public float[] probs;
@@ -108,7 +108,7 @@ public class Generator {
 			PotionOfInvisibility.class,
 			PotionOfMight.class,
 			PotionOfFrost.class };
-		Category.POTION.probs = new float[]{ 45, 4, 15, 10, 15, 10, 0, 20, 12, 10, 0, 15 };
+		Category.POTION.probs = new float[]{ 25, 5, 15, 12, 15, 10, 0, 20, 12, 10, 0, 15 };
 		
 		Category.WAND.classes = new Class<?>[]{ 
 			WandOfTeleportation.class, 
@@ -129,31 +129,14 @@ public class Generator {
 		Category.WEAPON.classes = new Class<?>[]{ 
 			Dagger.class, 
 			Knuckles.class,
-			Quarterstaff.class, 
-			Spear.class, 
-			Mace.class, 
-			Sword.class, 
-			Longsword.class,
-			BattleAxe.class,
-			WarHammer.class, 
-			Glaive.class,
-			ShortSword.class,
 			Dart.class,
-			Javelin.class,
-			IncendiaryDart.class,
-			CurareDart.class,
-			Shuriken.class,
-			Boomerang.class,
-			Tamahawk.class };
-		Category.WEAPON.probs = new float[]{ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1 };
+			};
+		Category.WEAPON.probs = new float[]{ 1, 1, 1};
 		
 		Category.ARMOR.classes = new Class<?>[]{ 
 			ClothArmor.class, 
-			LeatherArmor.class, 
-			MailArmor.class, 
-			ScaleArmor.class, 
-			PlateArmor.class };
-		Category.ARMOR.probs = new float[]{ 1, 1, 1, 1, 1 };
+			};
+		Category.ARMOR.probs = new float[]{ 1};
 		
 		Category.FOOD.classes = new Class<?>[]{ 
 			Food.class, 
@@ -191,6 +174,12 @@ public class Generator {
 			Bomb.class,
 			Honeypot.class};
 		Category.MISC.probs = new float[]{ 2, 1 };
+		
+		Category.QUEST.classes = new Class<?>[]{
+			Gold.class,
+			ScrollOfEnchantment.class
+		};
+		Category.QUEST.probs = new float[]{1, 0.1f};
 	}
 	
 	public static void reset() {
@@ -238,7 +227,7 @@ public class Generator {
 	
 	public static Armor randomArmor() throws Exception {
 		
-		int curStr = Hero.STARTING_STR + Dungeon.potionOfStrength;
+		int curStr = Hero.STARTING_STR;
 		
 		Category cat = Category.ARMOR;
 		
@@ -253,7 +242,7 @@ public class Generator {
 	
 	public static Weapon randomWeapon() throws Exception {
 		
-		int curStr = Hero.STARTING_STR + Dungeon.potionOfStrength;
+		int curStr = Hero.STARTING_STR;
 		
 		Category cat = Category.WEAPON;
 		

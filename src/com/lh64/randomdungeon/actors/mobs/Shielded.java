@@ -26,13 +26,22 @@ public class Shielded extends Brute {
 	{
 		name = "shielded brute";
 		spriteClass = ShieldedSprite.class;
+		discovered = Dungeon.shieldeddiscovered;
 		
-		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
+		defenseSkill = 4;
 	}
-	
+	@Override 
+	public boolean act() {
+		if(Dungeon.visible[pos]){
+			Dungeon.shieldeddiscovered = true;
+			discovered = true;
+			
+		}
+		return super.act();
+	}
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 4;
+		return 4;
 	}
 	
 	@Override

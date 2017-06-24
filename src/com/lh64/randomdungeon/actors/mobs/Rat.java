@@ -20,6 +20,7 @@ package com.lh64.randomdungeon.actors.mobs;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
+import com.lh64.randomdungeon.items.food.Cheese;
 import com.lh64.randomdungeon.sprites.CharSprite;
 import com.lh64.randomdungeon.sprites.RatSprite;
 import com.lh64.utils.Random;
@@ -29,54 +30,45 @@ public class Rat extends Mob {
 	{
 		name = "Sewer rat";
 		spriteClass = RatSprite.class;
+		discovered = Dungeon.ratdiscovered;
 		
-		if(Dungeon.hero.lvl <= 6){
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
-			} else {
-				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
-			}
-		if(Dungeon.hero.lvl <= 6){
-		defenseSkill = (Dungeon.hero.lvl/3 +1) + 2;
-		} else{
-			defenseSkill = (Dungeon.hero.lvl/3 +1) + 3 + Dungeon.hero.lvl/6;
-		}
 		
-		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl + Random.Int(0,2);
-			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
-			}
+			HP = HT = Random.Int(7,10);
+			
+		defenseSkill = 2;
+		
+		loot = new Cheese();
+		lootChance = 0.07f;
 		maxLvl = Dungeon.hero.lvl+ 5;
 	}
 	
 	@Override
 	public int damageRoll() {
-		if(Dungeon.hero.lvl <= 8){
-			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
-			} else {
-			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 6);
-			}
+		return Random.Int(1,4);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-		return (Dungeon.hero.lvl/3 +1) + 8;
-		} else{
-			return (Dungeon.hero.lvl /3 + 1) + (Dungeon.hero.lvl / 6 + 1) + 8 + Dungeon.hero.lvl/9;
-		}
+	
+		return 7;
+		
 	
 	
 	}
 	
+	
+
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1 + Dungeon.hero.lvl/9);
+		return 1;
 	}
 	
 	@Override
 	public void die( Object cause ) {
 		Ghost.Quest.processSewersKill( pos );
+		
+		Dungeon.ratdiscovered = true;
+		discovered = true;
 		sprite.showStatus( CharSprite.NEGATIVE, "X(" );
 		super.die( cause );
 	}
@@ -86,5 +78,10 @@ public class Rat extends Mob {
 		return
 			"Sewer rats are aggressive, but rather weak denizens " +
 			"of the sewers. They can be dangerous only in big numbers.  These rats also don't have rabies.";
+	}
+	@Override
+	public String altDescription(){
+		return "These rats are quite large, at a considerable 3 feet in height, although that is rather small compared to crabs.  They live off of mainly cheese and a few other things, but it is cheese that they really care for.  " +
+	"If any one of these creatures happens to obtain cheese, it will guard it with its life.";
 	}
 }

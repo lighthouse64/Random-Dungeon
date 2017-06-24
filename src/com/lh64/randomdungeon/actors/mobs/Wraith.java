@@ -41,6 +41,7 @@ public class Wraith extends Mob {
 	{
 		name = "wraith";
 		spriteClass = WraithSprite.class;
+		discovered = Dungeon.wraithdiscovered;
 		
 		HP = HT = 1;
 		EXP = 0;
@@ -49,7 +50,14 @@ public class Wraith extends Mob {
 	}
 	
 	private static final String LEVEL = "level";
-	
+	@Override 
+	public boolean act() {
+		if(Dungeon.visible[pos]){
+			
+			
+		}
+		return super.act();
+	}
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
@@ -65,17 +73,17 @@ public class Wraith extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( 1, 2 + level );
+		return Random.NormalIntRange( 1, 3 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 8 + level;
+		return 8 ;
 	}
 	
 	public void adjustStats( int level ) {
 		this.level = level;
-		defenseSkill = attackSkill( null ) * 5;
+		defenseSkill = attackSkill( null );
 		enemySeen = true;
 	}
 	
@@ -89,7 +97,12 @@ public class Wraith extends Mob {
 		state = WANDERING;
 		return true;
 	}
-
+	@Override
+	public void die(Object cause){
+		Dungeon.wraithdiscovered = true;
+		discovered = true;
+		super.die(cause);
+	}
 	@Override
 	public String description() {
 		return

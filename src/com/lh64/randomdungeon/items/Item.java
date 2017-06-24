@@ -122,7 +122,7 @@ public class Item implements Bundlable {
 					AC_BUY = "Buy all for " + price()*5 + " gold";
 					AC_BUY1 = "Buy 1 for " + price()*5/quantity() + " gold";
 				} else{
-			AC_BUY = "Buy for " + price()*10 + " gold";
+			AC_BUY = "Buy all for " + price()*10 + " gold";
 			AC_BUY1 = "Buy 1 for " + price()*10/quantity() + " gold";
 				}
 			actions.add(AC_BUY);
@@ -375,7 +375,7 @@ public class Item implements Bundlable {
 		cursed = false;
 		cursedKnown = true;
 		
-		level++;
+		this.level++;
 	
 		
 		return this;

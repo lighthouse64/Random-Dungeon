@@ -52,27 +52,36 @@ public class Tengu extends Mob {
 	{
 		name = Dungeon.depth == Statistics.deepestFloor ? "Tengu" : "Memory of Tengu";
 		spriteClass = TenguSprite.class;
+		discovered = Dungeon.tengudiscovered;
 		
-		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*13 +5,(Dungeon.hero.lvl /3 +1)*15 +5);
+		HP = HT = Random.Int(50,75);
 		EXP = Dungeon.hero.lvl;
-		defenseSkill = (Dungeon.hero.lvl) * 2;
+		defenseSkill = 10;
 	}
 	
 	private int timeToJump = JUMP_DELAY;
-	
+	@Override 
+	public boolean act() {
+		if(Dungeon.visible[pos]){
+			Dungeon.tengudiscovered = true;
+			discovered = true;
+			
+		}
+		return super.act();
+	}
 	@Override
 	public int damageRoll() {
-		return Random.Int( Dungeon.hero.lvl - Dungeon.hero.lvl/4 ,(Dungeon.hero.lvl/2 )*2 +5);
+		return Random.Int(4,7);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return Dungeon.hero.lvl + Dungeon.hero.lvl/3;
+		return 18;
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /2 +1) + 2 + Dungeon.hero.lvl/8;
+		return 3;
 	}
 	
 	@Override

@@ -62,14 +62,14 @@ import com.lh64.utils.Random;
 
 public abstract class Char extends Actor {
 
-	protected static final String TXT_HIT		= "%s hit %s";
+	protected static String TXT_HIT		= "%s hit %s";
 	protected static final String TXT_KILL		= "%s killed you...";
-	protected static final String TXT_DEFEAT	= "%s defeated %s";
+	protected static String TXT_DEFEAT	= "\n%s defeated %s";
 	
-	private static final String TXT_YOU_MISSED	= "%s %s your attack";
-	private static final String TXT_SMB_MISSED	= "%s %s %s's attack";
+	private static final String TXT_YOU_MISSED	= "\nthe %s %s your attack";
+	private static final String TXT_SMB_MISSED	= "\n%s %s %s's attack";
 	
-	private static final String TXT_OUT_OF_PARALYSIS	= "The pain snapped %s out of paralysis";
+	private static final String TXT_OUT_OF_PARALYSIS	= "\nThe pain snapped %s out of paralysis";
 	
 	public int pos = 0;
 	
@@ -136,6 +136,32 @@ public abstract class Char extends Actor {
 		if (hit( this, enemy, false )) {
 			
 			if (visibleFight) {
+				switch(Random.Int(0,5)){
+				case 0:
+					if(this == Dungeon.hero){
+					
+					TXT_HIT = "%s struck the %s";
+					} else{
+						TXT_HIT = "the %s struck %s";
+					}
+					break;
+				case 1:
+					if(this == Dungeon.hero){
+						TXT_HIT = "\n%s crudely pummeled the %s";
+						
+						} else{
+						TXT_HIT = "\nthe %s crudely pummeled %s";
+						}
+					break;
+				case 2:
+					if(this == Dungeon.hero){
+						TXT_HIT = "\n%s injured the %s";
+						
+						} else{
+						TXT_HIT = "\nthe %s injured %s";
+						}
+					break;
+				}
 				GLog.i( TXT_HIT, name, enemy.name );
 			}
 			
@@ -185,6 +211,29 @@ public abstract class Char extends Actor {
 					}
 					
 				} else {
+					switch(Random.Int(0,4)){
+					case 0:
+						if(this == Dungeon.hero){
+						TXT_DEFEAT = "\n%s helped the %s rest";
+						} else{
+							TXT_DEFEAT = "\nthe %s helped %s rest";
+						}
+						break;
+					case 1:
+						if(this == Dungeon.hero){
+							TXT_DEFEAT = "\n%s murdered the %s";
+							} else{
+								TXT_DEFEAT = "\nthe %s murdered the %s";
+							}
+							break;
+					case 2:
+						if(this == Dungeon.hero){
+							TXT_DEFEAT = "\n%s watched the %s become a dead pile";
+							} else{
+								TXT_DEFEAT = "\nthe %s watched the %s become a dead pile";
+							}
+							break;
+					}
 					GLog.i( TXT_DEFEAT, name, enemy.name );
 				}
 			}

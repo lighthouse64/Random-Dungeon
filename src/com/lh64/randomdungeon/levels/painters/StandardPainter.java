@@ -38,8 +38,8 @@ public class StandardPainter extends Painter {
 			door.set( Room.Door.Type.REGULAR );
 		}
 		
-		if (!Dungeon.bossLevel() && Random.Int( 5 ) == 0 && Dungeon.depth > 0) {
-			switch (Random.Int( 6 )) {
+		if (!Dungeon.bossLevel() && Random.Int( 3 ) == 0 && Dungeon.depth > 0) {
+			switch (Random.Int( 8 )) {
 			case 0:
 				if (level.feeling != Level.Feeling.GRASS) {
 					if (Math.min( room.width(), room.height() ) >= 4 && Math.max( room.width(), room.height() ) >= 6) {
@@ -85,10 +85,25 @@ public class StandardPainter extends Painter {
 					return;
 				}
 				break;
+			case 6:
+				if(room.width() > 3 && room.height() > 3){
+					paintBarricades(level, room);
+					return;
+				}
+				break;
+				
+			case 7:
+				if(room.width() > 2 && room.height() > 2){
+					paintAnnulus(level, room);
+				}
 			} 
 			
 		} else if (Dungeon.depth == 0){
-			paintTownRoom(level, room);
+		
+			
+				paintTownRoom(level, room);
+			
+		
 			return;
 		}
 		
@@ -242,6 +257,72 @@ public class StandardPainter extends Painter {
 				}
 			}
 		}
+	}
+	
+	private static void paintBarricades( Level level, Room room) {
+		boolean retry;
+		int style;
+		if(Random.Int(1,4)==1){
+			style= Terrain.EMBERS;
+		} else{
+			style = Terrain.EMPTY;
+		}
+		fill (level, room.left + 1, room.top + 1, room.width()-1,room.height() -1, style);
+		int i = 0;
+		int d =  Random.Int(3,5);
+		int [] b = new int[4] ;
+		while( i< d){
+				
+				//makes sure that the barricade won't be placed near a wall
+				int x = Random.Int(room.left + 2,room.right -2);
+				int y = Random.Int(room.top + 2,room.bottom -2);
+				b[i] = x + y * Level.WIDTH;
+				if( i == 0){
+					//The first position can't have any copies
+				set (level, b[i],Terrain.BARRICADE);
+				
+				} 
+				else{
+					retry = true;
+					int retrylimit = 0;
+					while(retry == true){
+					//Ensures that there are no copied positions
+					
+					int l = Random.Int(room.left+1,room.right-1);
+					int z = Random.Int(room.top+1,room.bottom-1);
+					b[i] = l + z * Level.WIDTH;
+					for(int j = i-1; j>=0; j--){
+						if(b[i] == b[j] || retrylimit < 100){
+							retry = true;
+							break;
+						}else {
+							retry = false;
+							set (level, b[i], Terrain.BARRICADE);
+						}
+					} 
+						if(retry == false){
+							break;
+						}
+					
+					retrylimit ++;
+					}
+				}
+				
+				
+			
+			i++;
+		}
+		
+	}
+	
+	private static void paintAnnulus(Level level, Room room){
+		fill(level,room,1, Terrain.EMPTY);
+		if(room.width() > 4 && room.height() >4){
+		fill(level,room, 3, Terrain.WALL );
+		} else {
+			fill(level,room,2,Terrain.WALL);
+		}
+		
 	}
 	private static void paintTownRoom(Level level, Room room) {
 		int pos = room.random();

@@ -41,32 +41,25 @@ public class Skeleton extends Mob {
 	{
 		name = "skeleton";
 		spriteClass = SkeletonSprite.class;
+		discovered = Dungeon.skeletondiscovered;
 		
-		if(Dungeon.hero.lvl <= 6){
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*6 +3,(Dungeon.hero.lvl /3 +1)*7 +5);
-			} else {
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
-			}
-		if(Dungeon.hero.lvl <= 6){
-		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
-		} else{
-			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
-		}
-		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl;
-			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl+1);
-			}
+		HP = HT = Random.Int(9,12);
+		defenseSkill =3;
+		
 		maxLvl = Dungeon.hero.lvl + 3;
 	}
-	
+	@Override 
+	public boolean act() {
+		if(Dungeon.visible[pos]){
+			Dungeon.skeletondiscovered = true;
+			discovered = true;
+			
+		}
+		return super.act();
+	}
 	@Override
 	public int damageRoll() {
-		if(Dungeon.hero.lvl <= 8){
-			return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 4);
-			} else {
-			return Random.Int( (Dungeon.hero.lvl/3 + 1) +2,(Dungeon.hero.lvl/3)*2 + 6);
-			}  
+		return Random.Int(2,4); 
 	}
 	
 	@Override
@@ -112,16 +105,12 @@ public class Skeleton extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-		return (Dungeon.hero.lvl/3 +1)*2 + 8;
-		} else{
-			return (Dungeon.hero.lvl/3 +1)*2 + 8 + (Dungeon.hero.lvl/6 + 1);
-		}
+		return 9;
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 2;
+		return 3;
 	}
 	
 	@Override

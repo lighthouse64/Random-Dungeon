@@ -28,19 +28,18 @@ import com.lh64.utils.Random;
 public class Albino extends Rat {
 
 	{
-		name = "albino rat";
+		name = "Albino rat";
 		spriteClass = AlbinoSprite.class;
+		discovered = Dungeon.albinodiscovered;
 		
-		if(Dungeon.hero.lvl <= 6){
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*6 +3,(Dungeon.hero.lvl /3 +1)*7 +5);
-			} else {
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
-			}
+		HP = HT = Random.Int(9,12);
 	}
 	
 	@Override
 	public void die( Object cause ) {
 		super.die( cause );
+		Dungeon.albinodiscovered = true;
+		discovered = true;
 		Badges.validateRare( this );
 	}
 	
@@ -52,4 +51,6 @@ public class Albino extends Rat {
 		
 		return damage;
 	}
+	
+
 }

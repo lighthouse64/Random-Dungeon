@@ -122,7 +122,7 @@ public class Shopkeeper extends NPC {
 		for (int j = 1; j < 3; j++){
 		new OverpricedRation().collect(Dungeon.hero.shopkeeperbag.backpack);
 		}
-		for (int i = 1; i<4; i++){
+		for (int i = 1; i<Random.Int(2,4); i++){
 			item = new PotionOfHealing();
 			item.collect(Dungeon.hero.shopkeeperbag.backpack);
 }
@@ -186,7 +186,7 @@ public class Shopkeeper extends NPC {
 			
 			Dungeon.shop3visit = true;
 		}
-		else if(Dungeon.shop4visit == false && Dungeon.depth == 28){
+		else if(Dungeon.shop4visit == false && Dungeon.depth == 14){
 			shopinit();
 			Dungeon.shop4visit = true;
 		}
@@ -203,7 +203,7 @@ public class Shopkeeper extends NPC {
 		}
 	};
 public static void choose(){
-	TrollSmith.troll = false;
+	
 	GameScene.show(new WndPurchaseItem());
 }
 

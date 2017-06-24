@@ -48,6 +48,9 @@ public class GLog {
 	}
 	
 	public static void n( String text, Object... args ) {
+		if(text == null){
+			text ="null";
+		}
 		i( NEGATIVE + text, args );
 	}
 	

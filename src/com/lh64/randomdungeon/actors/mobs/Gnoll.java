@@ -29,22 +29,13 @@ public class Gnoll extends Mob {
 	{
 		name = "gnoll scout";
 		spriteClass = GnollSprite.class;
+		discovered = Dungeon.gnolldiscovered;
 		
-		if(Dungeon.hero.lvl <= 6){
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
-			} else {
-				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
-			}
-		if(Dungeon.hero.lvl<= 6){
-		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
-		} else{
-			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
-		}
-		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl + Random.Int(0,2);
-			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
-			}
+	
+			HP = HT = Random.Int(8,12);
+			
+		defenseSkill = 2;
+		
 		maxLvl = Dungeon.hero.lvl + 3;
 		
 		loot = Gold.class;
@@ -53,31 +44,26 @@ public class Gnoll extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		if(Dungeon.hero.lvl <= 8){
-			return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 4);
-			} else {
-			return Random.Int( (Dungeon.hero.lvl/3 + 1) +2,(Dungeon.hero.lvl/3)*2 + 6);
-			}  
+		return Random.Int(1,4); 
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-		return (Dungeon.hero.lvl/3 +1)*2 + 7;
-		} else{
-			return (Dungeon.hero.lvl/3 +1)*2 + 7 + (Dungeon.hero.lvl /6 + 1) + Dungeon.hero.lvl/9;
-		}
+		return 9;
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 1+ Dungeon.hero.lvl/6;
+		return 2;
 	}
 	
 	@Override
 	public void die( Object cause ) {
 		Ghost.Quest.processSewersKill( pos );
+		Dungeon.gnolldiscovered = true;
+		discovered = true;
 		super.die( cause );
+		
 	}
 	
 	@Override

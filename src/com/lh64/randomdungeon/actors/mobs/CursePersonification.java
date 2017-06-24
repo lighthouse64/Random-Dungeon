@@ -38,11 +38,12 @@ public class CursePersonification extends Mob {
 	{
 		name = "curse personification";
 		spriteClass = CursePersonificationSprite.class;
+		discovered = Dungeon.cursediscovered;
 		
-		HP = HT = 10 + Dungeon.hero.lvl * 3;
-		defenseSkill = 10 + Dungeon.hero.lvl;
+		HP = HT = 10;
+		defenseSkill = 10 ;
 		
-		EXP = Dungeon.hero.lvl;
+		EXP = 1;
 		maxLvl = Dungeon.hero.lvl + 3;	
 		
 		state = HUNTING;
@@ -52,16 +53,12 @@ public class CursePersonification extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		if(Dungeon.hero.lvl <= 8){
-			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
-			} else {
-			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 5);
-			}
+		return Random.Int(1,4);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 10 + Dungeon.hero.lvl;
+		return 10 ;
 	}
 	
 	@Override
@@ -98,6 +95,7 @@ public class CursePersonification extends Mob {
 	
 	@Override
 	protected boolean act() {
+
 		if (HP > 0 && HP < HT) {
 			HP++;
 		}
@@ -107,6 +105,8 @@ public class CursePersonification extends Mob {
 	@Override
 	public void die( Object cause ) {
 		GLog.p("Thank you !!!");
+		Dungeon.cursediscovered = true;
+		discovered =true;
 		Ghost ghost = new Ghost();
 		ghost.state = ghost.PASSIVE;
 		Ghost.replace( this, ghost );

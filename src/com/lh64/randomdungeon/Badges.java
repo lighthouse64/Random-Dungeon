@@ -143,7 +143,10 @@ public class Badges {
 		GAMES_PLAYED_4( "2000 games played", 63, true ),
 		HAPPY_END( "Happy end", 38 ),
 		CHAMPION( "Challenge won", 39, true ),
-		SUPPORTER( "Thanks for your support!", 31, true );
+		SUPPORTER( "Thanks for your support!", 31, true ),
+		ROUNDSWON_1( "One round completed",0),
+		QUESTSCOMPLETED_1( "5 quests completed", 17);
+		
 		
 		public boolean meta;
 		
@@ -268,6 +271,24 @@ public class Badges {
 		}
 		
 		displayBadge( badge );
+	}
+	
+	public static void validateQuestsCompleted() {
+		Badge badge = null;
+		if(!local.contains(Badge.QUESTSCOMPLETED_1)&& Quests.completed >= 5){
+			badge = Badge.QUESTSCOMPLETED_1;
+			local.add(badge);
+		}
+		displayBadge(badge);
+	}
+	
+	public static void validateRoundWon() {
+		Badge badge = null;
+		if(!local.contains(Badge.ROUNDSWON_1)){
+			badge = Badge.ROUNDSWON_1;
+			local.add(badge);
+		}
+		displayBadge(badge);
 	}
 	
 	public static void validateGoldCollected() {

@@ -53,10 +53,11 @@ public class DM300 extends Mob {
 	{
 		name = Dungeon.depth == Statistics.deepestFloor ? "DM-300" : "DM-350";
 		spriteClass = DM300Sprite.class;
+		discovered = Dungeon.dm300discovered;
 		
-		HP = HT = Random.Int(Dungeon.hero.lvl * 15);
+		HP = HT = 35;
 		EXP = Dungeon.hero.lvl;
-		defenseSkill = Dungeon.hero.lvl + (Dungeon.hero.lvl /9);
+		defenseSkill = 5;
 		
 		loot = new RingOfThorns().random();
 		lootChance = 0.333f;
@@ -64,7 +65,7 @@ public class DM300 extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.IntRange( Dungeon.hero.lvl, Dungeon.hero.lvl + (Dungeon.hero.lvl / 3) );
+		return Random.IntRange(4,7);
 	}
 	
 	@Override
@@ -74,11 +75,12 @@ public class DM300 extends Mob {
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl/3 )+ (Dungeon.hero.lvl/2) + 2;
+		return  3;
 	}
 	
 	@Override
 	public boolean act() {
+		
 		GameScene.add( Blob.seed( pos, 30, ToxicGas.class ) );
 		return super.act();
 	}
@@ -149,7 +151,8 @@ public class DM300 extends Mob {
 		}
 		GameScene.bossSlain();
 		Dungeon.level.drop( new SkeletonKey(), pos ).sprite.drop();
-		
+		Dungeon.dm300discovered = true;
+		discovered = true;
 		Badges.validateBossSlain();
 		
 		yell( "Mission failed. Shutting down." );

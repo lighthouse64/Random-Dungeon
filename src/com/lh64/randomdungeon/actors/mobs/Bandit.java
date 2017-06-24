@@ -33,6 +33,7 @@ public class Bandit extends Thief {
 	{
 		name = "crazy bandit";
 		spriteClass = BanditSprite.class;
+		discovered = Dungeon.banditdiscovered;
 	}
 	
 	@Override
@@ -51,6 +52,9 @@ public class Bandit extends Thief {
 	@Override
 	public void die( Object cause ) {
 		super.die( cause );
+		Dungeon.banditdiscovered = true;
+		discovered = true;
 		Badges.validateRare( this );
 	}
+
 }

@@ -184,8 +184,6 @@ abstract public class Weapon extends KindOfWeapon {
 				}
 			}
 			if (Random.Int( 2 ) == 0) {
-				upgrade( n );
-			} else {
 				degrade( n );
 				cursed = true;
 			}

@@ -42,23 +42,16 @@ public class Thief extends Mob {
 	{
 		name = "crazy thief";
 		spriteClass = ThiefSprite.class;
+		discovered = Dungeon.thiefdiscovered;
 		
 		if(Dungeon.hero.lvl <= 6){
 			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
 			} else {
 				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
 			}
-		if(Dungeon.hero.lvl <= 6){
-		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
-		} else{
-			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
-		}
+		defenseSkill = 3;
 		
-		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl;
-			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
-			}
+		EXP = expStats();
 		maxLvl = Dungeon.hero.lvl + 5;
 		
 		loot = RingOfHaggler.class;
@@ -68,7 +61,15 @@ public class Thief extends Mob {
 	}
 	
 	private static final String ITEM = "item";
-	
+	@Override 
+	public boolean act() {
+		if(Dungeon.visible[pos]){
+			Dungeon.thiefdiscovered = true;
+			discovered = true;
+			
+		}
+		return super.act();
+	}
 	@Override
 	public void storeInBundle( Bundle bundle ) {
 		super.storeInBundle( bundle );
@@ -86,7 +87,7 @@ public class Thief extends Mob {
 		if(Dungeon.hero.lvl <= 8){
 			return Random.Int( (Dungeon.hero.lvl/3) ,(Dungeon.hero.lvl/3 + 1) + 4);
 			} else {
-			return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3)*2 + 4);
+			return Random.Int( (Dungeon.hero.lvl/3) +3 - Dungeon.hero.lvl/6,(Dungeon.hero.lvl/3)*2 + 2) - Dungeon.hero.lvl/6 - Dungeon.hero.lvl/9;
 			}
 	}
 	
@@ -107,16 +108,12 @@ public class Thief extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-			return (Dungeon.hero.lvl/3 +1)*2 + 7;
-			} else{
-				return (Dungeon.hero.lvl/3 +1)*2 + 7 + (Dungeon.hero.lvl /6 + 1) + Dungeon.hero.lvl/9;
-			}
+		return skillpts(8);
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 1 + Dungeon.hero.lvl/9;
+		return (Dungeon.hero.lvl /3 +1) + 1 + Dungeon.hero.lvl/6 + Dungeon.hero.lvl/9;
 	}
 	
 	@Override

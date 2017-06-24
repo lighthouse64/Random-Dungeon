@@ -120,12 +120,19 @@ public class GameScene extends PixelScene {
 			Music.INSTANCE.play(Assets.SEWERS, true);
 			Music.INSTANCE.volume( 1f );
 		}
+		else if(Dungeon.levelTheme == 2){
+			Music.INSTANCE.play(Assets.PRISON, true);
+			Music.INSTANCE.volume( 1f );
+		}
 		else if(Dungeon.levelTheme == 3){
 			Music.INSTANCE.play(Assets.CAVES, true);
 			Music.INSTANCE.volume( 1f );
 		}
 		else if(Dungeon.depth <=0){
 			Music.INSTANCE.play(Assets.TOWN, true);
+		}
+		else if(Dungeon.depth == 15){
+			Music.INSTANCE.play(Assets.BOSS, true);
 		}
 		else {
 			Music.INSTANCE.play( Assets.TUNE, true );
@@ -199,7 +206,7 @@ public class GameScene extends PixelScene {
 		
 		fog = new FogOfWar( Level.WIDTH, Level.HEIGHT );
 		fog.updateVisibility( Dungeon.visible, Dungeon.level.visited, Dungeon.level.mapped );
-		if(Dungeon.depth != 1){
+		if(Dungeon.depth != 0){
 		add( fog );
 		}
 		brightness( PixelDungeon.brightness() );

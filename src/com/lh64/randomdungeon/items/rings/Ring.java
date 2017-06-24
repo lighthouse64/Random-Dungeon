@@ -300,9 +300,7 @@ public class Ring extends EquipableItem {
 		if (Random.Float() < 0.4f) {
 			degrade( lvl );
 			cursed = true;
-		} else {
-			upgrade( lvl );
-		}
+		} 
 		return this;
 	}
 	

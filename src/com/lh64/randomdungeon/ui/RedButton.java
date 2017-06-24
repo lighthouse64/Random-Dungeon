@@ -27,6 +27,7 @@ import com.lh64.randomdungeon.Chrome;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.scenes.PixelScene;
 
+
 public class RedButton extends Button {
 	
 	protected NinePatch bg;
@@ -45,11 +46,9 @@ public class RedButton extends Button {
 		super.createChildren();
 		
 		bg = Chrome.get( Chrome.Type.BUTTON );
-		if(Dungeon.color != 0xFFFFFF && Dungeon.color != 0x000000 && Dungeon.color != 0xFF0000){
+		
 			bg.hardlight(Dungeon.color);
-		} else{
-			bg.hardlight(0xB22A2A);
-		}
+		
 		add( bg );
 		
 		text = PixelScene.createText( 9 );
@@ -77,24 +76,112 @@ public class RedButton extends Button {
 	
 	@Override
 	protected void onTouchDown() {
+		bg.resetColor();
+			if(Dungeon.color > 12566463){
+				String rgbsplit = Integer.toString(Dungeon.color,16);
+				int r = Integer.parseInt(rgbsplit.substring(0,2),16);
+				int g = Integer.parseInt(rgbsplit.substring(2,4),16);
+				int b = Integer.parseInt(rgbsplit.substring(4,6),16);
+				String rhex = Integer.toHexString(r);
+				String ghex = Integer.toHexString(g);
+				String bhex = Integer.toHexString(b);
+				if(r > 0x10){
+					r -= 17;
+					
+				
+				}
+				if(r<0x10){
+					rhex = "0"+Integer.toHexString(r);
+				} else{
+					rhex = Integer.toHexString(r);
+				}
+				if(g > 0x10){
+					g-=17;
+					
+				
+				}
+				if(g<0x10){
+					ghex = "0"+Integer.toHexString(g);
+				} else{
+					ghex = Integer.toHexString(g);
+				}
+				if(b > 0x10){
+					b-=17;
+				
+				}
+				if(b<0x10){
+					bhex = "0"+Integer.toHexString(b);
+				} else{
+					bhex = Integer.toHexString(b);
+				}
+				
+				int rgb = Integer.parseInt(rhex+ghex+bhex,16);
+				
+			
+				
+			bg.hardlight(rgb);
+			
+			} else{
+				
+				String rgbsplit = Integer.toString(Dungeon.color,16);
+				
+				if(rgbsplit.length() < 6){
+					int l = rgbsplit.length();
+					while(l < 6){
+						rgbsplit = "0"+rgbsplit;
+						l++;
+					}
+					
+				}
+				int r = Integer.parseInt(rgbsplit.substring(0,2),16);
+				int g = Integer.parseInt(rgbsplit.substring(2,4),16);
+				int b = Integer.parseInt(rgbsplit.substring(4,6),16);
+				String rhex;
+				String ghex;
+				String bhex;
+				
+				r+=17;
+				
+					rhex = Integer.toHexString(r);
+
+				if(g < 0xEF){
+					g+=17;
+					
+				
+				} else{
+					g -= 17;
+				}
+				
+					ghex = Integer.toHexString(g);
+
+				if(b < 0xEF){
+					b+=17;
+				
+				} else{
+					g-=17;
+				}
+				
+					bhex = Integer.toHexString(b);
+
+				
+				
+				int rgb = Integer.parseInt(rhex+ghex+bhex,16);
+				
+				bg.hardlight(rgb);
+				
+				
+			
+			}
 		
-		bg.brightness( 1.2f );
-		if(Dungeon.color != 0xFFFFFF && Dungeon.color != 0x000000 && Dungeon.color != 0xFF0000){
-			bg.hardlight(Dungeon.color);
-		} else{
-			bg.hardlight(0xB22A2A);
-		}
 		Sample.INSTANCE.play( Assets.SND_CLICK );
 	};
 	
 	@Override
 	protected void onTouchUp() {
 		bg.resetColor();
-		if(Dungeon.color != 0xFFFFFF && Dungeon.color != 0x000000 && Dungeon.color != 0xFF0000){
+		
 			bg.hardlight(Dungeon.color);
-		} else{
-			bg.hardlight(0xB22A2A);
-		}
+	
 	};
 	
 	public void enable( boolean value ) {

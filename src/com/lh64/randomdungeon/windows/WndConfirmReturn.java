@@ -18,13 +18,15 @@
 package com.lh64.randomdungeon.windows;
 
 import com.lh64.noosa.BitmapTextMultiline;
+import com.lh64.randomdungeon.Badges;
+
 import com.lh64.randomdungeon.scenes.PixelScene;
 import com.lh64.randomdungeon.ui.RedButton;
 import com.lh64.randomdungeon.ui.Window;
 
 public class WndConfirmReturn extends Window {
 	
-	private static final String TXT_MESSAGE	= "Do you want to warp back to the hub?  This is your only way back, without purging your non-equipped items.";
+	private static final String TXT_MESSAGE	= "Do you want to warp back to the hub?  This is your only way back without purging your non-equipped items.";
 	private static final String TXT_YES		= "Yes, I will return";
 	private static final String TXT_NO		= "No, I'm staying";
 	
@@ -52,6 +54,11 @@ public class WndConfirmReturn extends Window {
 			protected void onClick() {
 				hide();
 				WndConfirmAscend.go = true;
+				
+				
+				
+					Badges.validateRoundWon();
+				
 				WndConfirmAscend.reset(false);
 			}
 		};

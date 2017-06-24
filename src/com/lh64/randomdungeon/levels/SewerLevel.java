@@ -76,8 +76,11 @@ public class SewerLevel extends RegularLevel {
 				map[i - WIDTH] == Terrain.WALL && 
 				map[i + WIDTH] == Terrain.WATER &&
 				Random.Int( 2 ) == 0) {
-				
+				if(Random.Int(1,3) ==1){
 				map[i] = Terrain.WALL_DECO;
+				} else{
+					map[i] = Terrain.WALL_DECO2;
+				}
 			}
 		}
 		
@@ -114,7 +117,7 @@ public class SewerLevel extends RegularLevel {
 	@Override
 	protected void createMobs() {
 		super.createMobs();
-
+		
 		Ghost.Quest.spawn( this );
 		Wandmaker.Quest.spawn( this, roomEntrance );
 	}

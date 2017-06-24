@@ -53,7 +53,7 @@ public class Sign {
 		"If you are burning, you can't put out the fire in the water while levitating.",
 		"There is no sense in possessing more than one Ankh at the same time, because you will lose them upon resurrecting. (Unless it's not in your bag)",
 		
-		"DANGER! Heavy machinery can cause injury, loss of limbs or death!",
+		"Nothing appeared on the sign...",
 		
 		"Pixel-Mart. A safer life in dungeon.",
 		"When you upgrade an enchanted weapon, there is a chance to destroy that enchantment.",
@@ -62,7 +62,7 @@ public class Sign {
 		
 		"Save money for bags.  They will save your main bag's space.",
 		
-		"Pixel-Mart. Special prices for demon hunters!"
+		"Warning!  You will get hurt if you continue exploring this dungeon."
 	};
 	
 	
@@ -79,7 +79,7 @@ public class Sign {
 		} else {
 			
 			int index;
-			index = Random.Int(0,22);
+			index = Random.Int(0,21);
 			
 				GameScene.show( new WndMessage( TIPS[index] ) );
 			

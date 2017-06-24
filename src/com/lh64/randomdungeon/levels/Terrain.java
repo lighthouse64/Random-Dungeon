@@ -32,6 +32,7 @@ public class Terrain {
 	public static final int LOCKED_DOOR		= 10;
 	public static final int PEDESTAL		= 11;
 	public static final int WALL_DECO		= 12;
+	public static final int WALL_DECO2      = 64;
 	public static final int BARRICADE		= 13;
 	public static final int EMPTY_SP		= 14;
 	public static final int HIGH_GRASS		= 15;
@@ -98,6 +99,7 @@ public class Terrain {
 		flags[LOCKED_DOOR]	= LOS_BLOCKING | SOLID 							| UNSTITCHABLE;
 		flags[PEDESTAL]		= PASSABLE 										| UNSTITCHABLE;
 		flags[WALL_DECO]	= flags[WALL];
+		flags[WALL_DECO2]	= flags[WALL];
 		flags[BARRICADE]	= FLAMABLE | SOLID | LOS_BLOCKING;
 		flags[EMPTY_SP]		= flags[EMPTY]									| UNSTITCHABLE;
 		flags[HIGH_GRASS]	= PASSABLE | LOS_BLOCKING | FLAMABLE;

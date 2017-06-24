@@ -1,5 +1,5 @@
 /*
- * Pixel Dungeon
+d * Pixel Dungeon
  * Copyright (C) 2012-2015 Oleg Dolya
  *
  * This program is free software: you can redistribute it and/or modify
@@ -50,10 +50,10 @@ public class Goo extends Mob {
 	
 	{
 		name = Dungeon.depth == Statistics.deepestFloor ? "Goo" : "spawn of Goo";
-		
-		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*15 +5,(Dungeon.hero.lvl /3 +1)*17 +5);
+		discovered= Dungeon.goodiscovered;
+		HP = HT = Random.Int(37,50);
 		EXP = Dungeon.hero.lvl;
-		defenseSkill = (Dungeon.hero.lvl) * 2;
+		defenseSkill = (Dungeon.hero.lvl) + Dungeon.hero.lvl / 3;
 		spriteClass = GooSprite.class;
 		
 		loot = new LloydsBeacon();
@@ -66,9 +66,9 @@ public class Goo extends Mob {
 	@Override
 	public int damageRoll() {
 		if (pumpedUp) {
-			return Random.Int( (Dungeon.hero.lvl/3 +1 ) +4 ,(Dungeon.hero.lvl/2 ) +8);
+			return Random.Int( 5,10);
 		} else {
-			return Random.Int( (Dungeon.hero.lvl/3 +1 ) +3 ,(Dungeon.hero.lvl/3 )*2 +8);
+			return Random.Int( 3,7);
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class Goo extends Mob {
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /2 +1) + 1;
+		return 3;
 	}
 	
 	@Override
@@ -222,7 +222,8 @@ public class Goo extends Mob {
 		Dungeon.level.drop( new SkeletonKey(), pos ).sprite.drop();
 		
 		Badges.validateBossSlain();
-		
+		Dungeon.goodiscovered = true;
+		discovered = true;
 		yell( "glurp... glurp..." );
 	}
 	

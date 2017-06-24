@@ -23,8 +23,8 @@ import com.lh64.randomdungeon.windows.WndStory;
 public class IntroScene extends PixelScene {
 
 	private static final String TEXT = 	
-		"Welcome to the Random Dungeons, where your adventures will be random and infinite.  " +
-		"Have fun! ;)";
+		"Welcome to the Random Dungeons, where your adventures will be random and infinite.  (If you don't die)" +
+		"\nHave fun! ;)";
 	
 	@Override
 	public void create() {

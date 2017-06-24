@@ -23,6 +23,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.opengl.GLES20;
 import android.text.InputType;
 import android.widget.EditText;
@@ -41,6 +43,7 @@ import com.lh64.randomdungeon.effects.BannerSprites;
 import com.lh64.randomdungeon.effects.Fireball;
 import com.lh64.randomdungeon.ui.Archs;
 import com.lh64.randomdungeon.ui.ExitButton;
+import com.lh64.randomdungeon.ui.Icons;
 import com.lh64.randomdungeon.ui.PrefsButton;
 import com.lh64.randomdungeon.ui.RedButton;
 
@@ -163,7 +166,7 @@ public class TitleScene extends PixelScene {
 			}
 			
 		};
-		test.setRect(version.x -100, version.y + 10, 70, 15);
+		test.setRect(0 , version.y-7, 66, 15);
 		add(test);
 		try {
 			Dungeon.loadName("Name");
@@ -177,6 +180,11 @@ public class TitleScene extends PixelScene {
 		str.x = title.x ;
 		str.y = title.y -23 ;
 		add(str);
+		
+		//donate button
+		DonateButton donate = new DonateButton();
+		donate.setPos(w/2 -5, h - 30);
+		add(donate);
 		
 		PrefsButton btnPrefs = new PrefsButton();
 		btnPrefs.setPos( 0, 0 );
@@ -194,6 +202,54 @@ public class TitleScene extends PixelScene {
 		fb.setPos( x, y );
 		add( fb );
 	}
+	
+	//Credit to TypedScroll for the DonateButton :)
+	private static class DonateButton extends Button{
+
+		protected Image image;
+
+		public DonateButton() {
+			super();
+
+			width = image.width;
+			height = image.height;
+		}
+
+		@Override
+		protected void createChildren() {
+			super.createChildren();
+
+			image = Icons.SUPPORT.get();
+			add( image );
+		}
+
+		@Override
+		protected void layout() {
+			super.layout();
+
+			image.x = x;
+			image.y = y;
+		}
+
+		@Override
+		protected void onTouchDown() {
+			image.brightness( 1.5f );
+			Sample.INSTANCE.play( Assets.SND_CLICK );
+		}
+
+		@Override
+		protected void onTouchUp() {
+			image.resetColor();
+		}
+
+		@Override
+		protected void onClick() {
+			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://paypal.com/cgi-bin/webscr?cmd=_donations&business=9pipbubbles%40gmail%2ecom&lc=US&item_name=Lighthouse64&item_number=Random%20Dungeon&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHostedGuest"));
+			Game.instance.startActivity( browserIntent );
+		}
+
+}
+	
 	private static class DashboardItem extends Button {
 		
 		public static final float SIZE	= 48;
@@ -253,7 +309,7 @@ public class TitleScene extends PixelScene {
 			public void run(){
 				final EditText input = new EditText(PixelDungeon.instance);
 				AlertDialog.Builder builder = new AlertDialog.Builder(PixelDungeon.instance);
-				builder.setTitle("Choose your name (Max: 12 characters)");
+				builder.setTitle("Choose your name (Max: 12 characters) \n Non-Ascii characters do not work.");
 
 				// Set up the input
 				
@@ -264,7 +320,7 @@ public class TitleScene extends PixelScene {
 				builder.setPositiveButton("Choose Name", new DialogInterface.OnClickListener() { 
 				    @Override
 				    public void onClick(DialogInterface dialog, int which) {
-				        String name = input.getText().toString();
+				        String name = input.getText().toString().replaceAll("[^\\x00-\\x7F]", "");
 				        if(name.length() < 13){
 				        Dungeon.name = name;
 				        Dungeon.changename = false;

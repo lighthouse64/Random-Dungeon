@@ -27,6 +27,7 @@ public class RatKing extends NPC {
 	{
 		name = "rat king";
 		spriteClass = RatKingSprite.class;
+		discovered = Dungeon.ratkingdiscovered;
 		
 		state = SLEEPEING;
 	}
@@ -35,7 +36,15 @@ public class RatKing extends NPC {
 	public int defenseSkill( Char enemy ) {
 		return 1000;
 	}
-	
+	@Override 
+	public boolean act() {
+		if(Dungeon.visible[pos]){
+			Dungeon.ratkingdiscovered = true;
+			discovered = true;
+			
+		}
+		return super.act();
+	}
 	@Override
 	public float speed() {
 		return 2f;

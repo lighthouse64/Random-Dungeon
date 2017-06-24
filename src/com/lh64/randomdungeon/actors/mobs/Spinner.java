@@ -37,23 +37,17 @@ public class Spinner extends Mob {
 	{
 		name = "cave spinner";
 		spriteClass = SpinnerSprite.class;
+		discovered = Dungeon.spinnerdiscovered;
 		
 		if(Dungeon.hero.lvl <= 6){
 			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
 			} else {
 				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
 			}
-		if(Dungeon.hero.lvl <= 6){
-		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 1;
-		} else{
-			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
-		}
 		
-		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl + Random.Int(0,2);
-			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
-			}
+		defenseSkill = 3;
+		
+		
 		maxLvl = Dungeon.hero.lvl / 5 + Dungeon.hero.lvl + 2;
 		
 		loot = new MysteryMeat();
@@ -73,21 +67,20 @@ public class Spinner extends Mob {
 	
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-		return (Dungeon.hero.lvl/3 +1)*2 + 7;
-		} else{
-			return (Dungeon.hero.lvl/3 +1)*2 + 7 + (Dungeon.hero.lvl /6 + 1) + Dungeon.hero.lvl/9;
-		}
+		return skillpts(9);
 	}
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 2 + Dungeon.hero.lvl/6;
+		return (Dungeon.hero.lvl /3 +1) + 2 + Dungeon.hero.lvl/6 + Dungeon.hero.lvl/9;
 	}
 	
 	@Override
 	protected boolean act() {
 		boolean result = super.act();
-		
+		if(Dungeon.visible[pos]){
+			Dungeon.spinnerdiscovered = true;
+			discovered = true;
+		}
 		if (state == FLEEING && buff( Terror.class ) == null) {
 			if (enemy != null && enemySeen && enemy.buff( Poison.class ) == null) {
 				state = HUNTING;

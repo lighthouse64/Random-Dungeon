@@ -34,45 +34,36 @@ public class FetidRat extends Mob {
 	{
 		name = "fetid rat";
 		spriteClass = FetidRatSprite.class;
+		discovered = Dungeon.fetidratdiscovered;
 		
-		if(Dungeon.hero.lvl <= 6){
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
-			} else {
-				HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
-			}
-		if(Dungeon.hero.lvl <= 6){
-		defenseSkill =  ((Dungeon.hero.lvl/3 +1) * 2) + 2;
-		} else{
-			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
-		}
 		
-		EXP = Dungeon.hero.lvl;
+			HP = HT = Random.Int(9,11);
+			
+		defenseSkill = 4;
+		
+		EXP = 1;
 		maxLvl = Dungeon.hero.lvl + 3;
 		
 		state = WANDERING;
 	}
-	
+
 	@Override
 	public int damageRoll() {
 		if(Dungeon.hero.lvl <= 8){
 			return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 4);
 			} else {
-			return Random.Int( (Dungeon.hero.lvl/3 + 1) +2,(Dungeon.hero.lvl/3)*2 + 6);
+			return Random.Int( (Dungeon.hero.lvl/3 + 1) +2 - Dungeon.hero.lvl/6,(Dungeon.hero.lvl/3)*2 + 6) - Dungeon.hero.lvl/6 ;
 			}  
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-		return (Dungeon.hero.lvl/3 +1)*2 + 9;
-		} else{
-			return (Dungeon.hero.lvl /3 + 1)*2 + (Dungeon.hero.lvl /6 + 1) +9;
-		}
+		return 9;
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1 + Dungeon.hero.lvl/6) ;
+		return 2  ;
 	}
 	
 	@Override
@@ -91,7 +82,8 @@ public class FetidRat extends Mob {
 	@Override
 	public void die( Object cause ) {
 		super.die( cause );
-		
+		Dungeon.fetidratdiscovered = true;
+		discovered = true;
 		Dungeon.level.drop( new RatSkull(), pos ).sprite.drop();
 	}
 	

@@ -29,6 +29,7 @@ import com.lh64.randomdungeon.Badges;
 import com.lh64.randomdungeon.Bones;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.GamesInProgress;
+import com.lh64.randomdungeon.Quests;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.Char;
 import com.lh64.randomdungeon.actors.buffs.Barkskin;
@@ -116,12 +117,11 @@ public class Hero extends Char {
 	
 	private static final String TXT_LEVEL_UP = "level up!";
 	private static final String TXT_NEW_LEVEL = 
-		"Welcome to level %d! Now you are healthier and more focused. " +
-		"It's easier for you to hit enemies and dodge their attacks.";
+		"You are now a level %d!";
 	
 	public static final String TXT_YOU_NOW_HAVE	= "You obtained the %s";
 	
-	private static final String TXT_SOMETHING_ELSE	= "There is something else here";
+	private static final String TXT_SOMETHING_ELSE	= "\nThere is something else here";
 	private static final String TXT_LOCKED_CHEST	= "This chest is locked and you don't have matching key";
 	private static final String TXT_LOCKED_DOOR		= "You don't have a matching key";
 	private static final String TXT_NOTICED_SMTH	= "You noticed something";
@@ -171,7 +171,7 @@ public class Hero extends Char {
 	
 	public Hero() {
 		super();
-		name = "you";
+		name = "You";
 		
 		HP = HT = 20;
 		STR = STARTING_STR;
@@ -390,7 +390,9 @@ public class Hero extends Char {
 	public boolean act() {
 		
 		super.act();
-		
+		for(Quests.Quest req : Quests.heroquests){
+			req.tickQuest();
+		}
 		if (paralysed) {
 			
 			curAction = null;
@@ -1058,10 +1060,7 @@ public class Hero extends Char {
 			this.exp -= maxExp();
 			lvl++;
 			
-			HT += 5;
-			HP += 5;			
-			attackSkill++;
-			defenseSkill++;
+			
 			
 			if (lvl < 10) {
 				updateAwareness();
@@ -1092,11 +1091,9 @@ public class Hero extends Char {
 	}
 	
 	public int maxExp() {
-		if(lvl < 10){
-		return 5 + lvl*5;
-		} else{
-			return lvl*7;
-		}
+		
+		return lvl*5;
+		
 	}
 	
 	void updateAwareness() {

@@ -71,7 +71,6 @@ public class Assets {
 	public static final String WARLOCK	= "warlock.png";
 	public static final String GOLEM	= "golem.png";
 	public static final String UNDEAD	= "undead.png";
-	public static final String KING		= "king.png";
 	public static final String STATUE	= "statue.png";
 	public static final String PIRANHA	= "piranha.png";
 	public static final String EYE		= "eye.png";
@@ -93,6 +92,12 @@ public class Assets {
 	public static final String COINBOX  = "coinbox.png";
 	public static final String TOXICSLUDGE = "toxicsludge.png";
 	public static final String CAVEFLOWER = "CaveFlowerSprite.png";
+	public static final String MASTERTHIEF = "master_thief.png";
+	public static final String RATPRINCE   = "ratprince.png";
+	public static final String CAVESPIDER  = "cavespider.png";
+	public static final String INBOX       = "inbox.png";
+	public static final String FISH        = "fish.png";
+	public static final String LANDFISH    = "landfish.png";
 	
 	public static final String HUMAN    = "human.png";
 	public static final String FEMALEHUMAN = "femalehuman.png";
@@ -125,8 +130,10 @@ public class Assets {
 	public static final String THEME	= "theme.mp3";
 	public static final String TUNE		= "game.mp3";
 	public static final String SEWERS   = "Pixel_sewers.mp3";
+	public static final String PRISON   = "Prison.mp3";
 	public static final String CAVES    = "Pixel_caves.mp3";
 	public static final String TOWN     = "Pixel_town.mp3";
+	public static final String BOSS     = "Pixel_Boss.mp3";
 	public static final String HAPPY	= "surface.mp3";
 	
 	public static final String SND_CLICK	= "snd_click.mp3";

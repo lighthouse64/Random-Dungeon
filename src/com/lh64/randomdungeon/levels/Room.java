@@ -51,7 +51,6 @@ public class Room extends Rect implements Graph.Node, Bundlable {
 		PASSAGE		( PassagePainter.class ),
 		SHOP		( ShopPainter.class ),
 		BLACKSMITH	( BlacksmithPainter.class ),
-		TROLLSMITH  ( TrollSmithPainter.class ),
 		TREASURY	( TreasuryPainter.class ),
 		ARMORY		( ArmoryPainter.class ),
 		LIBRARY		( LibraryPainter.class ),
@@ -68,7 +67,8 @@ public class Room extends Rect implements Graph.Node, Bundlable {
 		WEAK_FLOOR	( WeakFloorPainter.class ),
 		PIT			( PitPainter.class ),
 		ALTAR		( AltarPainter.class ),
-		ABANDONED   ( AbandonedHousePainter.class);
+		ABANDONED   ( AbandonedHousePainter.class),
+		TROLLSMITH  ( StandardPainter.class);
 		
 		private Method paint;
 		
@@ -103,6 +103,7 @@ public class Room extends Rect implements Graph.Node, Bundlable {
 	public int random( int m ) {
 		int x = Random.Int( left + 1 + m, right - m );
 		int y = Random.Int( top + 1 + m, bottom - m );
+		
 		return x + y * Level.WIDTH;
 	}
 	
@@ -213,6 +214,7 @@ public class Room extends Rect implements Graph.Node, Bundlable {
 			for (String type : bundle.getStringArray( ROOMS )) {
 				SPECIALS.add( Type.valueOf( type ));
 			}
+			
 		} else {
 			shuffleTypes();
 		}

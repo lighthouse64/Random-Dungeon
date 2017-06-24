@@ -58,6 +58,7 @@ public class Ghost extends NPC {
 	{
 		name = "sad ghost";
 		spriteClass = GhostSprite.class;
+		discovered= Dungeon.ghostdiscovered;
 		
 		flying = true;
 		
@@ -74,7 +75,15 @@ public class Ghost extends NPC {
 	public int defenseSkill( Char enemy ) {
 		return 1000;
 	}
-	
+	@Override 
+	public boolean act() {
+		if(Dungeon.visible[pos]){
+			Dungeon.ghostdiscovered = true;
+			discovered = true;
+			
+		}
+		return super.act();
+	}
 	@Override
 	public String defenseVerb() {
 		return "evaded";

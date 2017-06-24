@@ -18,7 +18,6 @@
 package com.lh64.randomdungeon.items.weapon.melee;
 
 import com.lh64.randomdungeon.Dungeon;
-import com.lh64.randomdungeon.actors.mobs.npcs.TrollSmith;
 import com.lh64.randomdungeon.items.Item;
 import com.lh64.randomdungeon.items.weapon.Weapon;
 import com.lh64.randomdungeon.utils.Utils;
@@ -169,7 +168,7 @@ public class MeleeWeapon extends Weapon {
 	@Override
 	public int price() {
 		int price = 15 * (1 << (tier - 1));
-		if (enchantment != null && TrollSmith.troll == false) {
+		if (enchantment != null ) {
 			price *= 1.5;
 		}
 		return considerState( price );

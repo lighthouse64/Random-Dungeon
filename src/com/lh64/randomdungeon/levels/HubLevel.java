@@ -24,6 +24,7 @@ import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.actors.mobs.Mob;
 import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
 import com.lh64.randomdungeon.actors.mobs.npcs.Coinbox;
+import com.lh64.randomdungeon.actors.mobs.npcs.QuestInbox;
 import com.lh64.randomdungeon.actors.mobs.npcs.Shopkeeper;
 import com.lh64.randomdungeon.items.Gold;
 import com.lh64.randomdungeon.levels.painters.Painter;
@@ -69,6 +70,8 @@ public class HubLevel extends Level {
 		entrance = SIZE * WIDTH + SIZE / 2 + 1;
 		map[entrance] = Terrain.ENTRANCE;
 		map[bottomleft +1] = Terrain.BOOKSHELF;
+		
+		
 		map[entrance + 6] = Terrain.DOOR;
 		map[entrance + 10] = Terrain.ALCHEMY;
 		
@@ -101,6 +104,10 @@ public class HubLevel extends Level {
 		Mob shopkeeper = new Shopkeeper();
 		shopkeeper.pos = pedestal + 1;
 		mobs.add(shopkeeper);
+		
+		Mob questsign = new QuestInbox();
+		questsign.pos = shopkeeper.pos + 1;
+		mobs.add(questsign);
 	}
 	
 	protected void createChest(){

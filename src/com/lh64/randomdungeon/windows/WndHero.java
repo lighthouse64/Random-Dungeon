@@ -28,6 +28,7 @@ import com.lh64.noosa.Image;
 import com.lh64.noosa.TextureFilm;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.Quests;
 import com.lh64.randomdungeon.Statistics;
 import com.lh64.randomdungeon.actors.buffs.Buff;
 import com.lh64.randomdungeon.actors.buffs.Hunger;
@@ -157,6 +158,23 @@ public class WndHero extends WndTabbed {
 			
 			pos = btnCatalogus.bottom() + GAP;
 			
+			RedButton btnBeastiary = new RedButton("Beastiary"){
+				@Override
+				protected void onClick(){
+					GameScene.show(new WndBeastiary());
+				}
+			};
+			btnBeastiary.setRect(btnJournal.right() + 1, btnJournal.top(), btnBeastiary.reqWidth() + 2, btnBeastiary.reqHeight() + 2);
+			add(btnBeastiary);
+			
+			RedButton btnQuests = new RedButton("Quests"){
+				@Override 
+				protected void onClick(){
+					GameScene.show(new WndQuestList(true));
+				}
+			};
+			btnQuests.setRect(btnJournal.right() + 16, btnJournal.bottom() + 3, btnQuests.reqWidth() + 2, btnQuests.reqHeight() + 2);
+			add(btnQuests);
 			statSlot( TXT_STR, hero.STR() );
 			statSlot( TXT_HEALTH, hero.HP + "/" + hero.HT );
 			statSlot( TXT_HUNGER, 400 - Math.round(Hunger.level));
@@ -166,7 +184,7 @@ public class WndHero extends WndTabbed {
 			
 			statSlot( TXT_GOLD, Statistics.goldCollected );
 			statSlot( "Enemies slain ", Statistics.enemiesSlain);
-			statSlot( "SOU's read ",Dungeon.usedSOU);
+			statSlot( "Quests Completed", Quests.completed);
 			
 			pos += GAP;
 		}

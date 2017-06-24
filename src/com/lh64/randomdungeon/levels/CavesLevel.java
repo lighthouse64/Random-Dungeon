@@ -27,6 +27,8 @@ import com.lh64.randomdungeon.DungeonTilemap;
 import com.lh64.randomdungeon.actors.mobs.Mob;
 import com.lh64.randomdungeon.actors.mobs.npcs.Blacksmith;
 import com.lh64.randomdungeon.actors.mobs.npcs.Chest;
+import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
+import com.lh64.randomdungeon.actors.mobs.npcs.Wandmaker;
 import com.lh64.randomdungeon.levels.Room.Type;
 import com.lh64.randomdungeon.levels.painters.Painter;
 import com.lh64.utils.PointF;
@@ -66,7 +68,13 @@ public class CavesLevel extends RegularLevel {
 		
 		Blacksmith.Quest.spawn( rooms );
 	}
-	
+	@Override
+	protected void createMobs() {
+		super.createMobs();
+		
+		Ghost.Quest.spawn( this );
+		Wandmaker.Quest.spawn( this, roomEntrance );
+	}
 	@Override
 	protected void decorate() {
 		

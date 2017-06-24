@@ -31,23 +31,13 @@ public class Crab extends Mob {
 	{
 		name = "Sewer crab";
 		spriteClass = CrabSprite.class;
-		if(Dungeon.hero.lvl <= 6){
-		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*6 +3,(Dungeon.hero.lvl /3 +1)*7 +5);
-		} else {
-		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
-		}
-		if(Dungeon.hero.lvl <= 6){
-		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
-		} else {
-			defenseSkill = ((Dungeon.hero.lvl/3 +1) *2) + 3 + Dungeon.hero.lvl/6;
-		}
+		discovered= Dungeon.crabdiscovered;
+		HP = HT = Random.Int(9,13);
+		
+		defenseSkill = skillpts(4);
 		baseSpeed = 2f;
 		
-		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl + Random.Int(1,2);
-			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
-			}
+		EXP = expStats();
 		maxLvl = Dungeon.hero.lvl + 4;
 		
 		loot = new MysteryMeat();
@@ -56,34 +46,28 @@ public class Crab extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		if(Dungeon.hero.lvl <= 8){
-		return Random.Int( (Dungeon.hero.lvl/3 + 1) +1 ,(Dungeon.hero.lvl/3 + 1) +5);
-		} else {
-		return Random.Int( (Dungeon.hero.lvl/3 +1 ) +5 ,(Dungeon.hero.lvl/3 )*2 +8);
-		}
+		
+		return Random.Int( 2,5);
+		
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-		return (Dungeon.hero.lvl/3 +1)*2 + 9;
-		} else{
-			return (Dungeon.hero.lvl/3 +1)*2 + 9 + (Dungeon.hero.lvl/6 + 1);
-		}
+		return skillpts(11);
 	}
 	
 	@Override
 	public int attackProc( Char enemy, int damage ) {
-		if(Dungeon.hero.lvl > 6){
+		
 		if (Random.Int( 0,15 ) == 0) {
 			Buff.affect( enemy, Bleeding.class ).set(damage);
 		}
-		}
+		
 		return damage;
 	}
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 2 + Dungeon.hero.lvl/6;
+		return 3;
 	}
 	
 	@Override
@@ -94,6 +78,8 @@ public class Crab extends Mob {
 	@Override
 	public void die( Object cause ) {
 		Ghost.Quest.processSewersKill( pos );
+		Dungeon.crabdiscovered = true;
+		discovered = true;
 		super.die( cause );
 	}
 	
@@ -103,5 +89,13 @@ public class Crab extends Mob {
 			"These huge crabs are at the top of the food chain in the sewers. " +
 			"They are extremely fast and their thick exoskeleton can withstand " +
 			"heavy blows.";
+	}
+	@Override
+	public String altDescription() {
+		return
+				"The old small, easygoing crabs have now become huge speedy beasts.  An adventurer, like yourself, had once brought in his two crabs for a good luck charm.  "
+				+ "However, that adventurer faced a dreadful fate, and in that time, his crabs escaped.  Not having any predators, as their shells made them a difficult meal, the crabs feasted on the"
+				+ "yellow moss at first, and as they grew larger, they began to hunt rats and gnolls.  Over time, their diet of eating such large creatures and yellow moss has led them to mutating into fast, large beings, "
+				+ "which is why these crabs are so fierce and quick.";
 	}
 }

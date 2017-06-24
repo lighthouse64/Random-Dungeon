@@ -21,11 +21,14 @@ import com.lh64.noosa.BitmapTextMultiline;
 import com.lh64.noosa.Game;
 import com.lh64.randomdungeon.Dungeon;
 import com.lh64.randomdungeon.Journal;
+import com.lh64.randomdungeon.Quests;
 import com.lh64.randomdungeon.Statistics;
 import com.lh64.randomdungeon.actors.buffs.Hunger;
 import com.lh64.randomdungeon.actors.mobs.npcs.Blacksmith;
 import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.actors.mobs.npcs.Wandmaker;
+import com.lh64.randomdungeon.items.Item;
+import com.lh64.randomdungeon.items.bags.Keyring;
 import com.lh64.randomdungeon.items.potions.PotionOfHealing;
 import com.lh64.randomdungeon.levels.HubLevel;
 import com.lh64.randomdungeon.scenes.InterlevelScene;
@@ -68,12 +71,20 @@ public class WndConfirmAscend extends Window {
 		Dungeon.shop3visit = false;
 		Dungeon.shop4visit = false;
 		Dungeon.initshop = true;
+		Dungeon.previousTheme = Dungeon.levelTheme;
 		Dungeon.levelTheme = 0;
+		Item keyring = Dungeon.hero.belongings.getItem(Keyring.class);
+		//reset keys
+		if(keyring != null){
+			keyring.detachAll(Dungeon.hero.belongings.backpack);
+			
+			new Keyring().collect(Dungeon.hero.belongings.backpack);
+		}
 		if(go == true){
 		InterlevelScene.mode = InterlevelScene.Mode.ASCEND;
 		Game.switchScene( InterlevelScene.class );
 		} else{
-			InterlevelScene.returnDepth = 1;
+			InterlevelScene.returnDepth = 0;
 			InterlevelScene.returnPos = HubLevel.bottomleft + 3;
 			InterlevelScene.mode = InterlevelScene.Mode.RETURN;
 			Game.switchScene( InterlevelScene.class );
@@ -81,6 +92,10 @@ public class WndConfirmAscend extends Window {
 		Dungeon.initshop = true;
 		PotionOfHealing.heal(Dungeon.hero);	
 		((Hunger)Dungeon.hero.buff( Hunger.class )).satisfy( Hunger.STARVING );
+		Quests.quests.removeAll(Quests.quests);
+		for(int i = 0; i < 8; i++){
+			Quests.quests.add(new Quests.Quest(Random.Int(1,3)));
+		}
 	}
 	public WndConfirmAscend() {
 		

@@ -23,6 +23,7 @@ import com.lh64.randomdungeon.items.scrolls.ScrollOfReturn;
 import com.lh64.randomdungeon.levels.Level;
 import com.lh64.randomdungeon.levels.Room;
 import com.lh64.randomdungeon.levels.Terrain;
+import com.lh64.utils.Random;
 
 
 
@@ -43,22 +44,29 @@ public class AbandonedHousePainter extends Painter {
 		
 		for (Room.Door door : room.connected.values()) {
 			door.set( Room.Door.Type.REGULAR );
+			int tempdoorpos = door.x + door.y*Level.WIDTH;
+			
+			placeholes(level, room, tempdoorpos);
 			
 		}
-		placeholes(level, room);
+		
+		
 	}
 
 
 	
-	public static void placeholes( Level level, Room room){
+	public static void placeholes( Level level, Room room, int tempdoorpos){
 		int pos = room.random();
 		set (level, pos, Terrain.EMPTY_WELL);
+		if(Random.Int(1,4) > 1){
 		level.drop(new ScrollOfReturn(), pos);
+		}
 		
 		while(true){
 			int pos1 = room.random();
 			int pos2 = room.random();
-			if(pos1 != pos && pos2 != pos && pos2 != pos1){
+			if(pos1 != pos && pos2 != pos && pos2 != pos1 && pos1 != tempdoorpos+ 1 && pos2 != tempdoorpos+1 && pos1 != tempdoorpos - 1 && pos2 != tempdoorpos - 1 && pos1 != tempdoorpos+ Level.WIDTH && pos2 != tempdoorpos+ Level.WIDTH && pos1 != tempdoorpos - Level.WIDTH  && pos2 != tempdoorpos - Level.WIDTH){
+				
 				set(level,pos1,Terrain.CHASM_FLOOR_SP);
 				set(level,pos2,Terrain.CHASM_FLOOR_SP);
 				

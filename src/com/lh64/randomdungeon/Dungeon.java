@@ -73,8 +73,7 @@ import com.lh64.randomdungeon.scenes.InterlevelScene.Mode;
 
 public class Dungeon {
 	
-	public static int potionOfStrength;
-	public static int scrollsOfUpgrade;
+
 	public static int scrollsOfEnchantment;
 	public static boolean dewVial;		// true if the dew vial can be spawned
 
@@ -103,10 +102,46 @@ public class Dungeon {
 	public static int shop3;
 	public static int gold;
 	public static int levelTheme = 0;
+	public static int previousTheme = 0;
 	public static int coins = 0;
 	public static int usedSOU = 0;
 	public static float version;
-	public static float realversion = 0.2f;
+	public static float realversion = 0.3f;
+	public static int roundswon = 0;
+	
+	//list of discovered mobs variables (ABC order)
+	public static boolean albinodiscovered = false;
+	public static boolean banditdiscovered = false;
+	public static boolean batdiscovered = false;
+	public static boolean brutediscovered = false;
+	public static boolean caveflowerdiscovered = false;
+	public static boolean cavespiderdiscovered = false;
+	public static boolean crabdiscovered = false;
+	public static boolean cursediscovered = false;
+	public static boolean dm300discovered = false;
+	public static boolean fetidratdiscovered = false;
+	public static boolean ghostdiscovered = false;
+	public static boolean gnolldiscovered = false;
+	public static boolean goodiscovered = false;
+	public static boolean masterthiefdiscovered = false;
+	public static boolean mimicdiscovered = false;
+	public static boolean piranhadiscovered = false;
+	public static boolean ratdiscovered = false;
+	public static boolean ratkingdiscovered = false;
+	public static boolean ratprincediscovered = false;
+	public static boolean sewerhorsediscovered = false;
+	public static boolean shamandiscovered = false;
+	public static boolean shieldeddiscovered = false;
+	public static boolean skeletondiscovered = false;
+	public static boolean spinnerdiscovered = false;
+	public static boolean statuediscovered = false;
+	public static boolean tengudiscovered = false;
+	public static boolean thiefdiscovered = false;
+	public static boolean toxicsludgediscovered = false;
+	public static boolean trollsmithdiscovered = false;
+	public static boolean wraithdiscovered = false;
+	public static boolean dungeonfishdiscovered = false;
+	
 	// Reason of death
 	public static String resultDescription;
 	
@@ -131,9 +166,45 @@ public class Dungeon {
 		Potion.initColors();
 		Wand.initWoods();
 		Ring.initGems();
+		//init beastiary
+		albinodiscovered = false;
+		banditdiscovered = false;
+		batdiscovered = false;
+		brutediscovered = false;
+		caveflowerdiscovered = false;
+		cavespiderdiscovered = false;
+		crabdiscovered = false;
+		cursediscovered = false;
+		dm300discovered = false;
+		fetidratdiscovered = false;
+		ghostdiscovered = false;
+		gnolldiscovered = false;
+		 goodiscovered = false;
+		 masterthiefdiscovered = false;
+		 mimicdiscovered = false;
+		 piranhadiscovered = false;
+		 ratdiscovered = false;
+		 ratkingdiscovered = false;
+		ratprincediscovered = false;
+		sewerhorsediscovered = false;
+		shamandiscovered = false;
+		shieldeddiscovered = false;
+		skeletondiscovered = false;
+		spinnerdiscovered = false;
+		 statuediscovered = false;
+		 tengudiscovered = false;
+		thiefdiscovered = false;
+		 toxicsludgediscovered = false;
+		 trollsmithdiscovered = false;
+		 wraithdiscovered = false;
+		 dungeonfishdiscovered = false;
 		
 		Statistics.reset();
 		Journal.reset();
+		
+		Quests.heroquests.clear();
+		
+		
 		usedSOU = 0;
 		depth = 0;
 		gold = 100;
@@ -141,8 +212,8 @@ public class Dungeon {
 		initshop = true;
 		droppedItems = new SparseArray<ArrayList<Item>>();
 		levelTheme = 0;
-		potionOfStrength = 0;
-		scrollsOfUpgrade = 0;
+		previousTheme = 0;
+
 		scrollsOfEnchantment = 0;
 		dewVial = false;
 		zerocheck = true;
@@ -152,15 +223,16 @@ public class Dungeon {
 		shop4visit = false;
 		chapters = new HashSet<Integer>();
 
-		shop1 = Random.Int(3,10);
-		shop2 = Random.Int(11,19);
-		shop3 = Random.Int(20,27);
+		shop1 = Random.Int(3,5);
+		shop2 = Random.Int(7,10);
+		shop3 = Random.Int(11,13);
 		
 		Ghost.Quest.reset();
 		Wandmaker.Quest.reset();
 		Blacksmith.Quest.reset();
 		Imp.Quest.reset();
-		
+		Quests.quests.clear();
+		Quests.quests = new ArrayList<Quests.Quest>();
 		Room.shuffleTypes();
 		
 		QuickSlot.primaryValue = null;
@@ -178,6 +250,7 @@ public class Dungeon {
 		return (challenges & mask) != 0;
 	}
 	
+
 	public static Level newLevel() {
 		
 		Dungeon.level = null;
@@ -211,19 +284,33 @@ public class Dungeon {
 			level = new HubLevel();
 			break;
 		case 2:
+			
 			levelTheme = Random.Int(1,4);
+			while (true){
+				if(levelTheme != previousTheme){
+					break;
+				} else{
+					levelTheme = Random.Int(1,4);
+				}
+				
+			}
 			if (levelTheme == 1){
 				level = new SewerLevel();
 			}
 			else if (levelTheme == 2){
-				level = new PrisonLevel();
+				
+					level = new PrisonLevel();
+				
 			}
 			else if (levelTheme == 3){
-				level = new CavesLevel();
-			}
-			else{
+				
+					level = new CavesLevel();	
+				 
+			} else{
 				level = new DeadEndLevel();
 			}
+			
+			
 			break;
 		case 3:
 		case 4:
@@ -237,20 +324,6 @@ public class Dungeon {
 		case 12:
 		case 13:
 		case 14:
-		case 15:
-		case 16:
-		case 17:
-		case 18:
-		case 19:
-		case 20:
-		case 21:
-		case 22:
-		case 23:
-		case 24:
-		case 25:
-		case 26:
-		case 27:
-		case 28:
 			if (levelTheme == 1){
 				level = new SewerLevel();
 			}
@@ -264,7 +337,7 @@ public class Dungeon {
 				level = new DeadEndLevel();
 			}
 			break;
-		case 29:
+		case 15:
 			if(levelTheme == 1){
 				level = new SewerBossLevel();
 			}
@@ -278,7 +351,7 @@ public class Dungeon {
 				level = new DeadEndLevel();
 			}
 			break;
-		case 30:
+		case 16:
 			level = new LastLevel();
 			break;
 		default:
@@ -346,21 +419,9 @@ public class Dungeon {
 		dropped.add( item );
 	}
 	
-	public static boolean posNeeded() {
-		if((Random.Int(0,4) )== 0 || (Dungeon.hero.lvl/3) + 1 > potionOfStrength + 1){
-		return true;
-		} else{
-			return false;
-		}
-	}
 	
-	public static boolean souNeeded() {
-		if(Random.Int(0,2)  == 1 || (Dungeon.hero.lvl/3)+ 1 > scrollsOfUpgrade){
-			return true;
-		} else{
-			return false;
-		}
-	}
+	
+
 	
 	public static boolean soeNeeded() {
 		return Random.Int( 9 * (1 + scrollsOfEnchantment) ) < hero.lvl;
@@ -387,14 +448,13 @@ public class Dungeon {
 	private static final String DEPTH		= "depth";
 	private static final String LEVEL		= "level";
 	private static final String DROPPED		= "dropped%d";
-	private static final String POS			= "potionsOfStrength";
-	private static final String SOU			= "scrollsOfEnhancement";
 	private static final String SOE			= "scrollsOfEnchantment";
 	private static final String DV			= "dewVial";
 	private static final String CHAPTERS	= "chapters";
 	private static final String QUESTS		= "quests";
 	private static final String BADGES		= "badges";
 	private static final String LEVELTHEME  = "levelTheme";
+	private static final String PREVIOUSTHEME = "previousTheme";
 	private static final String SHOP1       = "first shop";
 	private static final String SHOP2       = "second shop";
 	private static final String SHOP3       = "third shop";
@@ -410,6 +470,42 @@ public class Dungeon {
 	private static final String USEDSOU     = "SOU's read";
 	private static final String V2          = "Secondary version";
 	private static final String HUBRESET    = "Reset hub?";
+	private static final String ROUNDSWON   = "Number of rounds won";
+	
+	//save data for the mobs discovery variables
+	private static final String ALBINODISCOVERED = "Albino rat discovered";
+	private static final String BANDITDISCOVERED = "Bandit discovered";
+	private static final String BATDISCOVERED = "Bat discovered";
+	private static final String BRUTEDISCOVERED = "Brute discovered";
+	private static final String CAVEFLOWERDISCOVERED = "Cave Flower discovered";
+	private static final String CAVESPIDERDISCOVERED = "Cave Spider discovered";
+	private static final String CRABDISCOVERED = "Crab discovered";
+	private static final String CURSEDISCOVERED = "Curse Personification discovered";
+	private static final String DM300DISCOVERED = "DM 300 discovered";
+	private static final String FETIDRATDISCOVERED = "Fetid rat discovered";
+	private static final String GHOSTDISCOVERED = "Ghost discovered";
+	private static final String GNOLLDISCOVERED = "Gnoll discovered";
+	private static final String GOODISCOVERED = "Goo discovered";
+	private static final String MASTERTHIEFDISCOVERED = "Master Thief discovered";
+	private static final String MIMICDISCOVERED = "Mimic discovered";
+	private static final String PIRANHADISCOVERED = "Piranha discovered";
+	private static final String RATDISCOVERED ="Rat discovered";
+	private static final String RATKINGDISCOVERED = "Rat King discovered";
+	private static final String RATPRINCEDISCOVERED = "Rat Prince Discovered";
+	private static final String SEWERHORSEDISCOVERED = "Sewer Horse discovered";
+	private static final String SHAMANDISCOVERED = "Shaman discovered";
+	private static final String SHIELDEDDISCOVERED = "Shielded discovered";
+	private static final String SKELETONDISCOVERED = "Skeleton discovered";
+	private static final String SPINNERDISCOVERED = "Spinner discovered";
+	private static final String STATUEDISCOVERED = "Statue discovered";
+	private static final String TENGUDISCOVERED = "Tengu discovered";
+	private static final String THIEFDISCOVERED = "Thief discovered";
+	private static final String TOXICSLUDGEDISCOVERED = "Toxic Sludge discovered";
+	private static final String TROLLSMITHDISCOVERED = "Troll Smith discovered";
+	private static final String WRAITHDISCOVERED = "Wraith discovered";
+	private static final String DUNGEONFISHDISCOVERED = "Dungeon fish discovered";
+	
+
 	
 	public static String gameFile( HeroClass cl ) {
 		switch (cl) {
@@ -454,6 +550,40 @@ public class Dungeon {
 	public static void saveGame( String fileName ) throws IOException {
 		try {
 			Bundle bundle = new Bundle();
+			
+			//put in data for boolean list of mobs
+			bundle.put(ALBINODISCOVERED, albinodiscovered);
+			bundle.put(BANDITDISCOVERED, banditdiscovered);
+			bundle.put(BATDISCOVERED, batdiscovered);
+			bundle.put(BRUTEDISCOVERED, brutediscovered);
+			bundle.put(CAVEFLOWERDISCOVERED, caveflowerdiscovered);
+			bundle.put(CAVESPIDERDISCOVERED, cavespiderdiscovered);
+			bundle.put(CRABDISCOVERED, crabdiscovered);
+			bundle.put(CURSEDISCOVERED, cursediscovered);
+			bundle.put(DM300DISCOVERED, dm300discovered);
+			bundle.put(FETIDRATDISCOVERED, fetidratdiscovered);
+			bundle.put(GHOSTDISCOVERED, ghostdiscovered);
+			bundle.put(GNOLLDISCOVERED, gnolldiscovered);
+			bundle.put(GOODISCOVERED, goodiscovered);
+			bundle.put(MASTERTHIEFDISCOVERED, masterthiefdiscovered);
+			bundle.put(MIMICDISCOVERED, mimicdiscovered);
+			bundle.put(PIRANHADISCOVERED, piranhadiscovered);
+			bundle.put(RATDISCOVERED, ratdiscovered);
+			bundle.put(RATKINGDISCOVERED, ratkingdiscovered);
+			bundle.put(RATPRINCEDISCOVERED, ratprincediscovered);
+			bundle.put(SEWERHORSEDISCOVERED, sewerhorsediscovered);
+			bundle.put(SHAMANDISCOVERED, shamandiscovered);
+			bundle.put(SHIELDEDDISCOVERED, shieldeddiscovered);
+			bundle.put(SKELETONDISCOVERED, skeletondiscovered);
+			bundle.put(SPINNERDISCOVERED, spinnerdiscovered);
+			bundle.put(STATUEDISCOVERED, statuediscovered);
+			bundle.put(TENGUDISCOVERED, tengudiscovered);
+			bundle.put(THIEFDISCOVERED, thiefdiscovered);
+			bundle.put(TROLLSMITHDISCOVERED, trollsmithdiscovered);
+			bundle.put(WRAITHDISCOVERED, wraithdiscovered);
+			bundle.put(DUNGEONFISHDISCOVERED, dungeonfishdiscovered);
+			
+			
 			version = realversion;
 			bundle.put(V2, version);
 			bundle.put( VERSION, Game.version );
@@ -462,6 +592,7 @@ public class Dungeon {
 			bundle.put( GOLD, gold );
 			bundle.put( DEPTH, depth );
 			bundle.put(LEVELTHEME, levelTheme);
+			bundle.put(PREVIOUSTHEME, previousTheme);
 			bundle.put(SHOP1, shop1);
 			bundle.put(SHOP2, shop2);
 			bundle.put(SHOP3, shop3);
@@ -472,6 +603,7 @@ public class Dungeon {
 			bundle.put(ZEROCHECK, zerocheck);
 			bundle.put(COINS, coins);
 			bundle.put(HUBRESET, resethub);
+			bundle.put(ROUNDSWON, roundswon);
 			loadName("Name");
 			saveName();
 			
@@ -483,8 +615,7 @@ public class Dungeon {
 				bundle.put( String.format( DROPPED, d ), droppedItems.get( d ) );
 			}
 			
-			bundle.put( POS, potionOfStrength );
-			bundle.put( SOU, scrollsOfUpgrade );
+
 			bundle.put( SOE, scrollsOfEnchantment );
 			bundle.put( DV, dewVial );
 			
@@ -506,6 +637,7 @@ public class Dungeon {
 			
 			Statistics.storeInBundle( bundle );
 			Journal.storeInBundle( bundle );
+			Quests.StoreQuestsInBundle(bundle);
 			
 			QuickSlot.save( bundle );
 			
@@ -575,6 +707,76 @@ public class Dungeon {
 	public static void loadGame( String fileName, boolean fullLoad ) throws IOException {
 		
 		Bundle bundle = gameBundle( fileName );
+		Dungeon.version    = bundle.getFloat(V2);
+		//Load booleans for mob discovery
+		if(Dungeon.version == Dungeon.realversion){
+			Dungeon.albinodiscovered = bundle.getBoolean(ALBINODISCOVERED);
+			Dungeon.banditdiscovered = bundle.getBoolean(BANDITDISCOVERED);
+			Dungeon.batdiscovered = bundle.getBoolean(BATDISCOVERED);
+			Dungeon.caveflowerdiscovered = bundle.getBoolean(CAVEFLOWERDISCOVERED);
+			Dungeon.cavespiderdiscovered = bundle.getBoolean(CAVESPIDERDISCOVERED);
+			Dungeon.crabdiscovered = bundle.getBoolean(CRABDISCOVERED);
+			Dungeon.cursediscovered = bundle.getBoolean(CURSEDISCOVERED);
+			Dungeon.dm300discovered = bundle.getBoolean(DM300DISCOVERED);
+			Dungeon.fetidratdiscovered = bundle.getBoolean(FETIDRATDISCOVERED);
+			Dungeon.ghostdiscovered = bundle.getBoolean(GHOSTDISCOVERED);
+			Dungeon.gnolldiscovered = bundle.getBoolean(GNOLLDISCOVERED);
+			Dungeon.goodiscovered = bundle.getBoolean(GOODISCOVERED);
+			Dungeon.masterthiefdiscovered = bundle.getBoolean(MASTERTHIEFDISCOVERED);
+			Dungeon.mimicdiscovered = bundle.getBoolean(MIMICDISCOVERED);
+			Dungeon.piranhadiscovered = bundle.getBoolean(PIRANHADISCOVERED);
+			Dungeon.ratdiscovered = bundle.getBoolean(RATDISCOVERED);
+			Dungeon.ratkingdiscovered = bundle.getBoolean(RATKINGDISCOVERED);
+			Dungeon.ratprincediscovered = bundle.getBoolean(RATPRINCEDISCOVERED);
+			Dungeon.sewerhorsediscovered = bundle.getBoolean(SEWERHORSEDISCOVERED);
+			Dungeon.shamandiscovered = bundle.getBoolean(SHAMANDISCOVERED);
+			Dungeon.shieldeddiscovered = bundle.getBoolean(SHIELDEDDISCOVERED);
+			Dungeon.skeletondiscovered = bundle.getBoolean(SKELETONDISCOVERED);
+			Dungeon.spinnerdiscovered = bundle.getBoolean(SPINNERDISCOVERED);
+			Dungeon.statuediscovered = bundle.getBoolean(STATUEDISCOVERED);
+			Dungeon.tengudiscovered = bundle.getBoolean(TENGUDISCOVERED);
+			Dungeon.thiefdiscovered = bundle.getBoolean(THIEFDISCOVERED);
+			Dungeon.toxicsludgediscovered = bundle.getBoolean(TOXICSLUDGEDISCOVERED);
+			Dungeon.trollsmithdiscovered = bundle.getBoolean(TROLLSMITHDISCOVERED);
+			Dungeon.wraithdiscovered = bundle.getBoolean(WRAITHDISCOVERED);
+			Dungeon.dungeonfishdiscovered = bundle.getBoolean(DUNGEONFISHDISCOVERED);
+			
+			//other things
+			previousTheme = bundle.getInt(PREVIOUSTHEME);
+			roundswon = bundle.getInt(ROUNDSWON);
+		} else{
+			albinodiscovered = false;
+			banditdiscovered = false;
+			batdiscovered = false;
+			brutediscovered = false;
+			caveflowerdiscovered = false;
+			cavespiderdiscovered = false;
+			crabdiscovered = false;
+			cursediscovered = false;
+			dm300discovered = false;
+			fetidratdiscovered = false;
+			ghostdiscovered = false;
+			gnolldiscovered = false;
+			 goodiscovered = false;
+			 masterthiefdiscovered = false;
+			 mimicdiscovered = false;
+			 piranhadiscovered = false;
+			 ratdiscovered = false;
+			 ratkingdiscovered = false;
+			ratprincediscovered = false;
+			sewerhorsediscovered = false;
+			shamandiscovered = false;
+			shieldeddiscovered = false;
+			skeletondiscovered = false;
+			spinnerdiscovered = false;
+			 statuediscovered = false;
+			 tengudiscovered = false;
+			thiefdiscovered = false;
+			 toxicsludgediscovered = false;
+			 trollsmithdiscovered = false;
+			 wraithdiscovered = false;
+			 dungeonfishdiscovered = false;
+		}
 		
 		Dungeon.challenges = bundle.getInt( CHALLENGES );
 		
@@ -591,8 +793,6 @@ public class Dungeon {
 		Wand.restore( bundle );
 		Ring.restore( bundle );
 		
-		potionOfStrength = bundle.getInt( POS );
-		scrollsOfUpgrade = bundle.getInt( SOU );
 		scrollsOfEnchantment = bundle.getInt( SOE );
 		dewVial = bundle.getBoolean( DV );
 		
@@ -636,6 +836,8 @@ public class Dungeon {
 		hero = null;
 		hero = (Hero)bundle.get( HERO );
 		
+		Quests.RestoreQuestsFromBundle(bundle);
+		
 		QuickSlot.compress();
 		
 		gold = bundle.getInt( GOLD );
@@ -653,7 +855,6 @@ public class Dungeon {
 		name       = bundle.getString(NAME);
 		changename = bundle.getBoolean(CHANGENAME);
 		usedSOU    = bundle.getInt(USEDSOU);
-		Dungeon.version    = bundle.getFloat(V2);
 		resethub   = bundle.getBoolean(HUBRESET);
 		
 		

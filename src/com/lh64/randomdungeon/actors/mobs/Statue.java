@@ -39,6 +39,7 @@ public class Statue extends Mob {
 	{
 		name = "animated statue";
 		spriteClass = StatueSprite.class;
+		discovered = Dungeon.statuediscovered;
 
 		EXP = 0;
 		state = PASSIVE;
@@ -78,6 +79,8 @@ public class Statue extends Mob {
 	protected boolean act() {
 		if (Dungeon.visible[pos]) {
 			Journal.add( Journal.Feature.STATUE );
+			Dungeon.statuediscovered = true;
+			discovered = true;
 		}
 		return super.act();
 	}

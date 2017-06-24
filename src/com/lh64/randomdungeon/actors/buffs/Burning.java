@@ -32,6 +32,7 @@ import com.lh64.randomdungeon.items.food.ChargrilledMeat;
 import com.lh64.randomdungeon.items.food.MysteryMeat;
 import com.lh64.randomdungeon.items.rings.RingOfElements.Resistance;
 import com.lh64.randomdungeon.items.scrolls.Scroll;
+import com.lh64.randomdungeon.items.scrolls.ScrollOfReturn;
 import com.lh64.randomdungeon.levels.Level;
 import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.randomdungeon.ui.BuffIndicator;
@@ -77,7 +78,7 @@ public class Burning extends Buff implements Hero.Doom {
 			if (target instanceof Hero) {
 				
 				Item item = ((Hero)target).belongings.randomUnequipped();
-				if (item instanceof Scroll) {
+				if (item instanceof Scroll || item instanceof ScrollOfReturn) {
 					
 					item = item.detach( ((Hero)target).belongings.backpack );
 					GLog.w( TXT_BURNS_UP, item.toString() );

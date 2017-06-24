@@ -17,11 +17,13 @@
  */
 package com.lh64.randomdungeon.actors.mobs;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import com.lh64.randomdungeon.Badges;
 import com.lh64.randomdungeon.Challenges;
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.Quests;
 import com.lh64.randomdungeon.Statistics;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.Char;
@@ -35,6 +37,7 @@ import com.lh64.randomdungeon.effects.Flare;
 import com.lh64.randomdungeon.effects.Wound;
 import com.lh64.randomdungeon.items.Generator;
 import com.lh64.randomdungeon.items.Item;
+
 import com.lh64.randomdungeon.levels.Level;
 import com.lh64.randomdungeon.sprites.CharSprite;
 import com.lh64.randomdungeon.utils.GLog;
@@ -51,6 +54,7 @@ public abstract class Mob extends Char {
 	protected static final String TXT_NOTICE1	= "?!";
 	protected static final String TXT_RAGE		= "#$%^";
 	protected static final String TXT_EXP		= "%+dEXP";
+	public boolean discovered = false;
 	
 	public AiState SLEEPEING	= new Sleeping();
 	public AiState HUNTING		= new Hunting();
@@ -67,7 +71,7 @@ public abstract class Mob extends Char {
 	
 	protected int defenseSkill = 0;
 	
-	protected int EXP = 1;
+	protected int EXP = expStats();
 	protected int maxLvl = 30;
 	
 	protected Char enemy;
@@ -80,6 +84,27 @@ public abstract class Mob extends Char {
 	
 	private static final String STATE	= "state";
 	private static final String TARGET	= "target";
+	
+	public int expStats(){
+		return 1;
+	}
+	public int skillpts( int base){
+		return base + Dungeon.hero.lvl -1 ;
+	}
+	
+	public void see(){
+		if(Dungeon.visible[pos]){
+			discovered = true;
+		}
+	}
+	
+	public void addDefense(int x){
+		defenseSkill += x;
+	}
+	
+	public String altDescription(){
+		return ".";
+	}
 	
 	@Override
 	public void storeInBundle( Bundle bundle ) {
@@ -231,6 +256,10 @@ public abstract class Mob extends Char {
 		return Level.adjacent( pos, enemy.pos ) && !isCharmedBy( enemy );
 	}
 	
+	public String Bestiarydesc(){
+		return "";
+	}
+	
 	protected boolean getCloser( int target ) {
 		
 		if (rooted) {
@@ -367,6 +396,13 @@ public abstract class Mob extends Char {
 
 		if (Dungeon.hero.lvl <= maxLvl + 2) {
 			dropLoot();
+		}
+		for(Quests.Quest req : Quests.heroquests){
+			if(req.type1 == 2){
+				if(req.mob.getClass() == this.getClass()){
+					req.mobProcess(pos);
+				}
+			}
 		}
 
 		if (Dungeon.hero.isAlive() && !Dungeon.visible[pos]) {	
@@ -609,4 +645,8 @@ public abstract class Mob extends Char {
 			return Utils.format( "This %s is passive", name );
 		}
 	}
+	
+	public static ArrayList<Mob> Mobs = new ArrayList<Mob>();
+
+	
 }

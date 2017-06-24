@@ -91,7 +91,12 @@ public class Chasm {
 		Camera.main.shake( 4, 0.2f );
 		
 		Buff.prolong( hero, Cripple.class, Cripple.DURATION );
-		hero.damage( Random.IntRange( hero.HT / 3, hero.HT / 2 ), new Hero.Doom() {
+		int damage = (int)(Dungeon.hero.HP * Random.Float(0.67f, 0.8f));
+		if(Dungeon.hero.HP < (int)(Dungeon.hero.HT*0.4f)){
+			damage += (int)(Dungeon.hero.HT*0.2f);
+		}
+
+		hero.damage( damage, new Hero.Doom() {
 			@Override
 			public void onDeath() {
 				Badges.validateDeathFromFalling();

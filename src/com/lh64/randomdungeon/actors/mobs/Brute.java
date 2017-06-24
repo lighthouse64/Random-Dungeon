@@ -37,23 +37,12 @@ public class Brute extends Mob {
 	{
 		name = "gnoll brute";
 		spriteClass = BruteSprite.class;
+		discovered = Dungeon.brutediscovered;
 		
-		if(Dungeon.hero.lvl <= 6){
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*6 +3,(Dungeon.hero.lvl /3 +1)*7 +5);
-			} else {
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +3,(Dungeon.hero.lvl /3 +1)*11 +5);
-			}
-		if(Dungeon.hero.lvl <= 6){
-		defenseSkill = ((Dungeon.hero.lvl/3 +1) * 2) + 2;
-		}else{
-			defenseSkill = ((Dungeon.hero.lvl/3 +1)*2) + 3 + Dungeon.hero.lvl/6;
-		}
+		HP = HT = Random.Int(9,13);
+		defenseSkill = 3;
 		
-		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl + Random.Int(0,2);
-			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl) + Random.Int(0,Dungeon.hero.lvl/5 + 2);
-			}
+		EXP = expStats();
 		maxLvl = Dungeon.hero.lvl + 4;
 		
 		
@@ -75,30 +64,30 @@ public class Brute extends Mob {
 			return enraged ? Random.Int( (Dungeon.hero.lvl/3 + 1) +2 ,(Dungeon.hero.lvl/3 + 1)*2 +4) :	
 				Random.Int( (Dungeon.hero.lvl/3 + 1) +1 ,(Dungeon.hero.lvl/3 + 1) +4);
 			} else {
-				return enraged ? Random.Int( (Dungeon.hero.lvl/3 +1 ) +7 ,(Dungeon.hero.lvl/3 )*3 +8):
-						Random.Int( (Dungeon.hero.lvl/3 +1 ) +4 ,(Dungeon.hero.lvl/3 )*2 +8);
+				return enraged ? Random.Int( (Dungeon.hero.lvl/3 +1 ) +6 - Dungeon.hero.lvl/6 ,(Dungeon.hero.lvl/3 )*3 +8 - Dungeon.hero.lvl/6 ):
+						Random.Int( (Dungeon.hero.lvl/3 +1 ) +4 ,(Dungeon.hero.lvl/3 )*2 +8 - Dungeon.hero.lvl/6);
 			}
 		
 				
 				
 	}
+	
+
 	@Override
 	public void die( Object cause ) {
 		Ghost.Quest.processSewersKill( pos );
+		Dungeon.brutediscovered = true;
+		discovered = true;
 		super.die( cause );
 	}
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-			return (Dungeon.hero.lvl/3 +1)*2 + 7;
-			} else{
-				return (Dungeon.hero.lvl/3 +1)*2 + 7 + (Dungeon.hero.lvl /6 + 1);
-			}
+		return skillpts(9);
 	}
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 2 + Dungeon.hero.lvl / 6;
+		return 3;
 	}
 	
 	@Override

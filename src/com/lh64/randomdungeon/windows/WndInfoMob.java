@@ -28,19 +28,30 @@ import com.lh64.randomdungeon.utils.Utils;
 
 public class WndInfoMob extends WndTitledMessage {
 
-	public WndInfoMob( Mob mob ) {
+	public WndInfoMob( Mob mob, boolean bestiary ) {
 		
-		super( new MobTitle( mob ), desc( mob ) );
+		super( new MobTitle( mob ), desc( mob, bestiary ) );
 		
 	}
 	
-	private static String desc( Mob mob ) {
+	private static String desc( Mob mob, boolean bestiary ) {
+		StringBuilder builder;
+		if(mob.altDescription().equals(".") || bestiary == false){
+		builder = new StringBuilder( mob.description() );
+		} else {
+			builder = new StringBuilder( mob.altDescription());
+		}
 		
-		StringBuilder builder = new StringBuilder( mob.description() );
 		
+		if(mob.state != mob.NOTHING && bestiary == false){
 		builder.append( "\n\n" + mob.state.status() + "." +"\n Health: " + mob.HP + "/" + mob.HT);
+		}
 		
+		if(mob.discovered == true || Mob.Mobs.contains(mob) == false){
 		return builder.toString();
+		} else{
+			return "You haven't gotten information on this mob yet.";
+		}
 	}
 	
 	private static class MobTitle extends Component {
@@ -53,13 +64,19 @@ public class WndInfoMob extends WndTitledMessage {
 		private BuffIndicator buffs;
 		
 		public MobTitle( Mob mob ) {
-			
-			name = PixelScene.createText( Utils.capitalize( mob.name ), 9 );
+			String temptext = mob.name;
+			if(mob.discovered != true && Mob.Mobs.contains(mob)){
+				temptext="???";
+			}
+			name = PixelScene.createText( Utils.capitalize( temptext ), 9 );
 			name.hardlight( TITLE_COLOR );
 			name.measure();	
 			add( name );
 			
 			image = mob.sprite();
+			if(mob.discovered != true && Mob.Mobs.contains(mob) == true){
+				image.hardlight(0x000000);
+			}
 			add( image );
 			
 			health = new HealthBar();

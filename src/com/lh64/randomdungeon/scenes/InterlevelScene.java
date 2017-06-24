@@ -26,14 +26,22 @@ import com.lh64.noosa.audio.Music;
 import com.lh64.noosa.audio.Sample;
 import com.lh64.randomdungeon.Assets;
 import com.lh64.randomdungeon.Dungeon;
+import com.lh64.randomdungeon.Quests;
 import com.lh64.randomdungeon.Statistics;
 import com.lh64.randomdungeon.actors.Actor;
+import com.lh64.randomdungeon.actors.hero.HeroClass;
 import com.lh64.randomdungeon.items.Generator;
+import com.lh64.randomdungeon.items.armor.ClothArmor;
+import com.lh64.randomdungeon.items.scrolls.ScrollOfUpgrade;
+import com.lh64.randomdungeon.items.weapon.melee.Dagger;
+import com.lh64.randomdungeon.items.weapon.melee.Knuckles;
+import com.lh64.randomdungeon.items.weapon.melee.ShortSword;
 import com.lh64.randomdungeon.levels.Level;
 import com.lh64.randomdungeon.levels.Terrain;
 import com.lh64.randomdungeon.ui.GameLog;
 import com.lh64.randomdungeon.windows.WndError;
 import com.lh64.randomdungeon.windows.WndStory;
+import com.lh64.utils.Random;
 
 public class InterlevelScene extends PixelScene {
 
@@ -210,6 +218,11 @@ public class InterlevelScene extends PixelScene {
 		Actor.fixTime();
 		if (Dungeon.hero == null) {
 			Dungeon.init();
+			for(int i = 0; i < 8; i++){
+				Quests.quests.add(new Quests.Quest(Random.Int(1,4)));
+			}
+			
+			
 			if (noStory) {
 				Dungeon.chapters.add( WndStory.ID_SEWERS );
 				noStory = false;
@@ -224,6 +237,7 @@ public class InterlevelScene extends PixelScene {
 		
 		if (Dungeon.depth >= Statistics.deepestFloor) {
 			level = Dungeon.newLevel();
+			
 		} 
 		else if(Dungeon.depth == 1 && Dungeon.resethub == true){
 			level = Dungeon.newLevel();
@@ -384,6 +398,28 @@ for (int i=0; i < length; i++) {
 			Level level;
 			
 			if( Dungeon.version != Dungeon.realversion){
+				
+					Dungeon.hero.STR = 10;
+					Dungeon.hero.attackSkill = 10;
+					Dungeon.hero.defenseSkill = 5;
+					Dungeon.hero.HT = 20;
+					Dungeon.hero.HP = 20;
+					if(Dungeon.hero.heroClass == HeroClass.WARRIOR){
+						Dungeon.hero.belongings.weapon = new ShortSword();
+					} 
+					else if(Dungeon.hero.heroClass == HeroClass.MAGE){
+						Dungeon.hero.belongings.weapon = new Knuckles();
+					} else{
+					Dungeon.hero.belongings.weapon = new Dagger();
+					Dungeon.hero.belongings.weapon.level(0);
+					Dungeon.hero.belongings.weapon.identify();
+					}
+					Dungeon.hero.belongings.armor = new ClothArmor();
+					Dungeon.hero.belongings.armor.identify();
+					Dungeon.hero.belongings.armor.level(0);
+					
+					new ScrollOfUpgrade().identify().collect(Dungeon.hero.belongings.backpack);
+				
 				if(Dungeon.depth == 1 ){
 				Dungeon.depth--;
 				level = Dungeon.newLevel();
@@ -437,6 +473,9 @@ for (int i=0; i < length; i++) {
 				} else{
 					Dungeon.resethub = true;
 					Dungeon.zerocheck = true;
+					
+					level = Dungeon.loadLevel( StartScene.curClass );
+					Dungeon.switchLevel( level, Level.resizingNeeded ? level.adjustPos( Dungeon.hero.pos ) : Dungeon.hero.pos );
 				}
 			}else{
 			level = Dungeon.loadLevel( StartScene.curClass );

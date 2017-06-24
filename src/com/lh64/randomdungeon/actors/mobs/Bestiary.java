@@ -70,9 +70,6 @@ public class Bestiary {
 		
 		switch (depth) {
 		case 1:
-			chances = new float[]{ 1 };
-			classes = new Class<?>[]{ Rat.class };
-			break;
 		case 2:
 		case 3:
 		case 4:
@@ -101,20 +98,20 @@ public class Bestiary {
 		case 27:
 		case 28:	
 			if (Dungeon.levelTheme == 1){
-				chances = new float[]{ 1, 1, 1, 0.8f, 0.7f };
-				classes = new Class<?>[]{ Rat.class, Gnoll.class, SewerHorse.class, Crab.class, ToxicSludge.class };
+				chances = new float[]{ 1, 1, 1, 0.8f, 0.7f, 0.07f, 1 };
+				classes = new Class<?>[]{ Rat.class, Gnoll.class, SewerHorse.class, Crab.class, ToxicSludge.class, RatPrince.class, DungeonFish.class };
 			}
 			else if (Dungeon.levelTheme == 2){
-				chances = new float[]{ 1, 1, 0.8f, 1 };
-				classes = new Class<?>[]{ Shaman.class, Gnoll.class, Skeleton.class, Thief.class };
+				chances = new float[]{ 1, 1, 0.8f, 1, 0.75f };
+				classes = new Class<?>[]{ Shaman.class, Gnoll.class, Skeleton.class, Thief.class, MasterThief.class };
 			}
 			else if (Dungeon.levelTheme == 3){
-				chances = new float[]{ 1, 1, 1, 0.6f, 1 };
-				classes = new Class<?>[]{ Bat.class, Gnoll.class, Spinner.class, Brute.class, CaveFlower.class };
+				chances = new float[]{ 1, 1, 1, 0.75f, 1, 0.9f, 0.07f };
+				classes = new Class<?>[]{ Bat.class, Gnoll.class, Spinner.class, Brute.class, CaveFlower.class, Shaman.class, CaveSpider.class };
 			}
 			else{
-				chances = new float[]{ 1 };
-				classes = new Class<?>[]{ Eye.class };
+				chances = new float[]{ 1, 1, 1, 1, 1, 1, 0.5f, 0.5f };
+				classes = new Class<?>[]{ Rat.class, Gnoll.class, ToxicSludge.class, SewerHorse.class, Shaman.class, CaveFlower.class, Crab.class, Bat.class };
 			}
 			break;
 		case 29:
@@ -130,8 +127,8 @@ public class Bestiary {
 				chances = new float[]{ 1 };
 				classes = new Class<?>[]{ DM300.class };
 			} else{
-				chances = new float[]{ 1 };
-				classes = new Class<?>[]{ Eye.class };
+				chances = new float[]{ 1, 1, 1, 1, 1, 1, 0.5f, 0.5f };
+				classes = new Class<?>[]{ Rat.class, Gnoll.class, ToxicSludge.class, SewerHorse.class, Shaman.class, CaveFlower.class, Crab.class, Bat.class };
 			}
 			break;
 		default:
@@ -146,8 +143,7 @@ public class Bestiary {
 		return 
 			mob instanceof Goo || 
 			mob instanceof Tengu || 
-			mob instanceof DM300 || 
-			mob instanceof King || 
+			mob instanceof DM300 ||  
 			mob instanceof Yog || mob instanceof BurningFist || mob instanceof RottingFist;
 	}
 }

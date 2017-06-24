@@ -71,6 +71,7 @@ public class PrisonLevel extends RegularLevel {
 	@Override
 	protected void createMobs() {
 		super.createMobs();
+		
 		Ghost.Quest.spawn( this );
 		Wandmaker.Quest.spawn( this, roomEntrance );
 	}
@@ -104,9 +105,12 @@ public class PrisonLevel extends RegularLevel {
 		for (int i=0; i < WIDTH; i++) {
 			if (map[i] == Terrain.WALL &&  
 				(map[i + WIDTH] == Terrain.EMPTY || map[i + WIDTH] == Terrain.EMPTY_SP) &&
-				Random.Int( 6 ) == 0) {
-				
+				Random.Int( 5 ) == 0) {
+				if( Random.Int(1,3) == 1){
 				map[i] = Terrain.WALL_DECO;
+				} else{
+					map[i]= Terrain.WALL_DECO2;
+				}
 			}
 		}
 		
@@ -115,8 +119,12 @@ public class PrisonLevel extends RegularLevel {
 				map[i - WIDTH] == Terrain.WALL && 
 				(map[i + WIDTH] == Terrain.EMPTY || map[i + WIDTH] == Terrain.EMPTY_SP) &&
 				Random.Int( 3 ) == 0) {
-				
+				if(Random.Int(1,3)==1){
 				map[i] = Terrain.WALL_DECO;
+				} else{
+					map[i]=Terrain.WALL_DECO2;
+				}
+				
 			}
 		}
 		

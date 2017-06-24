@@ -38,17 +38,18 @@ public class Piranha extends Mob {
 	{
 		name = "giant piranha";
 		spriteClass = PiranhaSprite.class;
+		discovered = Dungeon.piranhadiscovered;
 
-		baseSpeed = 2f;
+		baseSpeed = 1.5f;
 		
-		EXP = 0;
+		EXP = 1;
 	}
 	
 	public Piranha() {
 		super();
 		
-		HP = HT = 10 + Dungeon.hero.lvl * 5;
-		defenseSkill = 10 + Dungeon.hero.lvl * 2;
+		HP = HT = 10 * 3;
+		defenseSkill = 10;
 	}
 	
 	@Override
@@ -63,24 +64,25 @@ public class Piranha extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( Dungeon.hero.lvl, 4 + Dungeon.hero.lvl * 2 );
+		return Random.NormalIntRange( 4, 8 );
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 20 + Dungeon.hero.lvl * 2;
+		return 16;
 	}
 	
 	@Override
 	public int dr() {
-		return Dungeon.hero.lvl;
+		return 2;
 	}
 	
 	@Override
 	public void die( Object cause ) {
 		Dungeon.level.drop( new MysteryMeat(), pos ).sprite.drop();
 		super.die( cause );
-		
+		Dungeon.piranhadiscovered = true;
+		discovered = true;
 		Statistics.piranhasKilled++;
 		Badges.validatePiranhasKilled();
 	}

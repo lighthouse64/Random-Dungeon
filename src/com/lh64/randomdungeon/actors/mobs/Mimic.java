@@ -46,6 +46,7 @@ public class Mimic extends Mob {
 	{
 		name = "mimic";
 		spriteClass = MimicSprite.class;
+		discovered = Dungeon.mimicdiscovered;
 	}
 	
 	public ArrayList<Item> items;
@@ -59,7 +60,7 @@ public class Mimic extends Mob {
 		bundle.put( ITEMS, items );
 		bundle.put( LEVEL, level );
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void restoreFromBundle( Bundle bundle ) {
@@ -70,12 +71,12 @@ public class Mimic extends Mob {
 	
 	@Override
 	public int damageRoll() {
-		return Random.NormalIntRange( HT / 10, HT / 4 );
+		return Random.Int(1,5);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		return 9 + level;
+		return 9;
 	}
 	
 	@Override
@@ -93,8 +94,8 @@ public class Mimic extends Mob {
 	public void adjustStats( int level ) {
 		this.level = level;
 		
-		HT = (3 + level) * 4;
-		EXP = 2 + 2 * (level - 1) / 5;
+		HT = (3) * 4;
+		EXP = 1;
 		defenseSkill = attackSkill( null ) / 2;
 		
 		enemySeen = true;
@@ -104,7 +105,8 @@ public class Mimic extends Mob {
 	public void die( Object cause ) {
 
 		super.die( cause );
-		
+		Dungeon.mimicdiscovered = true;
+		discovered = true;
 		if (items != null) {
 			for (Item item : items) {
 				Dungeon.level.drop( item, pos ).sprite.drop();

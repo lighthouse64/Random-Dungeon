@@ -33,40 +33,31 @@ public class SewerHorse extends Mob {
 	{
 		name = "Sewer Horse";
 		spriteClass = SewerHorseSprite.class;
-		if(Dungeon.hero.lvl <= 6){
-		HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*5 +4,(Dungeon.hero.lvl /3 +1)*6 +5);
-		} else {
-			HP = HT = Random.Int((Dungeon.hero.lvl /3 +1)*8 +4,(Dungeon.hero.lvl /3 +1)*10 +5);
-		}
-		if(Dungeon.hero.lvl <= 6){
-		defenseSkill = (Dungeon.hero.lvl/3 +1) + 2;
-		} else{
-			defenseSkill =(int)( ((1.5*Dungeon.hero.lvl/3) +1) + 3 + Dungeon.hero.lvl/6);
-		}
-		if(Dungeon.hero.lvl <= 1){
-			EXP = Dungeon.hero.lvl;
-			} else{
-				EXP = Random.Int(Dungeon.hero.lvl/2,Dungeon.hero.lvl);
-			}
-		maxLvl = Dungeon.hero.lvl / 5 + Dungeon.hero.lvl + 2;
+		discovered = Dungeon.sewerhorsediscovered;
+		
+		HP = HT = Random.Int(8,10);
+		
+		defenseSkill = 3;
+		EXP = expStats();
+		maxLvl = Dungeon.hero.lvl + 2;
 	}
-	
+	@Override 
+	public boolean act() {
+		if(Dungeon.visible[pos]){
+			Dungeon.sewerhorsediscovered = true;
+			discovered = true;
+			
+		}
+		return super.act();
+	}
 	@Override
 	public int damageRoll() {
-		if(Dungeon.hero.lvl <= 8){
-		return Random.Int( (Dungeon.hero.lvl/3) +1,(Dungeon.hero.lvl/3 + 1) + 3);
-		} else {
-		return Random.Int( (Dungeon.hero.lvl/3) +3,(Dungeon.hero.lvl/3 )*2 + 7);
-		}
+		return Random.Int(1,5);
 	}
 	
 	@Override
 	public int attackSkill( Char target ) {
-		if(Dungeon.hero.lvl <= 7){
-		return (Dungeon.hero.lvl/3 +1)*2 + 7;
-		} else{
-			return (Dungeon.hero.lvl/3 +1)*2 + 7 + (Dungeon.hero.lvl /6 + 1) + Dungeon.hero.lvl/9;
-		}
+		return 9;
 	}
 	
 	@Override
@@ -83,7 +74,7 @@ public class SewerHorse extends Mob {
 	
 	@Override
 	public int dr() {
-		return (Dungeon.hero.lvl /3 +1) + 1 + Dungeon.hero.lvl/9;
+		return 1 ;
 	}
 	
 	@Override
