@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import com.lh64.randomdungeon.actors.Actor;
 import com.lh64.randomdungeon.actors.mobs.Bestiary;
 import com.lh64.randomdungeon.actors.mobs.Mob;
-import com.lh64.randomdungeon.actors.mobs.npcs.Ghost;
 import com.lh64.randomdungeon.items.Generator;
 import com.lh64.randomdungeon.items.Gold;
 import com.lh64.randomdungeon.items.Item;
@@ -46,7 +45,7 @@ public class Quests {
 		public static final String ADDED = "Added";
 		public static final String KILLS = "kills";
 		public static final String TIME = "time";
-		
+		public static final String REMOVE = "remove";
 	
 		
 		public boolean given = false;
@@ -61,6 +60,7 @@ public class Quests {
 		public int depth;
 		public String description;
 		public String title;
+		public boolean remove = false;
 		public Quest(){
 			
 		}
@@ -118,7 +118,7 @@ public class Quests {
 				reward.collect();
 				}
 				
-				heroquests.remove(this);
+				remove = true;
 				completed ++;
 				Badges.validateQuestsCompleted();
 				
@@ -136,7 +136,7 @@ public class Quests {
 					} else{
 					reward.collect();
 					}
-					heroquests.remove(this);
+					remove = true;
 					completed++;
 					Badges.validateQuestsCompleted();
 				}
@@ -151,7 +151,7 @@ public class Quests {
 					reward.collect();
 					}
 					GLog.p("You've killed the mob!");
-					heroquests.remove(this);
+					remove = true;
 					completed++;
 					Badges.validateQuestsCompleted();
 				}
@@ -159,7 +159,7 @@ public class Quests {
 		}
 		
 		public void addMob(Level level){
-			if(heroquests.contains(this) && added != true && Dungeon.depth > Random.Int(3,8)){
+			if(heroquests.contains(this) && added != true && Dungeon.depth > 1){
 				
 				do {
 					mob.pos = level.randomRespawnCell();
@@ -187,6 +187,7 @@ public class Quests {
 			type1 = bundle.getInt(TYPE);
 			reward = (Item) bundle.get(REWARD);
 			income = bundle.getInt(INCOME);
+			remove = bundle.getBoolean(REMOVE);
 			if(type1 == 1){
 				title = "Item wanted";
 				description = "Help! I've lost my " + item.name() + ", and I need a replacement.";
@@ -212,6 +213,7 @@ public class Quests {
 		
 		@Override
 		public void storeInBundle(Bundle bundle) {
+			bundle.put(REMOVE, remove);
 			bundle.put(ITEM, item);
 			bundle.put(TYPE,type1);
 			bundle.put(REWARD, reward);

@@ -71,7 +71,7 @@ public class WndInfoQuest extends Window {
 			}
 		};
 		
-		takequest.setRect(info.x + 5, info.y + 23, takequest.reqWidth() + 2, takequest.reqHeight() + 2);
+		takequest.setRect(info.x + 7, info.y + 30, takequest.reqWidth() + 2, takequest.reqHeight() + 2);
 		
 	RedButton removequest = new RedButton("Remove Quest"){
 		@Override
@@ -85,7 +85,7 @@ public class WndInfoQuest extends Window {
 			
 		}
 	};
-	removequest.setRect(info.x + 2, info.y + 15, removequest.reqWidth() + 2, removequest.reqHeight() + 2);
+	removequest.setRect(info.x + 7, info.y + 30, removequest.reqWidth() + 2, removequest.reqHeight() + 2);
 	
 	
 		if(heroquest != true){

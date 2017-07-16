@@ -164,7 +164,7 @@ public class WndHero extends WndTabbed {
 					GameScene.show(new WndBeastiary());
 				}
 			};
-			btnBeastiary.setRect(btnJournal.right() + 1, btnJournal.top(), btnBeastiary.reqWidth() + 2, btnBeastiary.reqHeight() + 2);
+			btnBeastiary.setRect(btnJournal.right() + 9, btnJournal.top(), btnBeastiary.reqWidth() + 2, btnBeastiary.reqHeight() + 2);
 			add(btnBeastiary);
 			
 			RedButton btnQuests = new RedButton("Quests"){

@@ -393,6 +393,11 @@ public class Hero extends Char {
 		for(Quests.Quest req : Quests.heroquests){
 			req.tickQuest();
 		}
+		for (Quests.Quest req : new ArrayList<>(Quests.heroquests)){
+			if(req.remove == true){
+				Quests.heroquests.remove(req);
+			}
+		}
 		if (paralysed) {
 			
 			curAction = null;

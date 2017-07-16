@@ -119,7 +119,7 @@ public enum HeroClass {
 		new Food().identify().collect();
 		new Keyring().collect();
 		new DewVial().collect();
-		new ScrollOfUpgrade().collect();
+		new ScrollOfUpgrade().identify().collect();
 
 	}
 	

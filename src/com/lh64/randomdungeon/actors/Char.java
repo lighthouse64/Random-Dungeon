@@ -160,6 +160,12 @@ public abstract class Char extends Actor {
 						} else{
 						TXT_HIT = "\nthe %s injured %s";
 						}
+				case 3:
+					if(this == Dungeon.hero){
+						TXT_HIT = "\n%s attacked the %s";
+					} else{
+						TXT_HIT = "\n the %s attacked %s";
+					}
 					break;
 				}
 				GLog.i( TXT_HIT, name, enemy.name );
