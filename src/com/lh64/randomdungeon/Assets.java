@@ -99,6 +99,8 @@ public class Assets {
 	public static final String FISH        = "fish.png";
 	public static final String LANDFISH    = "landfish.png";
 	
+	public static final String RATPILE     = "ratpilebutton.png";
+	
 	public static final String HUMAN    = "human.png";
 	public static final String FEMALEHUMAN = "femalehuman.png";
 	

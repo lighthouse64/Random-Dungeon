@@ -61,6 +61,7 @@ import com.lh64.randomdungeon.scenes.StartScene;
 import com.lh64.randomdungeon.ui.QuickSlot;
 import com.lh64.randomdungeon.utils.BArray;
 import com.lh64.randomdungeon.utils.Utils;
+import com.lh64.randomdungeon.windows.WndClickerGame;
 import com.lh64.randomdungeon.windows.WndResurrect;
 import com.lh64.utils.Bundlable;
 import com.lh64.utils.Bundle;
@@ -106,7 +107,7 @@ public class Dungeon {
 	public static int coins = 0;
 	public static int usedSOU = 0;
 	public static float version;
-	public static float realversion = 0.3f;
+	public static float realversion = 0.31f;
 	public static int roundswon = 0;
 	
 	//list of discovered mobs variables (ABC order)
@@ -472,6 +473,14 @@ public class Dungeon {
 	private static final String HUBRESET    = "Reset hub?";
 	private static final String ROUNDSWON   = "Number of rounds won";
 	
+	//ratking clicker game data
+	private static final String MONEY      ="moneyz";
+	private static final String RATLEVEL   ="rat level";
+	private static final String RATCOUNT   ="# of rats";
+	private static final String CLICKLEVEL ="clicklevel";
+	private static final String MULTIPLIER = "multiplier";
+	private static final String KINGMOOD   = "king mood";
+	
 	//save data for the mobs discovery variables
 	private static final String ALBINODISCOVERED = "Albino rat discovered";
 	private static final String BANDITDISCOVERED = "Bandit discovered";
@@ -583,6 +592,13 @@ public class Dungeon {
 			bundle.put(WRAITHDISCOVERED, wraithdiscovered);
 			bundle.put(DUNGEONFISHDISCOVERED, dungeonfishdiscovered);
 			
+			//ratking game
+			bundle.put(MONEY, WndClickerGame.money);
+			bundle.put(RATLEVEL, WndClickerGame.ratlevel);
+			bundle.put(RATCOUNT, WndClickerGame.rats);
+			bundle.put(CLICKLEVEL, WndClickerGame.clicklevel);
+			bundle.put(MULTIPLIER, WndClickerGame.multiplier);
+			bundle.put(KINGMOOD, WndClickerGame.moodlevel);
 			
 			version = realversion;
 			bundle.put(V2, version);
@@ -776,6 +792,16 @@ public class Dungeon {
 			 trollsmithdiscovered = false;
 			 wraithdiscovered = false;
 			 dungeonfishdiscovered = false;
+		}
+		
+		//Wnd Clicker Game
+		if(realversion >= 0.31f){
+		WndClickerGame.clicklevel = bundle.getInt(CLICKLEVEL);
+		WndClickerGame.money = bundle.getInt(MONEY);
+		WndClickerGame.multiplier = bundle.getInt(MULTIPLIER);
+		WndClickerGame.rats = bundle.getInt(RATCOUNT);
+		WndClickerGame.ratlevel = bundle.getInt(RATLEVEL);
+		WndClickerGame.moodlevel = bundle.getInt(KINGMOOD);
 		}
 		
 		Dungeon.challenges = bundle.getInt( CHALLENGES );

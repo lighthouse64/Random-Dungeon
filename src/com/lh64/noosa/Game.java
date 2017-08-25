@@ -30,7 +30,8 @@ import com.lh64.input.Touchscreen;
 import com.lh64.noosa.audio.Music;
 import com.lh64.noosa.audio.Sample;
 import com.lh64.randomdungeon.Dungeon;
-
+import com.lh64.randomdungeon.scenes.GameScene;
+import com.lh64.randomdungeon.windows.WndClickerGame;
 import com.lh64.utils.BitmapCache;
 import com.lh64.utils.SystemTime;
 
@@ -82,6 +83,7 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 	
 	public static float timeScale = 1f;
 	public static float elapsed = 0f;
+	public static int timerun = 0;
 	
 	protected GLSurfaceView view;
 	protected SurfaceHolder holder;
@@ -311,7 +313,14 @@ public class Game extends Activity implements GLSurfaceView.Renderer, View.OnTou
 	}
 	
 	protected void update() {
+		timerun ++;
 		Game.elapsed = Game.timeScale * step * 0.001f;
+		if(scene.getClass() == GameScene.class){
+			if(timerun % 50 == 0){
+			WndClickerGame.updateInfo();
+			}
+			
+		}
 		
 		synchronized (motionEvents) {
 			Touchscreen.processTouchEvents( motionEvents );

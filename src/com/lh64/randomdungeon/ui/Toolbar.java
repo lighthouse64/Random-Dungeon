@@ -20,6 +20,7 @@ package com.lh64.randomdungeon.ui;
 import com.lh64.noosa.Game;
 import com.lh64.noosa.Gizmo;
 import com.lh64.noosa.Image;
+import com.lh64.noosa.audio.Sample;
 import com.lh64.noosa.ui.Button;
 import com.lh64.noosa.ui.Component;
 import com.lh64.randomdungeon.Assets;
@@ -36,6 +37,7 @@ import com.lh64.randomdungeon.scenes.GameScene;
 import com.lh64.randomdungeon.sprites.ItemSprite;
 import com.lh64.randomdungeon.windows.WndBag;
 import com.lh64.randomdungeon.windows.WndCatalogus;
+import com.lh64.randomdungeon.windows.WndClickerGame;
 import com.lh64.randomdungeon.windows.WndHero;
 import com.lh64.randomdungeon.windows.WndInfoCell;
 import com.lh64.randomdungeon.windows.WndInfoItem;
@@ -52,6 +54,7 @@ public class Toolbar extends Component {
 	private Tool btnInventory;
 	private Tool btnQuick1;
 	private Tool btnQuick2;
+	private RatkingButton ratkingbutton;
 	
 	private PickedUpItem pickedUp;
 	
@@ -67,8 +70,51 @@ public class Toolbar extends Component {
 		height = btnInventory.height();
 	}
 	
+	private static class RatkingButton extends Button {
+		protected Image image;
+		
+		public RatkingButton(){
+			super();
+			width = image.width;
+			height = image.height;
+		}
+		
+		@Override
+		protected void createChildren() {
+			super.createChildren();
+
+			image = new Image(Assets.RATPILE);
+			add( image );
+		}
+		
+		@Override
+		protected void layout() {
+			super.layout();
+
+			image.x = x;
+			image.y = y;
+		}
+
+		@Override
+		protected void onTouchDown() {
+			image.brightness( 1.5f );
+			Sample.INSTANCE.play( Assets.SND_CLICK );
+		}
+
+		@Override
+		protected void onTouchUp() {
+			image.resetColor();
+		}
+		@Override
+		protected void onClick() {
+			GameScene.show(new WndClickerGame());
+		}
+	}
+	
 	@Override
 	protected void createChildren() {
+		
+		
 		
 		add( btnWait = new Tool( 0, 7, 20, 25 ) {
 			@Override
@@ -80,6 +126,11 @@ public class Toolbar extends Component {
 				return true;
 			};
 		} );
+		
+		ratkingbutton = new RatkingButton();
+		
+		
+		add(ratkingbutton);
 		
 		add( btnSearch = new Tool( 20, 7, 20, 25 ) {
 			@Override
@@ -139,6 +190,7 @@ public class Toolbar extends Component {
 		} else {
 			btnInventory.setPos( btnQuick1.left() - btnInventory.width(), y );
 		}
+		ratkingbutton.setPos(width - ratkingbutton.width(), y - 50);
 	}
 	
 	@Override
